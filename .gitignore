@@ -1,5 +1,12 @@
+# Virtualenv directory
 venv
+
+# Django files
 *.log
 *.pot
 *.pyc
 local_settings.py
+
+# Aptana files
+*.project
+*.pydevproject
