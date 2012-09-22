@@ -22,12 +22,26 @@ PROJEKT_STATUS = (
                   )
 
 # Create your models here.
+class Projekt(models.Model):
+    '''
+    Repräsentation eines Projekts.
+    '''
+    besitzer = models.ForeignKey(User, related_name="besitzer", help_text="Verantwortlicher für das Projekt.")
+    
+    name = models.CharField(max_length=512, help_text="Name des Projekts.")
+    beschreibung = models.TextField(help_text="Ausführliche Beschreibung des Projekts.")
+    status = models.CharField(max_length=2, default="OP", choices=PROJEKT_STATUS, help_text="Zustand des Projekts.")
+    
+    def __unicode__(self):
+        return self.name
+    
 class Aufgabe(models.Model):
     '''
     Repräsentation einer Aufgabe.
     '''
     ersteller = models.ForeignKey(User, related_name="ersteller", editable=False, help_text="Ersteller dieser Aufgabe.")
     bearbeiter = models.ForeignKey(User, related_name="bearbeiter", blank=True, null=True, help_text="Bearbeiter dieser Aufgabe.")
+    projekt = models.ForeignKey(Projekt, related_name="projekt", help_text="Das der Aufgabe übergeordnete Projekt.")
     
     status = models.CharField(max_length=2, default="OP",choices=AUFGABE_STATUS, help_text="Bearbeitungsstatus der Aufgabe.")
     prioritaet = models.CharField(max_length=2, default="ME", choices=PRIORITAET, help_text="Priorität der Aufgabe im Hinblick auf das Projekt.")
@@ -36,3 +50,7 @@ class Aufgabe(models.Model):
     erstellDatum = models.DateTimeField(auto_now_add=True, help_text="Die Aufgabe wurde an diesem Tag erstellt.")
     aenderungsDatum = models.DateTimeField(editable=False,auto_now=True, auto_now_add=True, help_text="Zeit der letzten Änderung.")
     faelligkeitsDatum = models.DateTimeField(blank=True, help_text="Die Aufgabe muss bis zu diesem Datum erledigt sein.")
+    
+    def __unicode__(self):
+        return self.titel
+
