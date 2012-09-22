@@ -23,7 +23,7 @@ admin.site.register(Aufgabe, AufgabeAdmin)
 class ProjektAdmin(admin.ModelAdmin):
     list_display = ('name', 'besitzer')
     
-# Auto populate ForeignKey field ersteller on save in admin site
+# Auto populate ForeignKey field besitzer on save in admin site
     def save_model(self, request, obj, form, change): 
         obj.besitzer = request.user
         obj.save()

@@ -21,10 +21,10 @@ PROJEKT_STATUS = (
                     ("CL", "Geschlossen"),
                   )
 
-# Create your models here.
+# App model classes
 class Projekt(models.Model):
     '''
-    Repräsentation eines Projekts.
+    Repräsentation eines Projekts. Das Projekt dient als Container für Aufgaben.
     '''
     besitzer = models.ForeignKey(User, related_name="besitzer", help_text="Verantwortlicher für das Projekt.")
     
