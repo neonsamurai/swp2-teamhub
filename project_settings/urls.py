@@ -6,7 +6,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Examples:
-    # url(r'^$', 'project_settings.views.home', name='home'),
+    url(r'^$', 'teamhub.views.dashboard', name='home'),
     # url(r'^project_settings/', include('project_settings.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
