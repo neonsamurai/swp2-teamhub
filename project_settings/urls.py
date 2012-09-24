@@ -5,14 +5,15 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
+    
+    # TeamHub custom URLs
     url(r'^$', 'teamhub.views.dashboard', name='home'),
+    url(r'^login/','django.contrib.auth.views.login'),
+    # Examples:
     # url(r'^project_settings/', include('project_settings.foo.urls')),
 
-    # Uncomment the admin/doc line below to enable admin documentation:
+    # Admin urls
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
     
     # Comments framework urls
