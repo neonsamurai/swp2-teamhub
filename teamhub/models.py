@@ -43,12 +43,12 @@ class Aufgabe(models.Model):
     bearbeiter = models.ForeignKey(User, related_name="bearbeiter", blank=True, null=True, help_text="Bearbeiter dieser Aufgabe.")
     projekt = models.ForeignKey(Projekt, related_name="projekt", help_text="Das der Aufgabe übergeordnete Projekt.")
     
-    status = models.CharField(max_length=2, default="OP",choices=AUFGABE_STATUS, help_text="Bearbeitungsstatus der Aufgabe.")
+    status = models.CharField(max_length=2, default="OP", choices=AUFGABE_STATUS, help_text="Bearbeitungsstatus der Aufgabe.")
     prioritaet = models.CharField(max_length=2, default="ME", choices=PRIORITAET, help_text="Priorität der Aufgabe im Hinblick auf das Projekt.")
     titel = models.CharField(max_length=512, help_text="Der Titel soll eine Idee des Inhalts der Aufgabe geben.")
     beschreibung = models.TextField(blank=True, help_text="Detaillierter Beschreibung der Aufgabe. Was ist das Problem? Unter welchen Bedingungen gilt die Aufgabe als gelöst?")
     erstellDatum = models.DateTimeField(auto_now_add=True, help_text="Die Aufgabe wurde an diesem Tag erstellt.")
-    aenderungsDatum = models.DateTimeField(editable=False,auto_now=True, auto_now_add=True, help_text="Zeit der letzten Änderung.")
+    aenderungsDatum = models.DateTimeField(editable=False, auto_now=True, auto_now_add=True, help_text="Zeit der letzten Änderung.")
     faelligkeitsDatum = models.DateTimeField(blank=True, help_text="Die Aufgabe muss bis zu diesem Datum erledigt sein.")
     
     def __unicode__(self):
