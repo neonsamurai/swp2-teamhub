@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block sectiontitle %}{{aufgabe.titel}}{% endblock %}
+
+{% block content %}
+<table class="table">
+        <tr>
+                <td>Erstellt von {{aufgabe.ersteller}}</td>
+                <td>Bearbeiter: {{aufgabe.bearbeiter}}</td>
+        </tr>
+        <tr>
+                <td>Erstellt am: {{aufgabe.erstellDatum}}</td>
+                <td>Fällig am: {{aufgabe.faelligkeitsDatum}}</td>
+        </tr>
+</table>
+<h1>Beschreibung</h1>
+<p>{{aufgabe.beschreibung}}</p>
+{% endblock %}
