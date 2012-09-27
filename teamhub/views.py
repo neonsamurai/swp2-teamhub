@@ -15,3 +15,10 @@ def dashboard(request):
     context = {'meineAufgaben': meineAufgaben}
     return render_to_response('../templates/base.html', context)
 
+def aufgabeDetails(request, aufgabeId):
+    '''
+    Erstellt die Detailansicht für eine Aufgabe.
+    '''
+    aufgabe = Aufgabe.objects.get(pk=aufgabeId)
+    context = {'aufgabe': aufgabe}
+    return render_to_response('../templates/base_aufgabe.html', context)
