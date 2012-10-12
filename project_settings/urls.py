@@ -9,6 +9,7 @@ urlpatterns = patterns('',
     # TeamHub custom URLs
     url(r'^$', 'teamhub.views.dashboard', name='home'),
     url(r'^aufgabe/(?P<aufgabeId>\d+)/$', 'teamhub.views.aufgabeDetails' ,name='aufgabeDetails'),
+    url(r'^profil/','teamhub.views.userProfilBearbeiten'),
     url(r'^login/','django.contrib.auth.views.login'),
     url(r'^logout/','teamhub.views.logoutUser'),
     #url(r'^logout/','teamhub.views.logout'),

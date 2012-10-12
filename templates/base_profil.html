@@ -1,19 +1,12 @@
 {% extends "base.html" %}
 {% load url from future %}
 
-{% block sectiontitle %}{{profil.username}}{% endblock %}
+{% block sectiontitle %}Dein Profil{% endblock %}
 
 {% block content %}
-<table class="table">
-        <tr>
-                <td>Erstellt von {{aufgabe.ersteller}}</td>
-                <td>Bearbeiter: {{aufgabe.bearbeiter}}</td>
-        </tr>
-        <tr>
-                <td>Erstellt am: {{aufgabe.erstellDatum}}</td>
-                <td>Fällig am: {{aufgabe.faelligkeitsDatum}}</td>
-        </tr>
-</table>
-<h1>Beschreibung</h1>
-<p>{{aufgabe.beschreibung}}</p>
+<form method="post" action="">
+	{% csrf_token %}
+	{{ form.as_table }}
+	<br /><input type="submit" value="Senden" />
+</form>
 {% endblock %}

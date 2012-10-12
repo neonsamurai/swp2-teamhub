@@ -1,7 +1,10 @@
 # coding: utf-8
 from django.contrib.auth.views import logout_then_login
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render_to_response
+from django.forms.models import modelformset_factory
+from django.shortcuts import render_to_response, redirect
+from django.template import RequestContext
 from teamhub.models import Aufgabe
 # Create your views here.
 
@@ -34,6 +37,17 @@ def userProfilBearbeiten(request):
     '''
     Erstellt die Bearbeitungsansicht für das Profil des angemeldeten Benutzers.
     '''
-    profil = User.objects.get(pk=request.user.id)
-    context = {'profil': profil}
-    return render_to_response('../templates/base_profil.html', context)
+    from teamhub.forms import profilForm
+    
+    user = User.objects.get(pk=request.user.pk)
+    
+    if request.method == 'POST':
+        form = profilForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('/profil/')
+    else:
+        form = profilForm(instance=user)
+        
+    context = {'form': form}
+    return render_to_response('../templates/base_profil.html', context, context_instance=RequestContext(request))
