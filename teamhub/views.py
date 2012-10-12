@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.forms.models import modelformset_factory
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
-from teamhub.models import Aufgabe
+from teamhub.models import Aufgabe, Projekt
 # Create your views here.
 
 @login_required
@@ -24,6 +24,11 @@ def logoutUser(request):
     Meldet den Anwender vom System ab und leitet auf die Login-Seite weiter.
     '''
     return logout_then_login(request, '/login/')
+
+def projektListe(request):
+    projektliste = Projekt.objects.all()
+    context = {'projektliste': projektliste}
+    return render_to_response('../templates/base_projekt.html', context)
 
 def aufgabeDetails(request, aufgabeId):
     '''

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block sectiontitle %}Projektliste{% endblock %}
+
+{% block content %}
+
+{% for projekt in projektliste %}
+<table class="table">
+	<tr>
+		<td colspan="2"><h2>Projekt: {{projekt.name}}</h2></td>
+	</tr>
+	<tr>
+
+		<td><strong>Besitzer:</strong> {{projekt.besitzer}}</td>
+		<td><strong>Status:</strong> {{projekt.status}}</td>
+	</tr>
+	<tr>
+		<td colspan="2"><h3>Beschreibung</h3>
+		<p>
+			{{projekt.beschreibung}}
+		</p></td>
+	</tr>
+</table>
+{% endfor %}
+{% endblock %}
