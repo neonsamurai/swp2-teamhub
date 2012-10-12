@@ -7,19 +7,17 @@
 
 {% for projekt in projektliste %}
 <table class="table">
+	<thead>
+		<th>Projekt</th>
+		<th>Beschreibung</th>
+		<th>Besitzer</th>
+		<th>Status</th>
+	</thead>
 	<tr>
-		<td colspan="2"><h2>Projekt: {{projekt.name}}</h2></td>
-	</tr>
-	<tr>
-
-		<td><strong>Besitzer:</strong> {{projekt.besitzer}}</td>
-		<td><strong>Status:</strong> {{projekt.status}}</td>
-	</tr>
-	<tr>
-		<td colspan="2"><h3>Beschreibung</h3>
-		<p>
-			{{projekt.beschreibung}}
-		</p></td>
+		<td>{{projekt.name}}</td>
+		<td>{{projekt.beschreibung}}</td>
+		<td>{{projekt.besitzer}}</td>
+		<td>{{projekt.get_status_display}}</td>
 	</tr>
 </table>
 {% endfor %}
