@@ -38,6 +38,20 @@ def projektDetail(request, projektId):
     context = {'projekt': projekt}
     return render_to_response('../templates/base_projekt_detail.html', context)
 
+def projektErstellen(request):
+    from teamhub.forms import projektForm
+    
+    if request.method == 'POST':
+        form = projektForm(request.POST)
+        if form.is_valid():
+            newProject = form.save()
+            return redirect('/projekte/'+ str(newProject.pk) + '/')
+    else:
+        form = projektForm()
+        
+    context = {'form': form}
+    return render_to_response('../templates/base_projekt_bearbeiten.html', context, context_instance=RequestContext(request))
+
 def projektBearbeiten(request, projektId):
     from teamhub.forms import projektForm
     
