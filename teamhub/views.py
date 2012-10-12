@@ -30,6 +30,30 @@ def projektListe(request):
     context = {'projektliste': projektliste}
     return render_to_response('../templates/base_projekt.html', context)
 
+def projektDetail(request, projektId):
+    '''
+    Erstellt die Detailansicht eines Projekts.
+    '''
+    projekt = Projekt.objects.get(pk=projektId)
+    context = {'projekt': projekt}
+    return render_to_response('../templates/base_projekt_detail.html', context)
+
+def projektBearbeiten(request, projektId):
+    from teamhub.forms import projektForm
+    
+    projekt = Projekt.objects.get(pk=projektId)
+    
+    if request.method == 'POST':
+        form = projektForm(request.POST, instance = projekt)
+        if form.is_valid():
+            form.save()
+            return redirect('/projekte/'+ projektId + '/')
+    else:
+        form = projektForm(instance = projekt)
+        
+    context = {'form': form}
+    return render_to_response('../templates/base_projekt_bearbeiten.html', context, context_instance=RequestContext(request))
+        
 def aufgabeDetails(request, aufgabeId):
     '''
     Erstellt die Detailansicht für eine Aufgabe.

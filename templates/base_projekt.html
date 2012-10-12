@@ -14,8 +14,8 @@
 		<th>Status</th>
 	</thead>
 	<tr>
-		<td>{{projekt.name}}</td>
-		<td>{{projekt.beschreibung}}</td>
+		<td><a href="/projekte/{{projekt.pk}}/">{{projekt.name}}</a></td>
+		<td><a href="/projekte/{{projekt.pk}}/">{{projekt.beschreibung}}</a></td>
 		<td>{{projekt.besitzer}}</td>
 		<td>{{projekt.get_status_display}}</td>
 	</tr>
