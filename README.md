@@ -63,11 +63,13 @@ Die kurze Version (Wenn man alle Änderungen in das Commit einfügen möchte):
 ACHTUNG: Niemals direkt in die master-Branch mergen. Zum Mergen nach master bitte folgenden Absatz beachten!
 
 Man muss sich in der Branch befinden, in die man etwas anderes hineinmergen will:
+
 1. $> git pull
 2. $> git merge <BRANCH_NAME>
 
 ## Eine Branch nach master mergen
 ACHTUNG: Niemals direkt in master mergen!
+
 1. $> git checkout <DIE_BRANCH_DIE_ICH_NACH_MASTER_MERGEN_WILL>
 2. $> git pull
 3. $> git merge origin/master
