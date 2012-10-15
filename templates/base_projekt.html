@@ -14,10 +14,10 @@
 		<th>Status</th>
 	</thead>
 	<tr>
-		<td><a href="/projekte/{{projekt.pk}}/">{{projekt.name}}</a></td>
-		<td><a href="/projekte/{{projekt.pk}}/">{{projekt.beschreibung}}</a></td>
-		<td>{{projekt.besitzer}}</td>
-		<td>{{projekt.get_status_display}}</td>
+		<td width="15%"><a href="/projekte/{{projekt.pk}}/">{{projekt.name}}</a></td>
+		<td width="55%"><a href="/projekte/{{projekt.pk}}/">{{projekt.beschreibung}}</a></td>
+		<td width="15%">{{projekt.besitzer}}</td>
+		<td width="15%">{{projekt.get_status_display}}</td>
 	</tr>
 </table>
 {% endfor %}
