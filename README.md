@@ -1,4 +1,4 @@
-# Team Hub
+﻿# Team Hub
 
 Es soll ein kleines Projektmanagementsystem erstellt werden. Im Kern soll es die Anwender befähigen, Aufgaben innerhalb eines Projektes zu planen, zu verfolgen und deren Ausgang zu bewerten.
 
@@ -8,6 +8,7 @@ Der Projekt/Teamleiter ( auch andere Benutzer?) sollte in der Lage sein Aufgaben
 
 Das System sollte mehrere Ansichten bieten z.B. Übersicht aller Aufgaben, Übersicht aller Aufgaben nach Datum (in einem Kalender) sortiert, Übersicht aller Aufgaben nach Fortschritt usw. enthalten.
 
+Das ist ein Test
 # Erste Schritte
 
 * Python muss vorhanden sein.
@@ -77,3 +78,4 @@ ACHTUNG: Niemals direkt in master mergen!
 5. $> git checkout master
 6. $> git merge <DIE_BRANCH_DIE_ICH_NACH_MASTER_MERGEN_WILL>
 7. $> git push
+test2 R. Mousarov
