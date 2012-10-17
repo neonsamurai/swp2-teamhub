@@ -41,7 +41,7 @@ Das ist ein anderer Test
 1. $> git pull
 
 ## Neue Branch mit Namen <NEUE_BRANCH> erstellen
-1. $> git push origin <NEUE_BRANCH>:refs/heads/<NEUE_BRANCH>
+1. $> git push origin <<NEUE_BRANCH>>:refs/heads/<<NEUE_BRANCH>>
 2. $> git fetch origin
 3. $> git branch --track <NEUE_BRANCH> origin/<NEUE_BRANCH>
 4. $> git checkout <NEUE_BRANCH>
