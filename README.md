@@ -41,24 +41,24 @@ Das ist ein Test
 1. $> git pull
 
 ## Neue Branch mit Namen <NEUE_BRANCH> erstellen
-1. $> git push origin <<NEUE_BRANCH>>:refs/heads/<<NEUE_BRANCH>>
+1. $> git push origin {NEUE_BRANCH}:refs/heads/{NEUE_BRANCH}
 2. $> git fetch origin
-3. $> git branch --track <NEUE_BRANCH> origin/<NEUE_BRANCH>
-4. $> git checkout <NEUE_BRANCH>
+3. $> git branch --track {NEUE_BRANCH} origin/{NEUE_BRANCH}
+4. $> git checkout {NEUE_BRANCH}
 
 ## Branch wechseln
-1. $> git checkout <BRANCH_NAME>
+1. $> git checkout {BRANCH_NAME}
 
 ## Changes committen
 Die lange Version (Hier kann man erstmal Dateien zum Commit hinzufügen, und die dann commiten. Gut wenn man seine Änderungen auf mehrere Commits aufteilen möchte):
-1. $> git add <dateiname>
+1. $> git add {dateiname}
 2. $> git commit -m "Commit Message"
 
 Die kurze Version (Wenn man alle Änderungen in das Commit einfügen möchte):
 1. $> git commit -am "Commit Message"
 
 ## Änderungen zu Github pushen
-1. $> git push <BRANCH_NAME>
+1. $> git push {BRANCH_NAME}
 
 ## Eine Branch in die eigene Branch "mergen"
 ACHTUNG: Niemals direkt in die master-Branch mergen. Zum Mergen nach master bitte folgenden Absatz beachten!
@@ -66,16 +66,16 @@ ACHTUNG: Niemals direkt in die master-Branch mergen. Zum Mergen nach master bitt
 Man muss sich in der Branch befinden, in die man etwas anderes hineinmergen will:
 
 1. $> git pull
-2. $> git merge <BRANCH_NAME>
+2. $> git merge {BRANCH_NAME}
 
 ## Eine Branch nach master mergen
 ACHTUNG: Niemals direkt in master mergen!
 
-1. $> git checkout <DIE_BRANCH_DIE_ICH_NACH_MASTER_MERGEN_WILL>
+1. $> git checkout {DIE_BRANCH_DIE_ICH_NACH_MASTER_MERGEN_WILL}
 2. $> git pull
 3. $> git merge origin/master
 4. (ggf. Merge-Konflikte lösen)
 5. $> git checkout master
-6. $> git merge <DIE_BRANCH_DIE_ICH_NACH_MASTER_MERGEN_WILL>
+6. $> git merge {DIE_BRANCH_DIE_ICH_NACH_MASTER_MERGEN_WILL}
 7. $> git push
 test2 R. Mousarov
