@@ -7,6 +7,9 @@ venv
 *.pyc
 local_settings.py
 
+# Database
+db
+
 # Aptana files
 *.project
 *.pydevproject
