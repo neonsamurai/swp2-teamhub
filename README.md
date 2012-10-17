@@ -8,7 +8,7 @@ Der Projekt/Teamleiter ( auch andere Benutzer?) sollte in der Lage sein Aufgaben
 
 Das System sollte mehrere Ansichten bieten z.B. Übersicht aller Aufgaben, Übersicht aller Aufgaben nach Datum (in einem Kalender) sortiert, Übersicht aller Aufgaben nach Fortschritt usw. enthalten.
 
-Das ist ein Test
+Das ist ein anderer Test
 # Erste Schritte
 
 * Python muss vorhanden sein.
