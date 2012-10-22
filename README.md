@@ -46,6 +46,9 @@ Das ist ein anderer Test
 3. $> git branch --track {NEUE_BRANCH} origin/{NEUE_BRANCH}
 4. $> git checkout {NEUE_BRANCH}
 
+## Lokale Branch für experimente erstellen
+1. $> git checkout -b {BRANCH_NAME}
+
 ## Branch wechseln
 1. $> git checkout {BRANCH_NAME}
 
