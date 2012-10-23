@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 setup(
     name="Django-TeamHub",
     version="0.1",
-    packages=find_packages(),
+    packages=find_packages(exclude=['project_settings']),
     
     # Project uses reStructuredText, so ensure that the docutils get
     # installed or upgraded on the target machine

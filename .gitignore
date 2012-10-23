@@ -9,7 +9,7 @@ local_settings.py
 
 # Distfiles
 dist
-*.egg-info*
+Django_TeamHub.egg-info
 
 # Database
 db
