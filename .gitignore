@@ -7,6 +7,10 @@ venv
 *.pyc
 local_settings.py
 
+# Distfiles
+dist
+*.egg-info
+
 # Database
 db
 
