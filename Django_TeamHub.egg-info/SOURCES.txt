@@ -1,0 +1,16 @@
+setup.py
+Django_TeamHub.egg-info/PKG-INFO
+Django_TeamHub.egg-info/SOURCES.txt
+Django_TeamHub.egg-info/dependency_links.txt
+Django_TeamHub.egg-info/requires.txt
+Django_TeamHub.egg-info/top_level.txt
+project_settings/__init__.py
+project_settings/settings.py
+project_settings/urls.py
+project_settings/wsgi.py
+teamhub/__init__.py
+teamhub/admin.py
+teamhub/forms.py
+teamhub/models.py
+teamhub/tests.py
+teamhub/views.py
