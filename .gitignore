@@ -9,7 +9,7 @@ local_settings.py
 
 # Distfiles
 dist
-*.egg-info
+*.egg-info*
 
 # Database
 db
