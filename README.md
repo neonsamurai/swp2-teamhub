@@ -8,7 +8,14 @@ Der Projekt/Teamleiter ( auch andere Benutzer?) sollte in der Lage sein Aufgaben
 
 Das System sollte mehrere Ansichten bieten z.B. Übersicht aller Aufgaben, Übersicht aller Aufgaben nach Datum (in einem Kalender) sortiert, Übersicht aller Aufgaben nach Fortschritt usw. enthalten.
 
-Das ist ein anderer Test
+# Aufgabenbereiche und Verantwortliche
+
+* 2 Templates: Ruslan
+* 3 Unit-Tests / Build-System: Dennis, Tim
+* 2 Geschäftslogik / Oberflächenschicht: Veronika
+* 1 (Persistenzschicht / Models / Schema)
+* Code Dokumentation-Tools: Tim
+
 # Erste Schritte
 
 * Python muss vorhanden sein.
