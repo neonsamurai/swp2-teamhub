@@ -7,6 +7,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     
     # TeamHub custom URLs
+
     url(r'^$', 'teamhub.views.dashboard', name='home'),
     url(r'^aufgabe/(?P<aufgabeId>\d+)/$', 'teamhub.views.aufgabeDetails' , name='aufgabeDetails'),
     url(r'^profil/','teamhub.views.userProfilBearbeiten'),
@@ -25,4 +26,5 @@ urlpatterns = patterns('',
     
     # Comments framework urls
     url(r'^comments/', include('django.contrib.comments.urls')),
+    
 )
