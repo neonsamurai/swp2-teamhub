@@ -17,7 +17,7 @@ def dashboard(request):
     '''
     meineAufgaben = Aufgabe.objects.filter(bearbeiter=request.user).order_by('faelligkeitsDatum')
     context = {'meineAufgaben': meineAufgaben}
-    return render_to_response('templates/base.html', context)
+    return render_to_response('base.html', context)
 
 def logoutUser(request):
     '''
@@ -28,7 +28,7 @@ def logoutUser(request):
 def projektListe(request):
     projektliste = Projekt.objects.all()
     context = {'projektliste': projektliste}
-    return render_to_response('templates/base_projekt.html', context)
+    return render_to_response('base_projekt.html', context)
 
 def projektDetail(request, projektId):
     '''
@@ -36,7 +36,7 @@ def projektDetail(request, projektId):
     '''
     projekt = Projekt.objects.get(pk=projektId)
     context = {'projekt': projekt}
-    return render_to_response('templates/base_projekt_detail.html', context)
+    return render_to_response('base_projekt_detail.html', context)
 
 def projektErstellen(request):
     from teamhub.forms import projektForm
@@ -50,7 +50,7 @@ def projektErstellen(request):
         form = projektForm()
         
     context = {'form': form}
-    return render_to_response('templates/base_projekt_bearbeiten.html', context, context_instance=RequestContext(request))
+    return render_to_response('base_projekt_bearbeiten.html', context, context_instance=RequestContext(request))
 
 def projektBearbeiten(request, projektId):
     from teamhub.forms import projektForm
@@ -66,7 +66,7 @@ def projektBearbeiten(request, projektId):
         form = projektForm(instance = projekt)
         
     context = {'form': form}
-    return render_to_response('templates/base_projekt_bearbeiten.html', context, context_instance=RequestContext(request))
+    return render_to_response('base_projekt_bearbeiten.html', context, context_instance=RequestContext(request))
         
 def aufgabeDetails(request, aufgabeId):
     '''
@@ -74,7 +74,7 @@ def aufgabeDetails(request, aufgabeId):
     '''
     aufgabe = Aufgabe.objects.get(pk=aufgabeId)
     context = {'aufgabe': aufgabe}
-    return render_to_response('templates/base_aufgabe.html', context)
+    return render_to_response('base_aufgabe.html', context)
 
 def userProfilBearbeiten(request):
     '''
@@ -93,4 +93,4 @@ def userProfilBearbeiten(request):
         form = profilForm(instance=user)
         
     context = {'form': form}
-    return render_to_response('templates/base_profil.html', context, context_instance=RequestContext(request))
+    return render_to_response('base_profil.html', context, context_instance=RequestContext(request))
