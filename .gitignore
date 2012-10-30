@@ -12,7 +12,7 @@ dist
 Django_TeamHub.egg-info
 
 # Database
-db
+db/*
 
 # Aptana files
 *.project
