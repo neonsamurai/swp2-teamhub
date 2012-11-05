@@ -4,7 +4,9 @@ from django.utils import timezone
 
 class lgAufgabe:
     def lg_aufgabe_isValid(self, aufgabe):
-        if Aufgabe.objects.filter(name=aufgabe.name).count()!=0:
+        if Aufgabe.objects.filter(titel=aufgabe.titel).count()!=0:
             return False
-        if not aufgabe.faelligkeitsDatum>=timezone.now():
+        if aufgabe.faelligkeitsDatum < timezone.now():
             return False
+        aufgabe.save()
+        return True

@@ -36,6 +36,7 @@ def aufgabeErstellen(request):
         form = aufgabeForm(request.POST)
         if form.is_valid():
             newAufgabe = form.save(commit=False)
+            newAufgabe.ersteller=request.user
             if lgAufgabe().lg_aufgabe_isValid(newAufgabe):
                 return redirect('/aufgabe/'+ str(newAufgabe.pk) + '/')
     else:
@@ -44,7 +45,7 @@ def aufgabeErstellen(request):
     context = {'form': form}
     return render_to_response('base_aufgabe_bearbeiten.html', context, context_instance=RequestContext(request))
 
-def aufgabeBearbeiten(request, aufgabeID):
+def aufgabeBearbeiten(request, aufgabeId):
     from teamhub.forms import aufgabeForm
     from teamhub.lg.lg_Aufgabe import lgAufgabe
     
@@ -55,9 +56,9 @@ def aufgabeBearbeiten(request, aufgabeID):
         if form.is_valid():
             form.save(commit=False)
             if lgAufgabe().lg_aufgabe_isValid(aufgabe):
-                return redirect('/aufgabe/'+ str(newAufgabe.pk) + '/')
+                return redirect('/aufgabe/'+ str(aufgabe.pk) + '/')
     else:
-        form = aufgabeForm()
+        form = aufgabeForm(instance = aufgabe)
         
     context = {'form': form}
     return render_to_response('base_aufgabe_bearbeiten.html', context, context_instance=RequestContext(request))
