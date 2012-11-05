@@ -30,12 +30,32 @@ def logoutUser(request):
 
 def aufgabeErstellen(request):
     from teamhub.forms import aufgabeForm
+    from teamhub.lg.lg_Aufgabe import lgAufgabe
     
     if request.method == 'POST':
         form = aufgabeForm(request.POST)
         if form.is_valid():
-            newAufgabe = form.save()
-            return redirect('/aufgabe/'+ str(newAufgabe.pk) + '/')
+            newAufgabe = form.save(commit=False)
+            if lgAufgabe().lg_aufgabe_isValid(newAufgabe):
+                return redirect('/aufgabe/'+ str(newAufgabe.pk) + '/')
+    else:
+        form = aufgabeForm()
+        
+    context = {'form': form}
+    return render_to_response('base_aufgabe_bearbeiten.html', context, context_instance=RequestContext(request))
+
+def aufgabeBearbeiten(request, aufgabeID):
+    from teamhub.forms import aufgabeForm
+    from teamhub.lg.lg_Aufgabe import lgAufgabe
+    
+    aufgabe = Aufgabe.objects.get(pk=aufgabeId)
+    
+    if request.method == 'POST':
+        form = aufgabeForm(request.POST, instance = aufgabe)
+        if form.is_valid():
+            form.save(commit=False)
+            if lgAufgabe().lg_aufgabe_isValid(aufgabe):
+                return redirect('/aufgabe/'+ str(newAufgabe.pk) + '/')
     else:
         form = aufgabeForm()
         
@@ -57,12 +77,14 @@ def projektDetail(request, projektId):
 
 def projektErstellen(request):
     from teamhub.forms import projektForm
+    from teamhub.lg.lg_Projekt import lgProjekt
     
     if request.method == 'POST':
         form = projektForm(request.POST)
         if form.is_valid():
-            newProject = form.save()
-            return redirect('/projekte/'+ str(newProject.pk) + '/')
+            newProject = form.save(commit=False)
+            if lgProjekt().lg_projekt_isValid(newProject):
+                return redirect('/projekte/'+ str(newProject.pk) + '/')
     else:
         form = projektForm()
         
@@ -71,14 +93,16 @@ def projektErstellen(request):
 
 def projektBearbeiten(request, projektId):
     from teamhub.forms import projektForm
+    from teamhub.lg.lg_Projekt import lgProjekt
     
     projekt = Projekt.objects.get(pk=projektId)
     
     if request.method == 'POST':
         form = projektForm(request.POST, instance = projekt)
         if form.is_valid():
-            form.save()
-            return redirect('/projekte/'+ projektId + '/')
+            form.save(commit=False)
+            if lgProjekt().lg_projekt_isValid(projekt):
+                return redirect('/projekte/'+ projektId + '/')
     else:
         form = projektForm(instance = projekt)
         
