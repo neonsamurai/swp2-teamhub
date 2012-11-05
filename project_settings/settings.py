@@ -15,7 +15,7 @@ LOGIN_REDIRECT_URL = '/'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'db/teamhub.sq3', # Or path to database file if using sqlite3.
+        'NAME': 'C:\\Users\\Wiki\\Documents\\5.Semester\\SP_II\\Repositoris\\swp2-teamhub\\sqlite.db', # Or path to database file if using sqlite3.
         'USER': '', # Not used with sqlite3.
         'PASSWORD': '', # Not used with sqlite3.
         'HOST': '', # Set to empty string for localhost. Not used with sqlite3.
