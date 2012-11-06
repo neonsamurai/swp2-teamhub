@@ -78,8 +78,12 @@ def projektDetail(request, projektId):
 
 def projektErstellen(request):
     from teamhub.forms import projektForm
-    from teamhub.lg.lg_Projekt import lgProjekt
+    from teamhub.lg.lg_Projekt import lgProjekt    
+    from teamhub.lg.lg_User import lgUser
     
+    if not lgUser().user_have_permissions(request.user):
+        return dashboard(request)
+        #return redirect(request.META.get('HTTP_HOST'))
     if request.method == 'POST':
         form = projektForm(request.POST)
         if form.is_valid():
@@ -95,6 +99,10 @@ def projektErstellen(request):
 def projektBearbeiten(request, projektId):
     from teamhub.forms import projektForm
     from teamhub.lg.lg_Projekt import lgProjekt
+    from teamhub.lg.lg_User import lgUser
+    
+    if not lgUser().user_have_permissions(request.user):
+        return dashboard(request)
     
     projekt = Projekt.objects.get(pk=projektId)
     
@@ -117,6 +125,25 @@ def aufgabeDetails(request, aufgabeId):
     aufgabe = Aufgabe.objects.get(pk=aufgabeId)
     context = {'aufgabe': aufgabe}
     return render_to_response('base_aufgabe.html', context)
+
+def benutzerErstellen(request):
+    from teamhub.lg.lg_User import lgUser
+    from teamhub.forms import userForm
+    
+    if not lgUser().user_have_permissions(request.user):
+        return dashboard(request)
+    if request.method=="POST":
+        form=userForm(request.POST)
+        if form.is_valid():
+            user=form.save(commit=False)
+            if lgUser().user_erstellen(user):
+                return dashboard(request)
+    else:
+        form = userForm()
+        
+    context = {'form': form}
+    return render_to_response('base_benutzer_erstellen.html', context, context_instance=RequestContext(request))
+    
 
 def userProfilBearbeiten(request):
     '''

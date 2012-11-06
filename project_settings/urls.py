@@ -21,6 +21,7 @@ urlpatterns = patterns('',
     url(r'^aufgabe/','teamhub.views.aufgabe'),
     url(r'^login/','django.contrib.auth.views.login'),
     url(r'^logout/','teamhub.views.logoutUser'),
+    url(r'^benutzer/','teamhub.views.benutzerErstellen'),
     # Examples:
     # url(r'^project_settings/', include('project_settings.foo.urls')),
 

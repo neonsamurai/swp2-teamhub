@@ -23,3 +23,8 @@ class aufgabeForm(ModelForm):
         def __unicode__(self):
             return self.as_divs()
           '''     
+        
+class userForm(ModelForm):
+    class Meta:
+        model=User
+        fields=('username','is_staff')
