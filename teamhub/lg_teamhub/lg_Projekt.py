@@ -20,9 +20,9 @@ class lgProjekt:
         form=projektForm(request,instance=projekt)
         
         if not form.is_valid():
-           return str(projekt.pk)
+            return str(projekt.pk)
        
-        if Projekt.objects.filter(name=request.get("name")).count() != 0:
+        if (Projekt.objects.get(pk=projekt.pk).name != projekt.name) and Projekt.objects.filter(name=request.get("name")).count() != 0:
             return str(projekt.pk)
         
         newProjekt = form.save()
