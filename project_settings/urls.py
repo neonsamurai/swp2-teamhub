@@ -10,6 +10,7 @@ urlpatterns = patterns('',
 
     url(r'^$', 'teamhub.views.dashboard', name='home'),
     url(r'^aufgabe/(?P<aufgabeId>\d+)/$', 'teamhub.views.aufgabeDetails' , name='aufgabeDetails'),
+    url(r'^aufgabe/erstellen/', 'teamhub.views.aufgabeErstellen'),
     url(r'^profil/','teamhub.views.userProfilBearbeiten'),
     url(r'^projekte/(?P<projektId>\d+)/bearbeiten/$', 'teamhub.views.projektBearbeiten', name='projektBearbeiten'),
     url(r'^projekte/(?P<projektId>\d+)/$', 'teamhub.views.projektDetail', name='projektDetails'),

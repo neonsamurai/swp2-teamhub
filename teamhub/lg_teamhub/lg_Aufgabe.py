@@ -5,9 +5,19 @@ from django.forms.models import modelformset_factory
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from teamhub.models import Aufgabe, Projekt
-from teamhub.forms import projektForm
+from teamhub.forms import aufgabeForm
 
-def projektErstellen(form):
-    if form.is_valid():
-        newProject = form.save()
-        return newProject
+class LgAufgabe:
+    def lg_aufgabeErstellen(self, request):
+        form = aufgabeForm(request)
+        
+        if not form.is_valid():
+            print "form invalid"
+            return False, str("erstellen")
+       
+        if Projekt.objects.filter(name=request.get("name")).count() != 0:
+            print "duplicate name"
+            return False, str("erstellen")
+        
+        newAufgabe = form.save()
+        return True, str(newAufgabe.pk)

@@ -4,8 +4,8 @@ from teamhub.models import Projekt
 from django.contrib.auth.models import User
 
 class lgProjekt:
-    def lg_projektErstellen(self,request):
-        form=projektForm(request)
+    def lg_projektErstellen(self, request):
+        form = projektForm(request)
         
         if not form.is_valid():
            return False, str("erstellen")
@@ -16,8 +16,8 @@ class lgProjekt:
         newProjekt = form.save()
         return True, str(newProjekt.pk)
     
-    def lg_projektBearbeiten(self,request,projekt):
-        form=projektForm(request,instance=projekt)
+    def lg_projektBearbeiten(self, request, projekt):
+        form = projektForm(request, instance=projekt)
         
         if not form.is_valid():
             return str(projekt.pk)

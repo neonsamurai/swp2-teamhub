@@ -39,7 +39,7 @@ class Aufgabe(models.Model):
     '''
     Repräsentation einer Aufgabe.
     '''
-    ersteller = models.ForeignKey(User, related_name="ersteller", editable=False, help_text="Ersteller dieser Aufgabe.")
+    ersteller = models.ForeignKey(User, related_name="ersteller", help_text="Ersteller dieser Aufgabe.")
     bearbeiter = models.ForeignKey(User, related_name="bearbeiter", blank=True, null=True, help_text="Bearbeiter dieser Aufgabe.")
     projekt = models.ForeignKey(Projekt, related_name="projekt", help_text="Das der Aufgabe übergeordnete Projekt.")
     

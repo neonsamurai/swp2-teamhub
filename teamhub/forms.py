@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django.contrib.auth.models import User
-from teamhub.models import Projekt
+from teamhub.models import Projekt, Aufgabe
 
 '''
 Django forms go here
@@ -15,3 +15,6 @@ class projektForm(ModelForm):
     class Meta:
         model = Projekt
         
+class aufgabeForm(ModelForm):
+    class Meta:
+        model = Aufgabe
