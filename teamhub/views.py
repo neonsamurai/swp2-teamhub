@@ -90,7 +90,7 @@ def projektErstellen(request):
         form = projektForm()
         
     context = {'form': form}
-    return render_to_response('base_projekt_bearbeiten.html', context, context_instance=RequestContext(request))
+    return render_to_response('base_projekt_erstellen.html', context, context_instance=RequestContext(request))
 
 def projektBearbeiten(request, projektId):
     from teamhub.forms import projektForm
