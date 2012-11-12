@@ -1,6 +1,7 @@
 # coding: utf-8
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 # Enums used by model classes
 PRIORITAET = (
@@ -32,10 +33,18 @@ class Projekt(models.Model):
     beschreibung = models.TextField(help_text="Ausführliche Beschreibung des Projekts.")
     status = models.CharField(max_length=2, default="OP", choices=PROJEKT_STATUS, help_text="Zustand des Projekts.")
     
+    def save (self):
+        if Projekt.objects.filter(name=self.name).exclude(pk=self.pk).count()!=0:
+            return False
+        # projekt.save()
+        super(Projekt, self).save()
+        return True
+        
     def __unicode__(self):
         return self.name
     
 class Aufgabe(models.Model):
+    
     '''
     Repräsentation einer Aufgabe.
     '''
@@ -51,6 +60,29 @@ class Aufgabe(models.Model):
     aenderungsDatum = models.DateTimeField(editable=False, auto_now=True, auto_now_add=True, help_text="Zeit der letzten Änderung.")
     faelligkeitsDatum = models.DateTimeField(blank=True, help_text="Die Aufgabe muss bis zu diesem Datum erledigt sein.")
     
+    def save(self):
+        if Aufgabe.objects.filter(titel=self.titel,projekt=self.projekt).exclude(pk=self.pk).count()!=0:
+            return False
+        if self.faelligkeitsDatum < timezone.now():
+            return False
+        if self.projekt.status=="CL":
+            return False
+        super(Aufgabe, self).save()
+        return True
+    
     def __unicode__(self):
         return self.titel
-
+    
+class CustomUser(User):
+    
+   def user_have_permissions(self, user):
+       return user.is_staff
+   
+   def user_erstellen(self, user):
+       if User.objects.filter(username=user.username).count()!=0:
+           return False
+       user.save()
+       user.set_password("test")
+       user.save()
+       return True 
+    
