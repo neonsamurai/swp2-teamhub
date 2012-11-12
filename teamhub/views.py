@@ -19,6 +19,7 @@ def dashboard(request):
     context = {'meineAufgaben': meineAufgaben}
     return render_to_response('base.html', context)
 
+
 def aufgabe(request):
     return render_to_response('base_aufgabe_erstellen.html')
         
@@ -107,16 +108,27 @@ def projektBearbeiten(request, projektId):
     projekt = Projekt.objects.get(pk=projektId)
     
     if request.method == 'POST':
-        form = projektForm(request.POST, instance = projekt)
-        if form.is_valid():
-            form.save(commit=False)
-            if lgProjekt().lg_projekt_isValid(projekt):
-                return redirect('/projekte/'+ projektId + '/')
+        b = lgProjekt().lg_projektBearbeiten(request.POST, projekt)
+        return redirect('/projekte/' + b + '/')
     else:
-        form = projektForm(instance = projekt)
+        form = projektForm(instance=projekt)
         
     context = {'form': form}
     return render_to_response('base_projekt_bearbeiten.html', context, context_instance=RequestContext(request))
+
+def aufgabeErstellen(request):
+    from teamhub.forms import aufgabeForm
+    from teamhub.lg_teamhub.lg_Aufgabe import LgAufgabe
+    
+    form = aufgabeForm()
+    
+    if request.method == 'POST':
+        f, b = LgAufgabe().lg_aufgabeErstellen(request.POST)
+        if f:
+            return redirect('/aufgabe/' + b + '/')
+    
+    context = {'form':form}
+    return render_to_response('../templates/base_aufgabe_bearbeiten.html', context, context_instance=RequestContext(request))
         
 def aufgabeDetails(request, aufgabeId):
     '''
@@ -144,7 +156,6 @@ def benutzerErstellen(request):
     context = {'form': form}
     return render_to_response('base_benutzer_erstellen.html', context, context_instance=RequestContext(request))
     
-
 def userProfilBearbeiten(request):
     '''
     Erstellt die Bearbeitungsansicht für das Profil des angemeldeten Benutzers.

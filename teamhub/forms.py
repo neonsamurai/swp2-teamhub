@@ -14,7 +14,7 @@ class profilForm(ModelForm):
 class projektForm(ModelForm):
     class Meta:
         model = Projekt
- 
+
 class aufgabeForm(ModelForm):
     class Meta:
         model = Aufgabe

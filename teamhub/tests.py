@@ -42,13 +42,43 @@ class AufgabeViewsTestCase(TestCase):
         response = self.c.get('/logout/')
         self.assertRedirects(response, '/login/')
 
+class AufgabeViewsTestCase(TestCase):
+            
+    def setUp(self):
+        self.c = Client()
+        User.objects.create_user(username='tim', email='tim.jagodzinski@gmail.com', password='tim')
+        testUser = User.objects.get(username='tim')
+        Projekt.objects.create(besitzer=testUser, name='Testprojekt', beschreibung='Beschreibung des Testprojekts', status='OP')
+        testProjekt = Projekt.objects.get(pk=1)
+        Aufgabe.objects.create(ersteller=testUser, bearbeiter=testUser, projekt=testProjekt, titel="Testaugabe", beschreibung="Beschreibung der Testaufgabe", faelligkeitsDatum='2015-12-12 12:00')
+        testAufgabe = Aufgabe.objects.get(pk=1)
+    
+    def test_login(self):
+        self.c.login(username='tim', password='tim')
+        self.assertIn('_auth_user_id', self.c.session)
+    
+    def test_dashboard(self):
+        self.c.login(username='tim', password='tim')
+        response = self.c.get('/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('meineAufgaben' in response.context)
+        self.assertEqual(response.context['meineAufgaben'][0].pk, 1)
+        
+    def test_logout(self):
+        self.c.login(username='tim', password='tim')
+        response = self.c.get('/logout/')
+        self.assertRedirects(response, '/login/')
+        
+        
+        
+
 class ProjektTest(TestCase):
 
     
     def test_Projekt_Erstellen(self):
         #Zwei Testuser werden erstellt
-        besitzer1=User(username='user',password='1234')
-        besitzer2=User(username='other_user',password='1234')
+        besitzer1 = User(username='user', password='1234')
+        besitzer2 = User(username='other_user', password='1234')
         besitzer1.save();
         besitzer2.save();
         
@@ -57,31 +87,30 @@ class ProjektTest(TestCase):
         self.assertEqual(Projekt.objects.all().count(), 0, '---Projekttabelle ist nicht leer!---')
         
         #Testprojekt wird erstellt
-        testProjekt = Projekt(besitzer=besitzer1, name='testProjekt',beschreibung='Test,test,test!!!',status='OP')
+        self.testProjekt = Projekt(besitzer=besitzer1, name='testProjekt', beschreibung='Test,test,test!!!', status='OP')
         self.assertEqual(Projekt.objects.all().count(), 0, '---Projekttabelle ist nicht leer!---')
         
         testProjekt.save()
         self.assertEqual(Projekt.objects.all().count(), 1, '---Projekttabelle ist nicht korrekt!---')
         
         
-        self.assertEqual(testProjekt.id, 1,'---Projektid stimmt nicht!---') 
-        self.assertEqual(testProjekt.name,'testProjekt','---Projektname stimmt nicht!---')        
-        self.assertEqual(testProjekt.beschreibung,'Test,test,test!!!','---Projektbeschreibung stimmt nicht!---')
-        self.assertEqual(testProjekt.status,'OP','---Projektstatus stimmt nicht!---')
-        self.assertEqual(testProjekt.besitzer, besitzer1,'---Projektbesitzer stimmt nicht!---')
+        self.assertEqual(self.testProjekt.id, 1, '---Projektid stimmt nicht!---') 
+        self.assertEqual(self.testProjekt.name, 'testProjekt', '---Projektname stimmt nicht!---')        
+        self.assertEqual(self.testProjekt.beschreibung, 'Test,test,test!!!', '---Projektbeschreibung stimmt nicht!---')
+        self.assertEqual(self.testProjekt.status, 'OP', '---Projektstatus stimmt nicht!---')
+        self.assertEqual(self.testProjekt.besitzer, besitzer1, '---Projektbesitzer stimmt nicht!---')
         
         #Im Testprojekt werden die Daten ausgetauscht
-        testProjekt.besitzer=besitzer2
-        testProjekt.beschreibung='Eine andere Beschreibung'
-        testProjekt.name='Projekt-Test'
-        testProjekt.status='CL'
-        testProjekt.save()
+        self.testProjekt.besitzer = besitzer2
+        self.testProjekt.beschreibung = 'Eine andere Beschreibung'
+        self.testProjekt.name = 'Projekt-Test'
+        self.testProjekt.status = 'CL'
+        self.testProjekt.save()
         
-        self.assertEqual(testProjekt.name,'Projekt-Test','---Projektname stimmt nicht!---')        
-        self.assertEqual(testProjekt.beschreibung,'Eine andere Beschreibung','---Projektbeschreibung stimmt nicht!---')
-        self.assertEqual(testProjekt.status,'CL','---Projektstatus stimmt nicht!---')
-        self.assertEqual(testProjekt.besitzer,besitzer2,'---Projektbesitzer stimmt nicht!---')
-        
+        self.assertEqual(self.testProjekt.name, 'Projekt-Test', '---Projektname stimmt nicht!---')        
+        self.assertEqual(self.testProjekt.beschreibung, 'Eine andere Beschreibung', '---Projektbeschreibung stimmt nicht!---')
+        self.assertEqual(self.testProjekt.status, 'CL', '---Projektstatus stimmt nicht!---')
+        self.assertEqual(self.testProjekt.besitzer, besitzer2, '---Projektbesitzer stimmt nicht!---')
         
         testProjekt.delete();
         self.assertEqual(Projekt.objects.all().count(), 0, '---Projekttabelle ist nicht leer!---')
