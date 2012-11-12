@@ -14,15 +14,15 @@ class profilForm(ModelForm):
 class projektForm(ModelForm):
     class Meta:
         model = Projekt
+        
+class projektFormErstellen(ModelForm):
+    class Meta:
+        model = Projekt
+        exclude=('status',)
  
 class aufgabeForm(ModelForm):
     class Meta:
-        model = Aufgabe
-        #auto_id=True
-        '''
-        def __unicode__(self):
-            return self.as_divs()
-          '''     
+        model = Aufgabe    
         
 class userForm(ModelForm):
     class Meta:
