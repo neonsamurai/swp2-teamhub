@@ -77,7 +77,7 @@ def projektDetail(request, projektId):
     return render_to_response('base_projekt_detail.html', context)
 
 def projektErstellen(request):
-    from teamhub.forms import projektForm
+    from teamhub.forms import projektFormErstellen
     #from teamhub.lg.lg_Projekt import lgProjekt    
     #from teamhub.lg.lg_User import lgUser
     
@@ -85,17 +85,18 @@ def projektErstellen(request):
         return dashboard(request)
         #return redirect(request.META.get('HTTP_HOST'))
     if request.method == 'POST':
-        form = projektForm(request.POST)
+        form = projektFormErstellen(request.POST)
         if form.is_valid():
-            newProject = form.save(commit=False)
+            #newProject = form.save(commit=False)
+            newProject = form.save()
             #if lgProjekt().lg_projekt_isValid(newProject):
-            if newProject.save():
-                return redirect('/projekte/'+ str(newProject.pk) + '/')
+            #if newProject.save():
+            return redirect('/projekte/'+ str(newProject.pk) + '/')
     else:
-        form = projektForm()
+        form = projektFormErstellen()
         
     context = {'form': form}
-    return render_to_response('base_projekt_bearbeiten.html', context, context_instance=RequestContext(request))
+    return render_to_response('base_projekt_erstellen.html', context, context_instance=RequestContext(request))
 
 def projektBearbeiten(request, projektId):
     from teamhub.forms import projektForm
@@ -110,9 +111,10 @@ def projektBearbeiten(request, projektId):
     if request.method == 'POST':
         form = projektForm(request.POST, instance = projekt)
         if form.is_valid():
-            form.save(commit=False)
-            if projekt.save():
-                return redirect('/projekte/'+ projektId + '/')
+            form.save()
+            
+            #if projekt.save():
+            return redirect('/projekte/'+ projektId + '/')
     else:
         form = projektForm(instance = projekt)
         
@@ -135,7 +137,7 @@ def benutzerErstellen(request):
     if request.method=="POST":
         form=userForm(request.POST)
         if form.is_valid():
-            user=form.save(commit=False)
+            user=form.save()
             if CustomUser().user_erstellen(user):
                 return dashboard(request)
     else:

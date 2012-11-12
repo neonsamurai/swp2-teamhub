@@ -2,6 +2,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.db.utils import IntegrityError
 
 # Enums used by model classes
 PRIORITAET = (
@@ -35,10 +36,10 @@ class Projekt(models.Model):
     
     def save (self):
         if Projekt.objects.filter(name=self.name).exclude(pk=self.pk).count()!=0:
-            return False
-        # projekt.save()
+            raise IntegrityError ('Es existiert schon ein Projekt mit dem Namen: '+self.name+'!')
+        
         super(Projekt, self).save()
-        return True
+        
         
     def __unicode__(self):
         return self.name
@@ -62,9 +63,9 @@ class Aufgabe(models.Model):
     
     def save(self):
         if Aufgabe.objects.filter(titel=self.titel,projekt=self.projekt).exclude(pk=self.pk).count()!=0:
-            return False
+            raise IntegrityError ('Es existiert schon eine Aufgabe mit dem Namen: '+self.titel+'!')
         if self.faelligkeitsDatum < timezone.now():
-            return False
+            raise IntegrityError ('Fälligkeitsdatum liegt in Vergangenheit!')
         if self.projekt.status=="CL":
             return False
         super(Aufgabe, self).save()
