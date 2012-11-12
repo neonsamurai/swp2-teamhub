@@ -14,7 +14,17 @@ class profilForm(ModelForm):
 class projektForm(ModelForm):
     class Meta:
         model = Projekt
-        
+ 
 class aufgabeForm(ModelForm):
     class Meta:
         model = Aufgabe
+        #auto_id=True
+        '''
+        def __unicode__(self):
+            return self.as_divs()
+          '''     
+        
+class userForm(ModelForm):
+    class Meta:
+        model=User
+        fields=('username','is_staff')
