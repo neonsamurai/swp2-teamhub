@@ -79,7 +79,8 @@ class CustomUser(User):
    
    def user_erstellen(self, user):
        if User.objects.filter(username=user.username).count()!=0:
-           raise IntegrityError ('Es existiert schon ein User mit den Namen: '+ self.name +'!')
+           return False
+           #raise IntegrityError ('Es existiert schon ein User mit den Namen: '+ self.name +'!')
        user.save()
        user.set_password("test")
        user.save() 
