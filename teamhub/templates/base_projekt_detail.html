@@ -4,14 +4,18 @@
 {% block sectiontitle %}{{projekt.titel}}{% endblock %}
 
 {% block content %}
-<h1>Projekt: {{projekt.name}}<a class="btn pull-right" href="/projekte/{{projekt.pk}}/bearbeiten/">Projekt bearbeiten</a></h1>
-<table class="table">
-        <tr>
-                <td><strong>Besitzer:</strong> {{projekt.besitzer}}</td>
-                <td><strong>Status:</strong> {{projekt.get_status_display}}</td>
-        </tr>
-        <tr>
-                <td colspan="2"><strong>Beschreibung:</strong> {{projekt.beschreibung}}</td>
-        </tr>
+<!-- blendet den Button "Projekt bearbeiten" aus, wenn Projekt status "geschlossen" ist -->
+{% if projekt.status == 'CL'%}
+{% else %}
+	<h1>Projekt: {{projekt.name}}<a class="btn pull-right" href="/projekte/{{projekt.pk}}/bearbeiten/">Projekt bearbeiten</a></h1>
+{%endif%}	
+		<table class="table">
+       	 <tr>
+               	 <td><strong>Besitzer:</strong> {{projekt.besitzer}}</td>
+                	<td><strong>Status:</strong> {{projekt.get_status_display}}</td>
+        	</tr>
+        	<tr>
+               	 <td colspan="2"><strong>Beschreibung:</strong> {{projekt.beschreibung}}</td>
+       	 </tr>
 </table>
 {% endblock %}

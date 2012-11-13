@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.forms.models import modelformset_factory
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
-from teamhub.models import Aufgabe, Projekt
+from teamhub.models import Aufgabe, Projekt, CustomUser
 # Create your views here.
 
 @login_required
@@ -19,7 +19,6 @@ def dashboard(request):
     context = {'meineAufgaben': meineAufgaben}
     return render_to_response('base.html', context)
 
-
 def aufgabe(request):
     return render_to_response('base_aufgabe_erstellen.html')
         
@@ -30,34 +29,29 @@ def logoutUser(request):
     return logout_then_login(request, '/login/')
 
 def aufgabeErstellen(request):
-    from teamhub.forms import aufgabeForm
-    from teamhub.lg.lg_Aufgabe import lgAufgabe
+    from teamhub.forms import aufgabeErstellenForm
     
     if request.method == 'POST':
-        form = aufgabeForm(request.POST)
+        form = aufgabeErstellenForm(request.POST)
         if form.is_valid():
             newAufgabe = form.save(commit=False)
             newAufgabe.ersteller=request.user
-            if lgAufgabe().lg_aufgabe_isValid(newAufgabe):
-                return redirect('/aufgabe/'+ str(newAufgabe.pk) + '/')
+            newAufgabe.save()
+            return redirect('/aufgabe/'+ str(newAufgabe.pk) + '/')
     else:
-        form = aufgabeForm()
-        
+        form = aufgabeErstellenForm()        
     context = {'form': form}
     return render_to_response('base_aufgabe_bearbeiten.html', context, context_instance=RequestContext(request))
 
 def aufgabeBearbeiten(request, aufgabeId):
     from teamhub.forms import aufgabeForm
-    from teamhub.lg.lg_Aufgabe import lgAufgabe
-    
+
     aufgabe = Aufgabe.objects.get(pk=aufgabeId)
-    
     if request.method == 'POST':
         form = aufgabeForm(request.POST, instance = aufgabe)
         if form.is_valid():
-            form.save(commit=False)
-            if lgAufgabe().lg_aufgabe_isValid(aufgabe):
-                return redirect('/aufgabe/'+ str(aufgabe.pk) + '/')
+            form.save()
+            return redirect('/aufgabe/'+ str(aufgabe.pk) + '/')
     else:
         form = aufgabeForm(instance = aufgabe)
         
@@ -78,57 +72,37 @@ def projektDetail(request, projektId):
     return render_to_response('base_projekt_detail.html', context)
 
 def projektErstellen(request):
-    from teamhub.forms import projektForm
-    from teamhub.lg.lg_Projekt import lgProjekt    
-    from teamhub.lg.lg_User import lgUser
+    from teamhub.forms import projektFormErstellen
     
-    if not lgUser().user_have_permissions(request.user):
+    if not CustomUser().user_have_permissions(request.user):
         return dashboard(request)
-        #return redirect(request.META.get('HTTP_HOST'))
     if request.method == 'POST':
-        form = projektForm(request.POST)
+        form = projektFormErstellen(request.POST)
         if form.is_valid():
-            newProject = form.save(commit=False)
-            if lgProjekt().lg_projekt_isValid(newProject):
-                return redirect('/projekte/'+ str(newProject.pk) + '/')
+            newProject = form.save()
+            return redirect('/projekte/'+ str(newProject.pk) + '/')
     else:
-        form = projektForm()
-        
+        form = projektFormErstellen()
     context = {'form': form}
-    return render_to_response('base_projekt_bearbeiten.html', context, context_instance=RequestContext(request))
+    return render_to_response('base_projekt_erstellen.html', context, context_instance=RequestContext(request))
 
 def projektBearbeiten(request, projektId):
     from teamhub.forms import projektForm
-    from teamhub.lg.lg_Projekt import lgProjekt
-    from teamhub.lg.lg_User import lgUser
-    
-    if not lgUser().user_have_permissions(request.user):
+    if not CustomUser().user_have_permissions(request.user):
         return dashboard(request)
     
     projekt = Projekt.objects.get(pk=projektId)
     
     if request.method == 'POST':
-        b = lgProjekt().lg_projektBearbeiten(request.POST, projekt)
-        return redirect('/projekte/' + b + '/')
+        form = projektForm(request.POST, instance = projekt)
+        if form.is_valid():
+            form.save()
+            return redirect('/projekte/'+ projektId + '/')
     else:
-        form = projektForm(instance=projekt)
+        form = projektForm(instance = projekt)
         
     context = {'form': form}
     return render_to_response('base_projekt_bearbeiten.html', context, context_instance=RequestContext(request))
-
-def aufgabeErstellen(request):
-    from teamhub.forms import aufgabeForm
-    from teamhub.lg_teamhub.lg_Aufgabe import LgAufgabe
-    
-    form = aufgabeForm()
-    
-    if request.method == 'POST':
-        f, b = LgAufgabe().lg_aufgabeErstellen(request.POST)
-        if f:
-            return redirect('/aufgabe/' + b + '/')
-    
-    context = {'form':form}
-    return render_to_response('../templates/base_aufgabe_bearbeiten.html', context, context_instance=RequestContext(request))
         
 def aufgabeDetails(request, aufgabeId):
     '''
@@ -139,16 +113,15 @@ def aufgabeDetails(request, aufgabeId):
     return render_to_response('base_aufgabe.html', context)
 
 def benutzerErstellen(request):
-    from teamhub.lg.lg_User import lgUser
     from teamhub.forms import userForm
     
-    if not lgUser().user_have_permissions(request.user):
+    if not CustomUser().user_have_permissions(request.user):
         return dashboard(request)
     if request.method=="POST":
         form=userForm(request.POST)
         if form.is_valid():
-            user=form.save(commit=False)
-            if lgUser().user_erstellen(user):
+            user=form.save()
+            if CustomUser().user_erstellen(user):
                 return dashboard(request)
     else:
         form = userForm()
@@ -156,6 +129,7 @@ def benutzerErstellen(request):
     context = {'form': form}
     return render_to_response('base_benutzer_erstellen.html', context, context_instance=RequestContext(request))
     
+
 def userProfilBearbeiten(request):
     '''
     Erstellt die Bearbeitungsansicht für das Profil des angemeldeten Benutzers.

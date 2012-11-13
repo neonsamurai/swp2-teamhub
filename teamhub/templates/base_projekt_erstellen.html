@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block sectiontitle %}Projekt erstellen{% endblock %}
+
+{% block content %}
+<form method="post" action="">
+        {% csrf_token %}
+        {{ form.as_table }}
+
+        <br /><input type="submit" value="Senden" />
+</form>
+
+{% endblock %}

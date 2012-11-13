@@ -1,6 +1,9 @@
 # coding: utf-8
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
+from django.db.utils import IntegrityError
+from django.core.exceptions import ValidationError
 
 # Enums used by model classes
 PRIORITAET = (
@@ -25,17 +28,30 @@ PROJEKT_STATUS = (
 class Projekt(models.Model):
     '''
     Repräsentation eines Projekts. Das Projekt dient als Container für Aufgaben.
+    
     '''
+    
     besitzer = models.ForeignKey(User, related_name="besitzer", help_text="Verantwortlicher für das Projekt.")
     
     name = models.CharField(max_length=512, help_text="Name des Projekts.")
     beschreibung = models.TextField(help_text="Ausführliche Beschreibung des Projekts.")
     status = models.CharField(max_length=2, default="OP", choices=PROJEKT_STATUS, help_text="Zustand des Projekts.")
-    
+    def save (self):
+        if Projekt.objects.filter(name=self.name).exclude(pk=self.pk).count()!=0:
+            raise IntegrityError ('Es existiert schon ein Projekt mit dem Namen: '+self.name+'!')
+        super(Projekt, self).save()
+
+    def save (self):
+        if Projekt.objects.filter(name=self.name).exclude(pk=self.pk).count()!=0:
+            raise IntegrityError ('Es existiert schon ein Projekt mit dem Namen: '+self.name+'!')
+        
+        super(Projekt, self).save()
+      
     def __unicode__(self):
         return self.name
     
 class Aufgabe(models.Model):
+    
     '''
     Repräsentation einer Aufgabe.
     '''
@@ -51,6 +67,28 @@ class Aufgabe(models.Model):
     aenderungsDatum = models.DateTimeField(editable=False, auto_now=True, auto_now_add=True, help_text="Zeit der letzten Änderung.")
     faelligkeitsDatum = models.DateTimeField(blank=True, help_text="Die Aufgabe muss bis zu diesem Datum erledigt sein.")
     
+    def save(self):
+        if Aufgabe.objects.filter(titel=self.titel,projekt=self.projekt).exclude(pk=self.pk).count()!=0:
+            raise IntegrityError ('Es existiert schon eine Aufgabe mit dem Namen: '+self.titel+'!')
+        if self.faelligkeitsDatum < timezone.now():
+            raise IntegrityError ('Fälligkeitsdatum darf nicht in der Vergangenheit liegen!')
+        if self.projekt.status=="CL":
+            raise ValidationError('Das Projektstatus darf nicht geschlossen sein!')
+        super(Aufgabe, self).save()
+    
     def __unicode__(self):
         return self.titel
-
+    
+class CustomUser(User):
+    
+   def user_have_permissions(self, user):
+       return user.is_staff
+   
+   def user_erstellen(self, user):
+       if User.objects.filter(username=user.username).count()!=0:
+           raise IntegrityError ('Es existiert schon ein User mit den Namen: '+ self.name +'!') # leider wird hier es nicht aufgerufen 
+       user.save()
+       user.set_password("test")
+       user.save() 
+       return True
+    
