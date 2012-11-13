@@ -40,7 +40,7 @@ def aufgabeErstellen(request):
             return redirect('/aufgabe/'+ str(newAufgabe.pk) + '/')
     else:
         form = aufgabeErstellenForm()        
-    context = {'form': form}
+    context = {'form': form, "title": "Aufgabe Erstellen"}
     return render_to_response('base_aufgabe_bearbeiten.html', context, context_instance=RequestContext(request))
 
 def aufgabeBearbeiten(request, aufgabeId):
@@ -55,7 +55,7 @@ def aufgabeBearbeiten(request, aufgabeId):
     else:
         form = aufgabeForm(instance = aufgabe)
         
-    context = {'form': form}
+    context = {'form': form, "title": "Aufgabe bearbeiten"}
     return render_to_response('base_aufgabe_bearbeiten.html', context, context_instance=RequestContext(request))
 
 def projektListe(request):

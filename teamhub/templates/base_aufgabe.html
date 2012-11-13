@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load url from future %}
 
-{% block sectiontitle %}{{aufgabe.titel}}Aufgabenliste <a class="btn pull-right" href="/aufgabe/{{aufgabe.pk}}/bearbeiten/">Aufgabe bearbeiten</a>{% endblock %}
+{% block sectiontitle %}{{aufgabe.titel}} <a class="btn pull-right" href="/aufgabe/{{aufgabe.pk}}/bearbeiten/">Aufgabe bearbeiten</a>{% endblock %}
 
 {% block content %}
 <table class="table">
