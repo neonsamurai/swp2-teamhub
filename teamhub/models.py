@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db.utils import IntegrityError
+from django.core.exceptions import ValidationError
 
 # Enums used by model classes
 PRIORITAET = (
@@ -64,9 +65,9 @@ class Aufgabe(models.Model):
         if Aufgabe.objects.filter(titel=self.titel,projekt=self.projekt).exclude(pk=self.pk).count()!=0:
             raise IntegrityError ('Es existiert schon eine Aufgabe mit dem Namen: '+self.titel+'!')
         if self.faelligkeitsDatum < timezone.now():
-            raise IntegrityError ('Fälligkeitsdatum liegt in Vergangenheit!')
+            raise IntegrityError ('Fälligkeitsdatum darf nicht in der Vergangenheit liegen!')
         if self.projekt.status=="CL":
-            raise IntegrityError ('Das Projektstatus darf nicht geschlossen sein!')
+            raise ValidationError('Das Projektstatus darf nicht geschlossen sein!')
         super(Aufgabe, self).save()
     
     def __unicode__(self):
@@ -79,9 +80,10 @@ class CustomUser(User):
    
    def user_erstellen(self, user):
        if User.objects.filter(username=user.username).count()!=0:
-           return False
-           #raise IntegrityError ('Es existiert schon ein User mit den Namen: '+ self.name +'!')
+           #return False
+           raise IntegrityError ('Es existiert schon ein User mit den Namen: '+ self.name +'!')
        user.save()
        user.set_password("test")
        user.save() 
+       return True
     

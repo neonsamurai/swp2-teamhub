@@ -20,8 +20,8 @@ def dashboard(request):
     return render_to_response('base.html', context)
 
 def aufgabe(request):
-    #return render_to_response('base_aufgabe_erstellen.html')
-    return render_to_response('base_aufgabe.html')
+    return render_to_response('base_aufgabe_erstellen.html')
+    #return render_to_response('base_aufgabe.html')
         
         
 def logoutUser(request):
@@ -136,7 +136,7 @@ def benutzerErstellen(request):
     if request.method=="POST":
         form=userForm(request.POST)
         if form.is_valid():
-            user=form.save()
+            user=form.save(commit=False)
             if CustomUser().user_erstellen(user):
                 return dashboard(request)
     else:
