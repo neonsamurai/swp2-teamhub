@@ -1,4 +1,4 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, CharField
 from django.contrib.auth.models import User
 from teamhub.models import Projekt, Aufgabe
 
@@ -28,7 +28,7 @@ class aufgabeErstellenForm(ModelForm):
     class Meta:
         model = Aufgabe
         exclude=('ersteller','status',) 
-                
+
 class userForm(ModelForm):
     class Meta:
         model=User

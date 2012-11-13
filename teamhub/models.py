@@ -40,8 +40,13 @@ class Projekt(models.Model):
         if Projekt.objects.filter(name=self.name).exclude(pk=self.pk).count()!=0:
             raise IntegrityError ('Es existiert schon ein Projekt mit dem Namen: '+self.name+'!')
         super(Projekt, self).save()
-    
+
+    def save (self):
+        if Projekt.objects.filter(name=self.name).exclude(pk=self.pk).count()!=0:
+            raise IntegrityError ('Es existiert schon ein Projekt mit dem Namen: '+self.name+'!')
         
+        super(Projekt, self).save()
+      
     def __unicode__(self):
         return self.name
     
@@ -74,7 +79,6 @@ class Aufgabe(models.Model):
     def __unicode__(self):
         return self.titel
     
-'''    
 class CustomUser(User):
     
    def user_have_permissions(self, user):
@@ -82,11 +86,9 @@ class CustomUser(User):
    
    def user_erstellen(self, user):
        if User.objects.filter(username=user.username).count()!=0:
-           #return False
            raise IntegrityError ('Es existiert schon ein User mit den Namen: '+ self.name +'!') # leider wird hier es nicht aufgerufen 
        user.save()
        user.set_password("test")
        user.save() 
        return True
-'''       
     
