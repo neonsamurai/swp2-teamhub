@@ -28,18 +28,19 @@ PROJEKT_STATUS = (
 class Projekt(models.Model):
     '''
     Repräsentation eines Projekts. Das Projekt dient als Container für Aufgaben.
+    
     '''
+    
     besitzer = models.ForeignKey(User, related_name="besitzer", help_text="Verantwortlicher für das Projekt.")
     
     name = models.CharField(max_length=512, help_text="Name des Projekts.")
     beschreibung = models.TextField(help_text="Ausführliche Beschreibung des Projekts.")
     status = models.CharField(max_length=2, default="OP", choices=PROJEKT_STATUS, help_text="Zustand des Projekts.")
-    
     def save (self):
         if Projekt.objects.filter(name=self.name).exclude(pk=self.pk).count()!=0:
             raise IntegrityError ('Es existiert schon ein Projekt mit dem Namen: '+self.name+'!')
         super(Projekt, self).save()
-        #return True
+    
         
     def __unicode__(self):
         return self.name
@@ -73,6 +74,7 @@ class Aufgabe(models.Model):
     def __unicode__(self):
         return self.titel
     
+'''    
 class CustomUser(User):
     
    def user_have_permissions(self, user):
@@ -81,9 +83,10 @@ class CustomUser(User):
    def user_erstellen(self, user):
        if User.objects.filter(username=user.username).count()!=0:
            #return False
-           raise IntegrityError ('Es existiert schon ein User mit den Namen: '+ self.name +'!')
+           raise IntegrityError ('Es existiert schon ein User mit den Namen: '+ self.name +'!') # leider wird hier es nicht aufgerufen 
        user.save()
        user.set_password("test")
        user.save() 
        return True
+'''       
     

@@ -24,6 +24,11 @@ class aufgabeForm(ModelForm):
     class Meta:
         model = Aufgabe    
         
+class aufgabeErstellenForm(ModelForm):
+    class Meta:
+        model = Aufgabe
+        exclude=('ersteller','status',) 
+                
 class userForm(ModelForm):
     class Meta:
         model=User
