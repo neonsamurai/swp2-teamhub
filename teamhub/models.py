@@ -73,17 +73,24 @@ class Aufgabe(models.Model):
     def __unicode__(self):
         return self.titel
     
+'''
 class CustomUser(User):
     
    def user_have_permissions(self, user):
        return user.is_staff
    
-   def user_erstellen(self, user):
-       if User.objects.filter(username=user.username).count()!=0:
-           #return False
-           raise IntegrityError ('Es existiert schon ein User mit den Namen: '+ self.name +'!')
+   def user_erstellen(self, user):      
        user.save()
        user.set_password("test")
        user.save() 
-       return True
-    
+
+   def save(self):
+       if User.objects.filter(username=user.username).count()!=0:
+           raise IntegrityError ('Es existiert schon ein User mit den Namen: '+ self.name +'!')
+       print("halo")
+       #super(CustomUser, self).save() 
+       self.set_password("test")      
+       super(CustomUser, self).save()
+   def __unicode__(self):
+        return self.username
+'''

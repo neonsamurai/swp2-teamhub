@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.forms.models import modelformset_factory
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
-from teamhub.models import Aufgabe, Projekt, CustomUser
+from teamhub.models import Aufgabe, Projekt
 # Create your views here.
 
 @login_required
@@ -31,26 +31,23 @@ def logoutUser(request):
     return logout_then_login(request, '/login/')
 
 def aufgabeErstellen(request):
-    from teamhub.forms import aufgabeForm
-    #from teamhub.lg.lg_Aufgabe import lgAufgabe
+    from teamhub.forms import aufgabeErstellenForm
     
     if request.method == 'POST':
-        form = aufgabeForm(request.POST)
+        form = aufgabeErstellenForm(request.POST)
         if form.is_valid():
-            #newAufgabe = form.save(commit=False)
-            newAufgabe = form.save()
+            newAufgabe = form.save(commit=False)
             newAufgabe.ersteller=request.user
-            #if newAufgabe.save():
+            newAufgabe.save()
             return redirect('/aufgabe/'+ str(newAufgabe.pk) + '/')
     else:
-        form = aufgabeForm()
+        form = aufgabeErstellenForm()
         
     context = {'form': form}
     return render_to_response('base_aufgabe_bearbeiten.html', context, context_instance=RequestContext(request))
 
 def aufgabeBearbeiten(request, aufgabeId):
     from teamhub.forms import aufgabeForm
-    #from teamhub.lg.lg_Aufgabe import lgAufgabe
     
     aufgabe = Aufgabe.objects.get(pk=aufgabeId)
     
@@ -58,7 +55,6 @@ def aufgabeBearbeiten(request, aufgabeId):
         form = aufgabeForm(request.POST, instance = aufgabe)
         if form.is_valid():
             form.save()
-            #if aufgabe.save():
             return redirect('/aufgabe/'+ str(aufgabe.pk) + '/')
     else:
         form = aufgabeForm(instance = aufgabe)
@@ -81,16 +77,13 @@ def projektDetail(request, projektId):
 
 def projektErstellen(request):
     from teamhub.forms import projektForm
-    #from teamhub.lg.lg_Projekt import lgProjekt    
-    #from teamhub.lg.lg_User import lgUser
     
-    if not CustomUser().user_have_permissions(request.user):
+    if not request.user.is_staff:
         return dashboard(request)
     if request.method == 'POST':
         form = projektForm(request.POST)
         if form.is_valid():
             newProject = form.save()
-            #if newProject.save():
             return redirect('/projekte/'+ str(newProject.pk) + '/')
     else:
         form = projektForm()
@@ -100,10 +93,8 @@ def projektErstellen(request):
 
 def projektBearbeiten(request, projektId):
     from teamhub.forms import projektForm
-    #from teamhub.lg.lg_Projekt import lgProjekt
-    #from teamhub.lg.lg_User import lgUser
-    
-    if not CustomUser().user_have_permissions(request.user):
+
+    if not request.user.is_staff:
         return dashboard(request)
     
     projekt = Projekt.objects.get(pk=projektId)
@@ -112,7 +103,6 @@ def projektBearbeiten(request, projektId):
         form = projektForm(request.POST, instance = projekt)
         if form.is_valid():
             form.save()
-            #if projekt.save():
             return redirect('/projekte/'+ projektId + '/')
     else:
         form = projektForm(instance = projekt)
@@ -131,14 +121,15 @@ def aufgabeDetails(request, aufgabeId):
 def benutzerErstellen(request):
     from teamhub.forms import userForm
     
-    if not CustomUser().user_have_permissions(request.user):
+    if not request.user.is_staff:
         return dashboard(request)
     if request.method=="POST":
         form=userForm(request.POST)
         if form.is_valid():
-            user=form.save(commit=False)
-            if CustomUser().user_erstellen(user):
-                return dashboard(request)
+            user=form.save()
+            user.set_password("test")
+            user.save()
+            return dashboard(request)
     else:
         form = userForm()
         
