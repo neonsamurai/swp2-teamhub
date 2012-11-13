@@ -61,7 +61,7 @@ class ProjektTest(TestCase):
         self.testProjekt = Projekt(besitzer=besitzer1, name='testProjekt', beschreibung='Test,test,test!!!', status='OP')
         self.assertEqual(Projekt.objects.all().count(), 0, '---Projekttabelle ist nicht leer!---')
         
-        testProjekt.save()
+        self.testProjekt.save()
         self.assertEqual(Projekt.objects.all().count(), 1, '---Projekttabelle ist nicht korrekt!---')
         
         
@@ -83,7 +83,7 @@ class ProjektTest(TestCase):
         self.assertEqual(self.testProjekt.status, 'CL', '---Projektstatus stimmt nicht!---')
         self.assertEqual(self.testProjekt.besitzer, besitzer2, '---Projektbesitzer stimmt nicht!---')
         
-        testProjekt.delete();
+        self.testProjekt.delete();
         self.assertEqual(Projekt.objects.all().count(), 0, '---Projekttabelle ist nicht leer!---')
         
 if __name__ == "__main__":
