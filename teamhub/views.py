@@ -81,7 +81,7 @@ def projektDetail(request, projektId):
 def projektErstellen(request):
     from teamhub.forms import projektFormErstellen
 
-    if not CustomUser().user_have_permissions(request.user):
+    if not request.user.is_staff:
         return dashboard(request)
     if request.method == 'POST':
         form = projektFormErstellen(request.POST)
@@ -96,7 +96,8 @@ def projektErstellen(request):
 
 def projektBearbeiten(request, projektId):
     from teamhub.forms import projektForm
-    if not CustomUser().user_have_permissions(request.user):
+    
+    if not request.user.is_staff:
         return dashboard(request)
 
     projekt = Projekt.objects.get(pk=projektId)
@@ -125,14 +126,15 @@ def aufgabeDetails(request, aufgabeId):
 def benutzerErstellen(request):
     from teamhub.forms import userForm
 
-    if not CustomUser().user_have_permissions(request.user):
+    if not request.user.is_staff:
         return dashboard(request)
     if request.method == "POST":
         form = userForm(request.POST)
         if form.is_valid():
             user = form.save()
-            if CustomUser().user_erstellen(user):
-                return dashboard(request)
+            user.set_password("test")
+            user.save()
+            return dashboard(request)
     else:
         form = userForm()
 
