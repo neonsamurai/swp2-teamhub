@@ -14,7 +14,8 @@ Django_TeamHub.egg-info
 # Database
 db/*
 
-# Aptana files
+# IDE files
 *.project
 *.pydevproject
 .settings
+*.sublime-*
