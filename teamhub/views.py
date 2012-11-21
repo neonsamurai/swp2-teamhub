@@ -160,3 +160,20 @@ def userProfilBearbeiten(request):
 
     context = {'form': form}
     return render_to_response('base_profil.html', context, context_instance=RequestContext(request))
+
+
+
+def search(request):
+    from django.db.models import Q
+    
+    if 'search' in request.GET and request.GET['search']:
+        anfrage = request.GET['search']
+        
+        aufgabe = Aufgabe.objects.filter(Q(titel__icontains=anfrage) | Q(beschreibung__icontains=anfrage))
+        context = {'aufgabe':aufgabe,"anfrage":anfrage}
+    else:
+        anfrage = "leere Suchanfrage!!!"
+        context = {"anfrage":anfrage,'suche':'You submitted an empty form.'}
+    return render_to_response('base_search.html', context, context_instance=RequestContext(request))
+
+
