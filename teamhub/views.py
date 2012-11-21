@@ -8,10 +8,10 @@ from teamhub.models import Aufgabe, Projekt
 # Create your views here.
 
 
-
 def makeContext(context):
     context['projektliste'] = Projekt.objects.all().order_by('name')
     return context
+
 
 @login_required
 def dashboard(request):
@@ -93,7 +93,7 @@ def projektErstellen(request):
         form = projektFormErstellen(request.POST)
         if form.is_valid():
             newProject = form.save(commit=False)
-            newProject.besitzer=request.user
+            newProject.besitzer = request.user
             newProject.save()
             return redirect('/projekte/' + str(newProject.pk) + '/')
     else:
@@ -104,7 +104,7 @@ def projektErstellen(request):
 
 def projektBearbeiten(request, projektId):
     from teamhub.forms import projektFormBearbeiten
-    
+
     if not request.user.is_staff:
         return dashboard(request)
 
@@ -169,21 +169,23 @@ def userProfilBearbeiten(request):
     context = makeContext({'form': form})
     return render_to_response('base_profil.html', context, context_instance=RequestContext(request))
 
+
 def search(request):
+    '''Implementierung einer einfachen suche. Es wird in Titel und Beschreibung gesucht.'''
     from django.db.models import Q
-    
+
     if 'search' in request.GET and request.GET['search']:
         anfrage = request.GET['search']
         if 'projekt' in request.GET and request.GET['projekt']:
             p_anfrage = Projekt.objects.get(name=request.GET['projekt'])
             aufgabe = Aufgabe.objects.filter(projekt=p_anfrage).filter(Q(titel__icontains=anfrage) | Q(beschreibung__icontains=anfrage))
-            context = makeContext({'aufgabe':aufgabe,"anfrage":anfrage})
+            context = makeContext({'aufgabe': aufgabe, "anfrage": anfrage})
         else:
             aufgabe = Aufgabe.objects.filter(Q(titel__icontains=anfrage) | Q(beschreibung__icontains=anfrage))
-            context = makeContext({'aufgabe':aufgabe,"anfrage":anfrage})
-            
+            context = makeContext({'aufgabe': aufgabe, "anfrage": anfrage})
+
     else:
         anfrage = "Bitte geben Sie ein Suchbegriff ein!!!"
-        context = makeContext({"anfrage":anfrage}) 
-           
+        context = makeContext({"anfrage": anfrage})
+
     return render_to_response('base_search.html', context, context_instance=RequestContext(request))
