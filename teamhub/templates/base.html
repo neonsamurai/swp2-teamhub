@@ -22,7 +22,7 @@
 		<link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
 		
 	</head>
-	<body>
+	<body> 
 			<div class="navbar">
 				<div class="navbar-inner">
 					<a class="brand" href="/">TeamHub</a>
@@ -54,21 +54,15 @@
 							</ul>
 						</li>
 					</ul>
-					<div class="input-prepend pull-right">
-  				<div class="btn-group">
-    			<button class="btn dropdown-toggle" data-toggle="dropdown">
-      			Projekte
-      			<span class="caret"></span>
-    			</button>
-    			<ul class="dropdown-menu">
-					{% for projekt in projektliste%}
-						<li><li>{{projekt.name}}</li></li>
-					{% endfor %}
-    			</ul>
-  				<input class="span2" id="prependedDropdownButton" type="text" placeholder="Aufgaben durchsuchen">
-  					<button class="btn" type="button">Search</button>
-  					
-					</div>
+					<div class="navbar-form pull-right">
+						<select class="span2">
+							<option>Projekt</option>
+								{% for projekt in projektliste%}
+							<option>{{projekt.name}}</option>
+								{% endfor %}
+  							<input class="span2" id="appendedInputButtons" type="text" placeholder="Aufgaben durchsuchen">
+  								<button class="btn" type="button">Search</button>
+  						</select>
 					</div>
 				</div>
 				{% if user.is_staff %}
