@@ -54,11 +54,22 @@
 							</ul>
 						</li>
 					</ul>
-
-					<form class="navbar-search pull-right">
-						<span class="add-on"><i class="icon-search"></i></span>
-						<input type="text" class="search-query" placeholder="Aufgaben durchsuchen...">
-					</form>
+					<div class="input-prepend pull-right">
+  				<div class="btn-group">
+    			<button class="btn dropdown-toggle" data-toggle="dropdown">
+      			Projekte
+      			<span class="caret"></span>
+    			</button>
+    			<ul class="dropdown-menu">
+					{% for projekt in projektliste%}
+						<li><li>{{projekt.name}}</li></li>
+					{% endfor %}
+    			</ul>
+  				<input class="span2" id="prependedDropdownButton" type="text" placeholder="Aufgaben durchsuchen">
+  					<button class="btn" type="button">Search</button>
+  					
+					</div>
+					</div>
 				</div>
 				{% if user.is_staff %}
 				<div class="btn-group pull-right">

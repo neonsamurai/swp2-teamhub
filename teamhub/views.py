@@ -16,7 +16,8 @@ def dashboard(request):
         * Meine zugewiesenen Projekte
     '''
     meineAufgaben = Aufgabe.objects.filter(bearbeiter=request.user).order_by('faelligkeitsDatum')
-    context = {'meineAufgaben': meineAufgaben}
+    projektliste = Projekt.objects.all()
+    context = {'meineAufgaben': meineAufgaben, 'projektliste': projektliste}
     return render_to_response('base.html', context, context_instance=RequestContext(request))
 
 
