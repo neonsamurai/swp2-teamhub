@@ -1,4 +1,13 @@
 # coding: utf-8
+"""
+.. module:: models
+   :platform: Unix, Windows
+   :synopsis: Custom Django models for teamhub package.
+
+.. moduleauthor:: Dennis, Rouslan, Tim, Veronika
+
+
+"""
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -27,7 +36,7 @@ PROJEKT_STATUS = (
 
 class Projekt(models.Model):
     '''
-    Repräsentation eines Projekts. Das Projekt dient als Container für Aufgaben.
+    This class represents a project. Projects are used to organize Aufgabe objects.
 
     '''
 
@@ -43,8 +52,8 @@ class Projekt(models.Model):
 
 class Aufgabe(models.Model):
 
-    '''
-    Repräsentation einer Aufgabe.
+    '''This class represents a task.
+
     '''
     ersteller = models.ForeignKey(User, related_name="ersteller", help_text="Ersteller dieser Aufgabe.",blank=True, null=True)
     bearbeiter = models.ForeignKey(User, related_name="bearbeiter", blank=True, null=True, help_text="Bearbeiter dieser Aufgabe.")
