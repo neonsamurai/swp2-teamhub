@@ -54,6 +54,7 @@
 <div class="genindex-jumpbox">
  <a href="#A"><strong>A</strong></a>
  | <a href="#B"><strong>B</strong></a>
+ | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
@@ -65,11 +66,16 @@
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
  | <a href="#U"><strong>U</strong></a>
+ | <a href="#V"><strong>V</strong></a>
  
 </div>
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/teamhub.html#module-admin">admin (module)</a>
+  </dt>
+
       
   <dt><a href="api/teamhub.html#teamhub.models.Aufgabe">Aufgabe (class in teamhub.models)</a>
   </dt>
@@ -90,6 +96,8 @@
   <dt><a href="api/teamhub.html#teamhub.admin.AufgabeAdmin">AufgabeAdmin (class in teamhub.admin)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api/teamhub.html#teamhub.views.aufgabeBearbeiten">aufgabeBearbeiten() (in module teamhub.views)</a>
   </dt>
@@ -98,18 +106,8 @@
   <dt><a href="api/teamhub.html#teamhub.views.aufgabeDetails">aufgabeDetails() (in module teamhub.views)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api/teamhub.html#teamhub.views.aufgabeErstellen">aufgabeErstellen() (in module teamhub.views)</a>
-  </dt>
-
-      
-  <dt><a href="api/teamhub.html#teamhub.forms.aufgabeErstellenForm">aufgabeErstellenForm (class in teamhub.forms)</a>
-  </dt>
-
-      
-  <dt><a href="api/teamhub.html#teamhub.forms.aufgabeErstellenForm.Meta">aufgabeErstellenForm.Meta (class in teamhub.forms)</a>
   </dt>
 
       
@@ -120,10 +118,6 @@
   <dt><a href="api/teamhub.html#teamhub.forms.aufgabeForm.Meta">aufgabeForm.Meta (class in teamhub.forms)</a>
   </dt>
 
-      
-  <dt><a href="api/teamhub.html#teamhub.tests.AufgabeTest">AufgabeTest (class in teamhub.tests)</a>
-  </dt>
-
   </dl></td>
 </tr></table>
 
@@ -131,20 +125,16 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="api/teamhub.html#teamhub.forms.aufgabeErstellenForm.base_fields">base_fields (teamhub.forms.aufgabeErstellenForm attribute)</a>
+  <dt><a href="api/teamhub.html#teamhub.forms.aufgabeForm.base_fields">base_fields (teamhub.forms.aufgabeForm attribute)</a>
   </dt>
 
       <dd><dl>
-        
-  <dt><a href="api/teamhub.html#teamhub.forms.aufgabeForm.base_fields">(teamhub.forms.aufgabeForm attribute)</a>
-  </dt>
-
         
   <dt><a href="api/teamhub.html#teamhub.forms.profilForm.base_fields">(teamhub.forms.profilForm attribute)</a>
   </dt>
 
         
-  <dt><a href="api/teamhub.html#teamhub.forms.projektForm.base_fields">(teamhub.forms.projektForm attribute)</a>
+  <dt><a href="api/teamhub.html#teamhub.forms.projektFormBearbeiten.base_fields">(teamhub.forms.projektFormBearbeiten attribute)</a>
   </dt>
 
         
@@ -173,6 +163,16 @@
   </dl></td>
 </tr></table>
 
+<h2 id="C">C</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/teamhub.html#teamhub.forms.aufgabeForm.clean">clean() (teamhub.forms.aufgabeForm method)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
@@ -183,20 +183,16 @@
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="api/teamhub.html#teamhub.forms.aufgabeErstellenForm.declared_fields">declared_fields (teamhub.forms.aufgabeErstellenForm attribute)</a>
+  <dt><a href="api/teamhub.html#teamhub.forms.aufgabeForm.declared_fields">declared_fields (teamhub.forms.aufgabeForm attribute)</a>
   </dt>
 
       <dd><dl>
-        
-  <dt><a href="api/teamhub.html#teamhub.forms.aufgabeForm.declared_fields">(teamhub.forms.aufgabeForm attribute)</a>
-  </dt>
-
         
   <dt><a href="api/teamhub.html#teamhub.forms.profilForm.declared_fields">(teamhub.forms.profilForm attribute)</a>
   </dt>
 
         
-  <dt><a href="api/teamhub.html#teamhub.forms.projektForm.declared_fields">(teamhub.forms.projektForm attribute)</a>
+  <dt><a href="api/teamhub.html#teamhub.forms.projektFormBearbeiten.declared_fields">(teamhub.forms.projektFormBearbeiten attribute)</a>
   </dt>
 
         
@@ -221,10 +217,14 @@
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="api/teamhub.html#teamhub.forms.aufgabeErstellenForm.Meta.exclude">exclude (teamhub.forms.aufgabeErstellenForm.Meta attribute)</a>
+  <dt><a href="api/teamhub.html#teamhub.forms.aufgabeForm.Meta.exclude">exclude (teamhub.forms.aufgabeForm.Meta attribute)</a>
   </dt>
 
       <dd><dl>
+        
+  <dt><a href="api/teamhub.html#teamhub.forms.projektFormBearbeiten.Meta.exclude">(teamhub.forms.projektFormBearbeiten.Meta attribute)</a>
+  </dt>
+
         
   <dt><a href="api/teamhub.html#teamhub.forms.projektFormErstellen.Meta.exclude">(teamhub.forms.projektFormErstellen.Meta attribute)</a>
   </dt>
@@ -246,6 +246,12 @@
   </dt>
 
       </dl></dd>
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/teamhub.html#module-forms">forms (module)</a>
+  </dt>
+
   </dl></td>
 </tr></table>
 
@@ -321,16 +327,16 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
+  <dt><a href="api/teamhub.html#teamhub.views.makeContext">makeContext() (in module teamhub.views)</a>
+  </dt>
+
+      
   <dt><a href="api/teamhub.html#teamhub.admin.AufgabeAdmin.media">media (teamhub.admin.AufgabeAdmin attribute)</a>
   </dt>
 
       <dd><dl>
         
   <dt><a href="api/teamhub.html#teamhub.admin.ProjektAdmin.media">(teamhub.admin.ProjektAdmin attribute)</a>
-  </dt>
-
-        
-  <dt><a href="api/teamhub.html#teamhub.forms.aufgabeErstellenForm.media">(teamhub.forms.aufgabeErstellenForm attribute)</a>
   </dt>
 
         
@@ -342,7 +348,7 @@
   </dt>
 
         
-  <dt><a href="api/teamhub.html#teamhub.forms.projektForm.media">(teamhub.forms.projektForm attribute)</a>
+  <dt><a href="api/teamhub.html#teamhub.forms.projektFormBearbeiten.media">(teamhub.forms.projektFormBearbeiten attribute)</a>
   </dt>
 
         
@@ -357,20 +363,16 @@
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="api/teamhub.html#teamhub.forms.aufgabeErstellenForm.Meta.model">model (teamhub.forms.aufgabeErstellenForm.Meta attribute)</a>
+  <dt><a href="api/teamhub.html#teamhub.forms.aufgabeForm.Meta.model">model (teamhub.forms.aufgabeForm.Meta attribute)</a>
   </dt>
 
       <dd><dl>
-        
-  <dt><a href="api/teamhub.html#teamhub.forms.aufgabeForm.Meta.model">(teamhub.forms.aufgabeForm.Meta attribute)</a>
-  </dt>
-
         
   <dt><a href="api/teamhub.html#teamhub.forms.profilForm.Meta.model">(teamhub.forms.profilForm.Meta attribute)</a>
   </dt>
 
         
-  <dt><a href="api/teamhub.html#teamhub.forms.projektForm.Meta.model">(teamhub.forms.projektForm.Meta attribute)</a>
+  <dt><a href="api/teamhub.html#teamhub.forms.projektFormBearbeiten.Meta.model">(teamhub.forms.projektFormBearbeiten.Meta attribute)</a>
   </dt>
 
         
@@ -382,6 +384,10 @@
   </dt>
 
       </dl></dd>
+      
+  <dt><a href="api/teamhub.html#module-models">models (module)</a>
+  </dt>
+
   </dl></td>
 </tr></table>
 
@@ -453,11 +459,11 @@
   </dt>
 
       
-  <dt><a href="api/teamhub.html#teamhub.forms.projektForm">projektForm (class in teamhub.forms)</a>
+  <dt><a href="api/teamhub.html#teamhub.forms.projektFormBearbeiten">projektFormBearbeiten (class in teamhub.forms)</a>
   </dt>
 
       
-  <dt><a href="api/teamhub.html#teamhub.forms.projektForm.Meta">projektForm.Meta (class in teamhub.forms)</a>
+  <dt><a href="api/teamhub.html#teamhub.forms.projektFormBearbeiten.Meta">projektFormBearbeiten.Meta (class in teamhub.forms)</a>
   </dt>
 
       
@@ -472,26 +478,12 @@
   <dt><a href="api/teamhub.html#teamhub.views.projektListe">projektListe() (in module teamhub.views)</a>
   </dt>
 
-      
-  <dt><a href="api/teamhub.html#teamhub.tests.ProjektTest">ProjektTest (class in teamhub.tests)</a>
-  </dt>
-
   </dl></td>
 </tr></table>
 
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
-      
-  <dt><a href="api/teamhub.html#teamhub.models.Aufgabe.save">save() (teamhub.models.Aufgabe method)</a>
-  </dt>
-
-      <dd><dl>
-        
-  <dt><a href="api/teamhub.html#teamhub.models.Projekt.save">(teamhub.models.Projekt method)</a>
-  </dt>
-
-      </dl></dd>
       
   <dt><a href="api/teamhub.html#teamhub.admin.AufgabeAdmin.save_formset">save_formset() (teamhub.admin.AufgabeAdmin method)</a>
   </dt>
@@ -502,8 +494,6 @@
   </dt>
 
       </dl></dd>
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api/teamhub.html#teamhub.admin.AufgabeAdmin.save_model">save_model() (teamhub.admin.AufgabeAdmin method)</a>
   </dt>
@@ -514,6 +504,16 @@
   </dt>
 
       </dl></dd>
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/teamhub.html#teamhub.views.search">search() (in module teamhub.views)</a>
+  </dt>
+
+      
+  <dt><a href="api/teamhub.html#teamhub.tests.TestCase.setUp">setUp() (teamhub.tests.TestCase method)</a>
+  </dt>
+
   </dl></td>
 </tr></table>
 
@@ -536,18 +536,30 @@
   <dt><a href="api/teamhub.html#module-teamhub.tests">teamhub.tests (module)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api/teamhub.html#module-teamhub.views">teamhub.views (module)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="api/teamhub.html#teamhub.tests.AufgabeTest.test_Aufgabe">test_Aufgabe() (teamhub.tests.AufgabeTest method)</a>
+  <dt><a href="api/teamhub.html#teamhub.tests.TestCase.testAufgabe">testAufgabe() (teamhub.tests.TestCase method)</a>
   </dt>
 
       
-  <dt><a href="api/teamhub.html#teamhub.tests.ProjektTest.test_Projekt_Erstellen">test_Projekt_Erstellen() (teamhub.tests.ProjektTest method)</a>
+  <dt><a href="api/teamhub.html#teamhub.tests.TestCase">TestCase (class in teamhub.tests)</a>
+  </dt>
+
+      
+  <dt><a href="api/teamhub.html#teamhub.tests.TestCase.testProjekt">testProjekt() (teamhub.tests.TestCase method)</a>
+  </dt>
+
+      
+  <dt><a href="api/teamhub.html#module-tests">tests (module)</a>
+  </dt>
+
+      
+  <dt><a href="api/teamhub.html#teamhub.tests.TestCase.testSuche">testSuche() (teamhub.tests.TestCase method)</a>
   </dt>
 
   </dl></td>
@@ -568,6 +580,16 @@
   <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api/teamhub.html#teamhub.views.userProfilBearbeiten">userProfilBearbeiten() (in module teamhub.views)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="V">V</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/teamhub.html#module-views">views (module)</a>
   </dt>
 
   </dl></td>

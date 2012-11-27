@@ -1,4 +1,13 @@
 # coding: utf-8
+"""
+.. module:: views
+   :platform: Unix, Windows
+   :synopsis: Django views for teamhub package.
+
+.. moduleauthor:: Dennis, Rouslan, Tim, Veronika
+
+
+"""
 from django.contrib.auth.views import logout_then_login
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
