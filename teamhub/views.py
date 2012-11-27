@@ -104,7 +104,6 @@ def projektErstellen(request):
 
 def projektBearbeiten(request, projektId):
     from teamhub.forms import projektFormBearbeiten
-
     if not request.user.is_staff:
         return dashboard(request)
 
