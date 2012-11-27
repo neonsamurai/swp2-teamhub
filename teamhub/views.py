@@ -8,6 +8,11 @@ from teamhub.models import Aufgabe, Projekt
 # Create your views here.
 
 
+
+def makeContext(context):
+    context['projektliste'] = Projekt.objects.all().order_by('name')
+    return context
+
 @login_required
 def dashboard(request):
     '''
@@ -16,12 +21,12 @@ def dashboard(request):
         * Meine zugewiesenen Projekte
     '''
     meineAufgaben = Aufgabe.objects.filter(bearbeiter=request.user).order_by('faelligkeitsDatum')
-    context = {'meineAufgaben': meineAufgaben}
-    return render_to_response('base.html', context)
+    context = makeContext({'meineAufgaben': meineAufgaben})
+    return render_to_response('base.html', context, context_instance=RequestContext(request))
 
 
 def aufgabe(request):
-    return render_to_response('base_aufgabe_erstellen.html')
+    return render_to_response('base_aufgabe_erstellen.html', context_instance=RequestContext(request))
 
 
 def logoutUser(request):
@@ -32,18 +37,18 @@ def logoutUser(request):
 
 
 def aufgabeErstellen(request):
-    from teamhub.forms import aufgabeErstellenForm
+    from teamhub.forms import aufgabeForm
 
     if request.method == 'POST':
-        form = aufgabeErstellenForm(request.POST)
+        form = aufgabeForm(request.POST)
         if form.is_valid():
             newAufgabe = form.save(commit=False)
             newAufgabe.ersteller = request.user
             newAufgabe.save()
             return redirect('/aufgabe/' + str(newAufgabe.pk) + '/')
     else:
-        form = aufgabeErstellenForm()
-    context = {'form': form, "title": "Aufgabe Erstellen"}
+        form = aufgabeForm()
+    context = makeContext({'form': form, "title": "Aufgabe Erstellen"})
     return render_to_response('base_aufgabe_bearbeiten.html', context, context_instance=RequestContext(request))
 
 
@@ -59,14 +64,14 @@ def aufgabeBearbeiten(request, aufgabeId):
     else:
         form = aufgabeForm(instance=aufgabe)
 
-    context = {'form': form, "title": "Aufgabe bearbeiten"}
+    context = makeContext({'form': form, "title": "Aufgabe bearbeiten"})
     return render_to_response('base_aufgabe_bearbeiten.html', context, context_instance=RequestContext(request))
 
 
 def projektListe(request):
     projektliste = Projekt.objects.all()
     context = {'projektliste': projektliste}
-    return render_to_response('base_projekt.html', context)
+    return render_to_response('base_projekt.html', context, context_instance=RequestContext(request))
 
 
 def projektDetail(request, projektId):
@@ -74,8 +79,9 @@ def projektDetail(request, projektId):
     Erstellt die Detailansicht eines Projekts.
     '''
     projekt = Projekt.objects.get(pk=projektId)
-    context = {'projekt': projekt}
-    return render_to_response('base_projekt_detail.html', context)
+    aufgaben = Aufgabe.objects.filter(projekt=projekt).order_by('faelligkeitsDatum')
+    context = makeContext({'projekt': projekt, 'aufgaben': aufgaben})
+    return render_to_response('base_projekt_detail.html', context, context_instance=RequestContext(request))
 
 
 def projektErstellen(request):
@@ -86,16 +92,18 @@ def projektErstellen(request):
     if request.method == 'POST':
         form = projektFormErstellen(request.POST)
         if form.is_valid():
-            newProject = form.save()
+            newProject = form.save(commit=False)
+            newProject.besitzer=request.user
+            newProject.save()
             return redirect('/projekte/' + str(newProject.pk) + '/')
     else:
         form = projektFormErstellen()
-    context = {'form': form}
+    context = makeContext({'form': form})
     return render_to_response('base_projekt_erstellen.html', context, context_instance=RequestContext(request))
 
 
 def projektBearbeiten(request, projektId):
-    from teamhub.forms import projektForm
+    from teamhub.forms import projektFormBearbeiten
     
     if not request.user.is_staff:
         return dashboard(request)
@@ -103,14 +111,14 @@ def projektBearbeiten(request, projektId):
     projekt = Projekt.objects.get(pk=projektId)
 
     if request.method == 'POST':
-        form = projektForm(request.POST, instance=projekt)
+        form = projektFormBearbeiten(request.POST, instance=projekt)
         if form.is_valid():
             form.save()
             return redirect('/projekte/' + projektId + '/')
     else:
-        form = projektForm(instance=projekt)
+        form = projektFormBearbeiten(instance=projekt)
 
-    context = {'form': form}
+    context = makeContext({'form': form})
     return render_to_response('base_projekt_bearbeiten.html', context, context_instance=RequestContext(request))
 
 
@@ -119,8 +127,8 @@ def aufgabeDetails(request, aufgabeId):
     Erstellt die Detailansicht für eine Aufgabe.
     '''
     aufgabe = Aufgabe.objects.get(pk=aufgabeId)
-    context = {'aufgabe': aufgabe}
-    return render_to_response('base_aufgabe.html', context)
+    context = makeContext({'aufgabe': aufgabe})
+    return render_to_response('base_aufgabe.html', context, context_instance=RequestContext(request))
 
 
 def benutzerErstellen(request):
@@ -138,7 +146,7 @@ def benutzerErstellen(request):
     else:
         form = userForm()
 
-    context = {'form': form}
+    context = makeContext({'form': form})
     return render_to_response('base_benutzer_erstellen.html', context, context_instance=RequestContext(request))
 
 
@@ -158,22 +166,24 @@ def userProfilBearbeiten(request):
     else:
         form = profilForm(instance=user)
 
-    context = {'form': form}
+    context = makeContext({'form': form})
     return render_to_response('base_profil.html', context, context_instance=RequestContext(request))
-
-
 
 def search(request):
     from django.db.models import Q
     
     if 'search' in request.GET and request.GET['search']:
         anfrage = request.GET['search']
-        
-        aufgabe = Aufgabe.objects.filter(Q(titel__icontains=anfrage) | Q(beschreibung__icontains=anfrage))
-        context = {'aufgabe':aufgabe,"anfrage":anfrage}
+        if 'projekt' in request.GET and request.GET['projekt']:
+            p_anfrage = Projekt.objects.get(name=request.GET['projekt'])
+            aufgabe = Aufgabe.objects.filter(projekt=p_anfrage).filter(Q(titel__icontains=anfrage) | Q(beschreibung__icontains=anfrage))
+            context = makeContext({'aufgabe':aufgabe,"anfrage":anfrage})
+        else:
+            aufgabe = Aufgabe.objects.filter(Q(titel__icontains=anfrage) | Q(beschreibung__icontains=anfrage))
+            context = makeContext({'aufgabe':aufgabe,"anfrage":anfrage})
+            
     else:
-        anfrage = "leere Suchanfrage!!!"
-        context = {"anfrage":anfrage,'suche':'You submitted an empty form.'}
+        anfrage = "Bitte geben Sie ein Suchbegriff ein!!!"
+        context = makeContext({"anfrage":anfrage}) 
+           
     return render_to_response('base_search.html', context, context_instance=RequestContext(request))
-
-

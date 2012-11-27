@@ -2,8 +2,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-from django.db.utils import IntegrityError
-from django.core.exceptions import ValidationError
 
 # Enums used by model classes
 PRIORITAET = (
@@ -33,16 +31,11 @@ class Projekt(models.Model):
 
     '''
 
-    besitzer = models.ForeignKey(User, related_name="besitzer", help_text="Verantwortlicher für das Projekt.")
+    besitzer = models.ForeignKey(User, related_name="besitzer", help_text="Verantwortlicher für das Projekt.",blank=True, null=True)
 
-    name = models.CharField(max_length=512, help_text="Name des Projekts.")
+    name = models.CharField(max_length=512, help_text="Name des Projekts.", unique=True)
     beschreibung = models.TextField(help_text="Ausführliche Beschreibung des Projekts.")
     status = models.CharField(max_length=2, default="OP", choices=PROJEKT_STATUS, help_text="Zustand des Projekts.")
-
-    def save(self):
-        if Projekt.objects.filter(name=self.name).exclude(pk=self.pk).count() != 0:
-            raise IntegrityError('Es existiert schon ein Projekt mit dem Namen: ' + self.name + '!')
-        super(Projekt, self).save()
 
     def __unicode__(self):
         return self.name
@@ -53,7 +46,7 @@ class Aufgabe(models.Model):
     '''
     Repräsentation einer Aufgabe.
     '''
-    ersteller = models.ForeignKey(User, related_name="ersteller", help_text="Ersteller dieser Aufgabe.")
+    ersteller = models.ForeignKey(User, related_name="ersteller", help_text="Ersteller dieser Aufgabe.",blank=True, null=True)
     bearbeiter = models.ForeignKey(User, related_name="bearbeiter", blank=True, null=True, help_text="Bearbeiter dieser Aufgabe.")
     projekt = models.ForeignKey(Projekt, related_name="projekt", help_text="Das der Aufgabe übergeordnete Projekt.")
 
@@ -64,15 +57,6 @@ class Aufgabe(models.Model):
     erstellDatum = models.DateTimeField(auto_now_add=True, help_text="Die Aufgabe wurde an diesem Tag erstellt.")
     aenderungsDatum = models.DateTimeField(editable=False, auto_now=True, auto_now_add=True, help_text="Zeit der letzten Änderung.")
     faelligkeitsDatum = models.DateTimeField(blank=True, help_text="Die Aufgabe muss bis zu diesem Datum erledigt sein.")
-
-    def save(self):
-        if Aufgabe.objects.filter(titel=self.titel, projekt=self.projekt).exclude(pk=self.pk).count() != 0:
-            raise IntegrityError('Es existiert schon eine Aufgabe mit dem Namen: ' + self.titel + '!')
-        if self.faelligkeitsDatum < timezone.now():
-            raise IntegrityError('Fälligkeitsdatum darf nicht in der Vergangenheit liegen!')
-        if self.projekt.status == "CL":
-            raise ValidationError('Das Projektstatus darf nicht geschlossen sein!')
-        super(Aufgabe, self).save()
 
     def __unicode__(self):
         return self.titel
