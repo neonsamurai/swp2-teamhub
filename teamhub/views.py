@@ -33,8 +33,7 @@ def dashboard(request):
 
     '''
     meineAufgaben = Aufgabe.objects.filter(bearbeiter=request.user).order_by('faelligkeitsDatum')
-    projektliste = Projekt.objects.all()
-    context = {'meineAufgaben': meineAufgaben, 'projektliste': projektliste}
+    context = makeContext({'meineAufgaben': meineAufgaben})
     return render_to_response('base.html', context, context_instance=RequestContext(request))
 
 
@@ -229,5 +228,4 @@ def search(request):
     else:
         anfrage = "Bitte geben Sie ein Suchbegriff ein!!!"
         context = makeContext({"anfrage": anfrage})
-
     return render_to_response('base_search.html', context, context_instance=RequestContext(request))

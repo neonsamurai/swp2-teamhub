@@ -8,11 +8,14 @@
 
 
 """
+from django.forms import ModelForm, CharField
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 from django.utils import timezone
 from teamhub.models import Projekt, Aufgabe
+from django.utils import timezone
+from django.core.exceptions import ValidationError
 
 
 '''
@@ -69,14 +72,6 @@ class aufgabeForm(ModelForm):
                 raise ValidationError("Das Projektstatus darf nicht geschlossen sein!")
 
         return cleaned_data
-
-
-'''
-class aufgabeErstellenForm(aufgabeForm):
-    class Meta:
-        model = Aufgabe
-        exclude = ('ersteller', 'status',)
-       '''
 
 
 class userForm(ModelForm):

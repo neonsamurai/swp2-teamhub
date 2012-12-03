@@ -40,7 +40,7 @@ class Projekt(models.Model):
 
     '''
 
-    besitzer = models.ForeignKey(User, related_name="besitzer", help_text="Verantwortlicher für das Projekt.",blank=True, null=True)
+    besitzer = models.ForeignKey(User, related_name="besitzer", help_text="Verantwortlicher für das Projekt.", blank=True, null=True)
 
     name = models.CharField(max_length=512, help_text="Name des Projekts.", unique=True)
     beschreibung = models.TextField(help_text="Ausführliche Beschreibung des Projekts.")
@@ -55,7 +55,7 @@ class Aufgabe(models.Model):
     '''This class represents a task.
 
     '''
-    ersteller = models.ForeignKey(User, related_name="ersteller", help_text="Ersteller dieser Aufgabe.",blank=True, null=True)
+    ersteller = models.ForeignKey(User, related_name="ersteller", help_text="Ersteller dieser Aufgabe.", blank=True, null=True)
     bearbeiter = models.ForeignKey(User, related_name="bearbeiter", blank=True, null=True, help_text="Bearbeiter dieser Aufgabe.")
     projekt = models.ForeignKey(Projekt, related_name="projekt", help_text="Das der Aufgabe übergeordnete Projekt.")
 
@@ -69,4 +69,3 @@ class Aufgabe(models.Model):
 
     def __unicode__(self):
         return self.titel
-

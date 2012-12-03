@@ -6,7 +6,7 @@
       body{
       	padding-top: 0,5%; /* 60px to make the container go all the way to the bottom of the topbar */
       	padding-left: 5%;
-      	padding-right: 5%;	
+      	padding-right: 5%;
       }
       .ellipsis{
   	overflow: hidden;
@@ -20,10 +20,10 @@
 		<title>TeamHub</title>
 		<!-- Bootstrap -->
 		<link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
-		
+
 	</head>
 	{% block sectionnavbar %}
-	<body> 
+	<body>
 			<div class="navbar">
 				<div class="navbar-inner">
 					<a class="brand" href="/">TeamHub</a>
@@ -55,16 +55,17 @@
 							</ul>
 						</li>
 					</ul>
-					<div class="navbar-form pull-right">
-						<select class="span2">
-							<option>Projekt</option>
+						<form class="navbar-form pull-right" action="/suchen/" method="get">
+						<select class="span2" name="projekt">
+							<!--option>Projekt</option-->
+							<option value="">Alle Projekte</option>
 								{% for projekt in projektliste%}
 							<option>{{projekt.name}}</option>
 								{% endfor %}
-  							<input class="span2" id="appendedInputButtons" type="text" placeholder="Aufgaben durchsuchen">
-  								<button class="btn" type="button">Search</button>
+  							<input class="span2" id="appendedInputButtons" type="text" placeholder="Aufgaben durchsuchen" name="search">
+  								<button class="btn" type="submit">Search</button>
   						</select>
-					</div>
+					</form>
 				</div>
 				{% if user.is_staff %}
 				<div class="btn-group pull-right">
@@ -85,10 +86,10 @@
 							</li>
   						</ul>
   					</div>
-  					{%endif%}	
+  					{%endif%}
 				</div>
 				{% endblock %}
-				
+
 				<div class="page-header">
 					<h1>{%block sectiontitle %} Meine Aufgaben {% endblock %}</h1>
 				</div>
@@ -97,7 +98,7 @@
 						{% block content %}
 	 					{% for aufgabe in meineAufgaben.all %}
   						<li class="span12">
-  	   				 <div class="thumbnail">	
+  	   				 <div class="thumbnail">
   	    				<table class="table table-striped table-hover">
 							<br>
 							<thead>
@@ -105,13 +106,13 @@
 								<th>Ersteller</th>
 								<th>Fälligkeit</th>
 							</thead>
-							
+
 							<tr>
 								<td width="250">{{aufgabe.projekt}}</td>
 								<td width="100">{{aufgabe.ersteller}}</td>
 								<td width="150" align="right">{{aufgabe.faelligkeitsDatum}}</td>
 							</tr>
-							
+
 						</table>
       					<h3><a href="/aufgabe/{{aufgabe.pk}}/"> {{aufgabe.titel}}</a></h3>
      					<p>{{aufgabe.details}}</p>
