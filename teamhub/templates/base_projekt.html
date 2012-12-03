@@ -1,24 +1,28 @@
 {% extends "base.html" %}
 {% load url from future %}
 
-{% block sectiontitle %}Projektliste <a class="btn pull-right" href="/projekte/erstellen/">Projekt erstellen</a>{% endblock %}
+{% block sectiontitle %}Projektliste 
+<br> <br><a class="btn pull-right pull-left" href="/projekte/erstellen/">Projekt erstellen</a>
+{% endblock %}
 
 {% block content %}
 
 {% for projekt in projektliste %}
-<table class="table">
+
+<ul class="thumbnails">
+  <li class="span12">
+    <div class="thumbnail">
+    	<table class="table">
 	<thead>
-		<th>Projekt</th>
-		<th>Beschreibung</th>
-		<th>Besitzer</th>
-		<th>Status</th>
+		<th>Besitzer: {{projekt.besitzer}}</th>
+		<th>Status: {{projekt.get_status_display}}</th>
 	</thead>
-	<tr>
-		<td width="15%"><a href="/projekte/{{projekt.pk}}/">{{projekt.name}}</a></td>
-		<td width="55%"><a href="/projekte/{{projekt.pk}}/">{{projekt.beschreibung}}</a></td>
-		<td width="15%">{{projekt.besitzer}}</td>
-		<td width="15%">{{projekt.get_status_display}}</td>
-	</tr>
 </table>
+     <h3><a href="/projekte/{{projekt.pk}}/">{{projekt.name}}</a></h3>
+     <p>{{projekt.beschreibung}}</p>
+   </div>
+  </li>
+</ul>
+
 {% endfor %}
 {% endblock %}
