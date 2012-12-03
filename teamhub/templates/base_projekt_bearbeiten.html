@@ -4,10 +4,14 @@
 {% block sectiontitle %}Projekt bearbeiten{% endblock %}
 
 {% block content %}
+
+<div class="container-fluid" "span12">
+
 <form method="post" action="">      
         {% csrf_token %}
         {{ form.as_table }}
-        <br /><input type="submit" value="Senden" />
-</form>
+        <br /><button class="btn btn-primary" type="submit" >Senden</button>
 
+</form>
+</div>
 {% endblock %}

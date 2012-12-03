@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load url from future %}
+{% load comments %}
 
 {% block sectiontitle %}{{aufgabe.titel}} <a class="btn pull-right" href="/aufgabe/{{aufgabe.pk}}/bearbeiten/">Aufgabe bearbeiten</a>{% endblock %}
 
@@ -16,4 +17,22 @@
 </table>
 <h1>Beschreibung</h1>
 <p>{{aufgabe.beschreibung}}</p>
+<h1>Kommentare</h1>
+{% render_comment_list for aufgabe %}
+{% if user.is_authenticated %}
+    {% get_comment_form for aufgabe as form %}
+    <form action="{% comment_form_target %}" method="POST">
+    {% csrf_token %}
+    <div>Dein Kommentar:<br /> {{ form.comment }}</div>
+
+    <div>{{ form.content_type }}</div>
+    <div>{{ form.object_pk }}</div>
+    <div>{{ form.timestamp }}</div>
+    <div>{{ form.security_hash }}</div>
+    <input type="hidden" name="next" value="{% url 'aufgabeDetails' aufgabe.pk %}" />
+    <input type="submit" value="Absenden" id="id_submit" />
+    </form>
+{% else %}
+    <p>Bitte <a href="{% url 'auth_login' %}">anmelden</a>, wenn Du einen Kommentar hinterlassen m&ouml;chtest</p>
+{% endif %}
 {% endblock %}

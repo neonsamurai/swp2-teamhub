@@ -1,89 +1,119 @@
 # coding: utf-8
 """
-This file demonstrates writing tests using the unittest module. These will pass
-when you run "manage.py test".
+.. module:: tests
+   :platform: Unix, Windows
+   :synopsis: Unit tests for teamhub package.
 
-Replace this with more appropriate tests for your application.
+.. moduleauthor:: Dennis, Rouslan, Tim, Veronika
+
+
 """
-
+import datetime, unittest
 from django.test import TestCase
-from teamhub.models import Projekt, Aufgabe
 from django.contrib.auth.models import User
-#from django.test.client import Client
-from django.utils import timezone
-import datetime
-from django.db.utils import IntegrityError
-from django.core.exceptions import ValidationError
+from django.test.client import Client
+from teamhub.models import Projekt, Aufgabe
 
 
-class AufgabeTest(TestCase):
-    def test_Aufgabe(self):
-        user = User(username='user', email='user@user.com', password='user')
-        user.save()
-        testProjekt = Projekt(besitzer=user, name='testProjekt', beschreibung='Test,test,test!!!', status='OP')
-        testProjekt.save()
-        #Ein Datum-Objekt erstellen(Morgen)
-        fDatum = timezone.make_aware(datetime.datetime.now() + datetime.timedelta(days=1), timezone.get_default_timezone())
+class TestCase(TestCase):
 
-        #Eine gültige Aufgabe erstellen
-        aufgabe = Aufgabe(ersteller=user, bearbeiter=user, projekt=testProjekt, titel="Testaufgabe", beschreibung="Beschreibung der Testaufgabe", faelligkeitsDatum=fDatum)
-        aufgabe.save()
+    def setUp(self):
+        '''Sets the basic test environment. This function is called before every unit test.
+        '''
+        self.c = Client()
+        self.testUser = User(username='tim', email='tim.jagodzinski@gmail.com', is_staff=True)
+        self.testUser.set_password("tim")
+        self.testUser.save()
+        self.c.login(username='tim', password='tim')
 
-        #Testen, ob eine Aufgabe mit dem gleichen Namen erstellt werden kann
-        aufgabe1 = Aufgabe(ersteller=user, bearbeiter=user, projekt=testProjekt, titel="Testaufgabe", beschreibung="Beschreibung der Testaufgabe", faelligkeitsDatum=fDatum)
-        self.assertRaisesRegexp(IntegrityError, 'Es existiert schon eine Aufgabe mit dem Namen: Testaufgabe!', aufgabe1.save)
-
-        #Testen, ob eine Aufgabe mit einem Faelligkeitsdatum, das in Vergangenheit liegt, erstellt werden kann
-        aufgabe.faelligkeitsDatum = timezone.make_aware(datetime.datetime.now() - datetime.timedelta(days=1), timezone.get_default_timezone())
-        self.assertRaisesRegexp(IntegrityError, 'Fälligkeitsdatum darf nicht in der Vergangenheit liegen!', aufgabe.save)
-
-        #Testen, ob eine Aufgabe in einem Projekt, das den Status "Geschlossen" hat, erstellt werden kann
-        testProjekt.status = "CL"
-        testProjekt.save()
-        aufgabe1 = Aufgabe(ersteller=user, bearbeiter=user, projekt=testProjekt, titel="Aufgabe zum Testen", beschreibung="Beschreibung der Testaufgabe", faelligkeitsDatum=fDatum)
-        self.assertRaisesRegexp(ValidationError, 'Das Projektstatus darf nicht geschlossen sein!', aufgabe1.save)
-
-
-class ProjektTest(TestCase):
-
-    def test_Projekt_Erstellen(self):
-        #Zwei Testuser werden erstellt
-        besitzer1 = User(username='user', password='1234')
-        besitzer2 = User(username='other_user', password='1234')
-        besitzer1.save()
-        besitzer2.save()
-
-        #self.queryset=[]
-        #Projekt.objects.all()
+    def testProjekt(self):
+        '''Unit tests concerning Projekt objects.
+        '''
         self.assertEqual(Projekt.objects.all().count(), 0, '---Projekttabelle ist nicht leer!---')
 
         #Testprojekt wird erstellt
-        self.testProjekt = Projekt(besitzer=besitzer1, name='testProjekt', beschreibung='Test,test,test!!!', status='OP')
-        self.assertEqual(Projekt.objects.all().count(), 0, '---Projekttabelle ist nicht leer!---')
-        self.testProjekt.save()
-
+        self.c.post('/projekte/erstellen/', {'name': 'TestProjekt', 'beschreibung': 'Eine Beschreibung des Projekts'})
         self.assertEqual(Projekt.objects.all().count(), 1, '---Projekttabelle ist nicht korrekt!---')
 
-        self.assertEqual(self.testProjekt.id, 1, '---Projektid stimmt nicht!---')
-        self.assertEqual(self.testProjekt.name, 'testProjekt', '---Projektname stimmt nicht!---')
-        self.assertEqual(self.testProjekt.beschreibung, 'Test,test,test!!!', '---Projektbeschreibung stimmt nicht!---')
-        self.assertEqual(self.testProjekt.status, 'OP', '---Projektstatus stimmt nicht!---')
-        self.assertEqual(self.testProjekt.besitzer, besitzer1, '---Projektbesitzer stimmt nicht!---')
+        #Prüfung des Testprojekts
+        self.assertEqual(Projekt.objects.get(pk=1).besitzer, self.testUser, '---Projektbesitzer ist nicht korrekt!---')
+        self.assertEqual(Projekt.objects.get(pk=1).name, 'TestProjekt', '---Projektname ist nicht korrekt!---')
+        self.assertEqual(Projekt.objects.get(pk=1).beschreibung, 'Eine Beschreibung des Projekts', '---Projektbeschreibung ist nicht korrekt!---')
 
-        #Im Testprojekt werden die Daten ausgetauscht
-        self.testProjekt.besitzer = besitzer2
-        self.testProjekt.beschreibung = 'Eine andere Beschreibung'
-        self.testProjekt.name = 'Projekt-Test'
-        self.testProjekt.status = 'CL'
-        self.testProjekt.save()
+        #Testprojekt bearbeiten
+        self.c.post('/projekte/' + str(Projekt.objects.get(pk=1).pk) + '/bearbeiten/', {'name': 'TestProjektNummer2', 'beschreibung': 'Eine andere Beschreibung des Projekts', 'status': "CL"})
 
-        self.assertEqual(self.testProjekt.name, 'Projekt-Test', '---Projektname stimmt nicht!---')
-        self.assertEqual(self.testProjekt.beschreibung, 'Eine andere Beschreibung', '---Projektbeschreibung stimmt nicht!---')
-        self.assertEqual(self.testProjekt.status, 'CL', '---Projektstatus stimmt nicht!---')
-        self.assertEqual(self.testProjekt.besitzer, besitzer2, '---Projektbesitzer stimmt nicht!---')
+        #Prüfung des Testprojekts
+        self.assertEqual(Projekt.objects.get(pk=1).name, 'TestProjektNummer2', '---Projektname ist nicht korrekt!---')
+        self.assertEqual(Projekt.objects.get(pk=1).beschreibung, 'Eine andere Beschreibung des Projekts', '---Projektbeschreibung ist nicht korrekt!---')
 
-        self.testProjekt.delete()
-        self.assertEqual(Projekt.objects.all().count(), 0, '---Projekttabelle ist nicht leer!---')
+    def testAufgabe(self):
+        '''Unit tests concerning Aufgabe objects.
+        '''
+        self.c.post('/projekte/erstellen/', {'name': 'TestProjekt', 'beschreibung': 'Eine Beschreibung des Projekts'})
+        self.assertEqual(Aufgabe.objects.all().count(), 0, '---Aufgabentabelle ist nicht leer!---')
+
+        #Eine gültige Testaufgabe wird erstellt ,'erstellDatum':timezone.now(),'aenderungsDatum':timezone.now()
+        self.c.post('/aufgabe/erstellen/', {'bearbeiter': self.testUser.pk, 'projekt': Projekt.objects.get(pk=1).pk, 'prioritaet': 'ME', 'titel': "Testaufgabe", 'beschreibung': "Beschreibung der Testaufgabe", 'faelligkeitsDatum': '2015-12-12 12:00'})
+
+        #Prüfung der Testaufgabe
+        self.assertEqual(Aufgabe.objects.get(pk=1).titel, 'Testaufgabe', '---Aufgabentitel ist nicht korrekt!---')
+        self.assertEqual(Aufgabe.objects.get(pk=1).bearbeiter, self.testUser, '---Bearbeiter der Aufgabe ist nicht korrekt!---')
+        self.assertEqual(Aufgabe.objects.get(pk=1).ersteller, self.testUser, '---Ersteller der Aufgabe ist nicht korrekt!---')
+        self.assertEqual(Aufgabe.objects.get(pk=1).prioritaet, 'ME', '---Aufgabenpriorität ist nicht korrekt!---')
+        self.assertEqual(Aufgabe.objects.get(pk=1).projekt, Projekt.objects.get(pk=1), '---Projekt der Aufgabe ist nicht korrekt!---')
+        self.assertEqual(Aufgabe.objects.get(pk=1).beschreibung, 'Beschreibung der Testaufgabe', '---Aufgabenbeschreibung ist nicht korrekt!---')
+        self.assertEqual((Aufgabe.objects.get(pk=1).faelligkeitsDatum + datetime.timedelta(hours=1)).strftime('%Y-%m-%d %H:%M'), '2015-12-12 12:00', '---Fälligkeitsdatum der Aufgabe ist nicht korrekt!---')
+
+        #Geschäftsregeln testen
+        response = self.c.post('/aufgabe/erstellen/', {'bearbeiter': self.testUser.pk, 'projekt': Projekt.objects.get(pk=1).pk, 'prioritaet': 'ME', 'titel': "Testaufgabe", 'beschreibung': "Beschreibung der Testaufgabe", 'faelligkeitsDatum': '2015-12-12 12:00'})
+        self.assertFormError(response, 'form', 'titel', "Es existiert schon eine Aufgabe mit dem Namen!")
+
+        response = self.c.post('/aufgabe/erstellen/', {'bearbeiter': self.testUser.pk, 'projekt': Projekt.objects.get(pk=1).pk, 'prioritaet': 'ME', 'titel': "Eine andere Testaufgabe", 'beschreibung': "Beschreibung der Testaufgabe", 'faelligkeitsDatum': '2010-12-12 12:00'})
+        self.assertFormError(response, 'form', 'faelligkeitsDatum', "Fälligkeitsdatum darf nicht in der Vergangenheit liegen!")
+
+        self.c.post('/projekte/' + str(Projekt.objects.get(pk=1).pk) + '/bearbeiten/', {'name': 'TestProjektNummer2', 'beschreibung': 'Eine andere Beschreibung des Projekts', 'status': "CL"})
+        response = self.c.post('/aufgabe/erstellen/', {'bearbeiter': self.testUser.pk, 'projekt': Projekt.objects.get(pk=1).pk, 'prioritaet': 'ME', 'titel': "Eine andere Testaufgabe", 'beschreibung': "Beschreibung der Testaufgabe", 'faelligkeitsDatum': '2010-12-12 12:00'})
+        self.assertFormError(response, 'form', None, "Das Projektstatus darf nicht geschlossen sein!")
+
+        #Die Testaufgabe wird verändert
+        self.c.post('/projekte/' + str(Projekt.objects.get(pk=1).pk) + '/bearbeiten/', {'name': 'TestProjektNummer2', 'beschreibung': 'Eine andere Beschreibung des Projekts', 'status': "OP"})
+        self.c.post('/projekte/erstellen/', {'name': 'TestProjektNummer2', 'beschreibung': 'Eine Beschreibung des Projekts Nummer 2'})
+        testUser1 = User(username='user', email='user@gmail.com', is_staff=True)
+        testUser1.set_password("user")
+        testUser1.save()
+        self.c.post('/aufgabe/' + str(Aufgabe.objects.get(pk=1).pk) + '/bearbeiten/', {'bearbeiter': testUser1.pk, 'projekt': Projekt.objects.get(name='TestProjektNummer2').pk, 'prioritaet': 'LO', 'titel': "Andere Testaufgabe", 'beschreibung': "Beschreibung der anderen Testaufgabe", 'faelligkeitsDatum': '2014-12-12 12:00'})
+
+        #Prüfung der veränderten Testaufgabe
+        self.assertEqual(Aufgabe.objects.get(pk=1).titel, 'Andere Testaufgabe', '---Aufgabentitel ist nicht korrekt!---')
+        self.assertEqual(Aufgabe.objects.get(pk=1).bearbeiter, testUser1, '---Bearbeiter der Aufgabe ist nicht korrekt!---')
+        self.assertEqual(Aufgabe.objects.get(pk=1).ersteller, self.testUser, '---Ersteller der Aufgabe ist nicht korrekt!---')
+        self.assertEqual(Aufgabe.objects.get(pk=1).prioritaet, 'LO', '---Aufgabenpriorität ist nicht korrekt!---')
+        self.assertEqual(Aufgabe.objects.get(pk=1).projekt, Projekt.objects.get(name='TestProjektNummer2'), '---Projekt der Aufgabe ist nicht korrekt!---')
+        self.assertEqual(Aufgabe.objects.get(pk=1).beschreibung, 'Beschreibung der anderen Testaufgabe', '---Aufgabenbeschreibung ist nicht korrekt!---')
+        self.assertEqual((Aufgabe.objects.get(pk=1).faelligkeitsDatum + datetime.timedelta(hours=1)).strftime('%Y-%m-%d %H:%M'), '2014-12-12 12:00', '---Fälligkeitsdatum der Aufgabe ist nicht korrekt!---')
+
+    def testSuche(self):
+        '''Unit tests concerning search functionality.
+        '''
+        self.c.post('/projekte/erstellen/', {'name': 'TestProjekt', 'beschreibung': 'Eine Beschreibung des Projekts'})
+        self.c.post('/projekte/erstellen/', {'name': 'TestProjektNummer2', 'beschreibung': 'Eine Beschreibung des 2. Projekts'})
+        self.c.post('/aufgabe/erstellen/', {'bearbeiter': self.testUser.pk, 'projekt': Projekt.objects.get(name='TestProjekt').pk, 'prioritaet': 'ME', 'titel': "Testaufgabe", 'beschreibung': "Beschreibung der Testaufgabe", 'faelligkeitsDatum': '2015-12-12 12:00'})
+        self.c.post('/aufgabe/erstellen/', {'bearbeiter': self.testUser.pk, 'projekt': Projekt.objects.get(name='TestProjektNummer2').pk, 'prioritaet': 'ME', 'titel': "TestaufgabeNummer2", 'beschreibung': "Beschreibung der 2. Testaufgabe", 'faelligkeitsDatum': '2015-12-12 12:00'})
+
+        response = self.c.get('/suchen/', {'search': 'Test', 'projekt': ''})
+        self.assertItemsEqual(response.context['aufgabe'].all(), Aufgabe.objects.all(), '---Falsche Suchergebnisse---')
+        response = self.c.get('/suchen/', {'search': 'Beschreibung', 'projekt': ''})
+        self.assertItemsEqual(response.context['aufgabe'].all(), Aufgabe.objects.all(), '---Falsche Suchergebnisse---')
+        response = self.c.get('/suchen/', {'search': 'Beschreibung der Testaufgabe', 'projekt': ''})
+        self.assertItemsEqual(response.context['aufgabe'].all(), Aufgabe.objects.all().filter(titel="Testaufgabe"), '---Falsche Suchergebnisse---')
+        response = self.c.get('/suchen/', {'search': 'Test', 'projekt': 'TestProjekt'})
+        self.assertItemsEqual(response.context['aufgabe'].all(), Aufgabe.objects.all().filter(titel="Testaufgabe"), '---Falsche Suchergebnisse---')
+        response = self.c.get('/suchen/', {'search': 'TestaufgabeNummer2', 'projekt': 'TestProjekt'})
+        self.assertItemsEqual(response.context['aufgabe'].all(), [], '---Falsche Suchergebnisse---')
+        response = self.c.get('/suchen/', {'search': '', 'projekt': ''})
+        self.assertEqual(response.context['anfrage'], "Bitte geben Sie ein Suchbegriff ein!!!", '---Falsche Suchergebnisse---')
+
 
 if __name__ == "__main__":
     unittest.main()
