@@ -33,8 +33,7 @@ def dashboard(request):
 
     '''
     meineAufgaben = Aufgabe.objects.filter(bearbeiter=request.user).order_by('faelligkeitsDatum')
-    projektliste = Projekt.objects.all()
-    context = {'meineAufgaben': meineAufgaben, 'projektliste': projektliste}
+    context = makeContext({'meineAufgaben': meineAufgaben})
     return render_to_response('base.html', context, context_instance=RequestContext(request))
 
 
@@ -56,14 +55,18 @@ def aufgabeErstellen(request):
     to create a new Aufgabe object.
     '''
     from teamhub.forms import aufgabeForm
+    from teamhub.decorators import decorateSave
 
     if request.method == 'POST':
         form = aufgabeForm(request.POST)
         if form.is_valid():
-            newAufgabe = form.save(commit=False)
-            newAufgabe.ersteller = request.user
-            newAufgabe.save()
-            return redirect('/aufgabe/' + str(newAufgabe.pk) + '/')
+            @decorateSave
+            def saveAufgabe(form_to_save, request):
+                newAufgabe = form_to_save.save(commit=False)
+                newAufgabe.ersteller = request.user
+                newAufgabe.save()
+                return redirect('/aufgabe/' + str(newAufgabe.pk) + '/')
+            return saveAufgabe(form, request)
     else:
         form = aufgabeForm()
     context = makeContext({'form': form, "title": "Aufgabe Erstellen"})
@@ -78,13 +81,17 @@ def aufgabeBearbeiten(request, aufgabeId):
     :type aufgabeId: int
     '''
     from teamhub.forms import aufgabeForm
+    from teamhub.decorators import decorateSave
 
     aufgabe = Aufgabe.objects.get(pk=aufgabeId)
     if request.method == 'POST':
         form = aufgabeForm(request.POST, instance=aufgabe)
         if form.is_valid():
-            form.save()
-            return redirect('/aufgabe/' + str(aufgabe.pk) + '/')
+            @decorateSave
+            def saveAufgabe(form_to_save, request):
+                form_to_save.save()
+                return redirect('/aufgabe/' + str(aufgabe.pk) + '/')
+            return saveAufgabe(form, request)
     else:
         form = aufgabeForm(instance=aufgabe)
 
@@ -117,16 +124,20 @@ def projektErstellen(request):
     to create a new Projekt object.
     '''
     from teamhub.forms import projektFormErstellen
+    from teamhub.decorators import decorateSave
 
     if not request.user.is_staff:
         return dashboard(request)
     if request.method == 'POST':
         form = projektFormErstellen(request.POST)
         if form.is_valid():
-            newProject = form.save(commit=False)
-            newProject.besitzer = request.user
-            newProject.save()
-            return redirect('/projekte/' + str(newProject.pk) + '/')
+            @decorateSave
+            def projektSave(form_to_save, request):
+                newProject = form_to_save.save(commit=False)
+                newProject.besitzer = request.user
+                newProject.save()
+                return redirect('/projekte/' + str(newProject.pk) + '/')
+            return projektSave(form, request)
     else:
         form = projektFormErstellen()
     context = makeContext({'form': form})
@@ -141,6 +152,8 @@ def projektBearbeiten(request, projektId):
     :type projektId: int
     '''
     from teamhub.forms import projektFormBearbeiten
+    from teamhub.decorators import decorateSave
+
     if not request.user.is_staff:
         return dashboard(request)
 
@@ -149,8 +162,11 @@ def projektBearbeiten(request, projektId):
     if request.method == 'POST':
         form = projektFormBearbeiten(request.POST, instance=projekt)
         if form.is_valid():
-            form.save()
-            return redirect('/projekte/' + projektId + '/')
+            @decorateSave
+            def projektSave(form_to_save, request):
+                form_to_save.save()
+                return redirect('/projekte/' + projektId + '/')
+            return projektSave(form, request)
     else:
         form = projektFormBearbeiten(instance=projekt)
 
@@ -176,16 +192,20 @@ def benutzerErstellen(request):
     .. note : Only users with the is_staff flag set to True can create new users.
     '''
     from teamhub.forms import userForm
+    from teamhub.decorators import decorateSave
 
     if not request.user.is_staff:
         return dashboard(request)
     if request.method == "POST":
         form = userForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            user.set_password("test")
-            user.save()
-            return dashboard(request)
+            @decorateSave
+            def benutzerSave(form_to_save, request):
+                user = form_to_save.save()
+                user.set_password("test")
+                user.save()
+                return dashboard(request)
+            return benutzerSave(form, request)
     else:
         form = userForm()
 
@@ -197,14 +217,18 @@ def userProfilBearbeiten(request):
     '''Allows a user to modify her profile data.
     '''
     from teamhub.forms import profilForm
+    from teamhub.decorators import decorateSave
 
     user = User.objects.get(pk=request.user.pk)
 
     if request.method == 'POST':
         form = profilForm(request.POST, instance=user)
         if form.is_valid():
-            form.save()
-            return redirect('/profil/')
+            @decorateSave
+            def benutzerSave(form_to_save, request):
+                form.save()
+                return redirect('/profil/')
+            return benutzerSave(form, request)
     else:
         form = profilForm(instance=user)
 
@@ -229,5 +253,4 @@ def search(request):
     else:
         anfrage = "Bitte geben Sie ein Suchbegriff ein!!!"
         context = makeContext({"anfrage": anfrage})
-
     return render_to_response('base_search.html', context, context_instance=RequestContext(request))
