@@ -14,6 +14,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from teamhub.models import Aufgabe, Projekt
+import teamhub.stringConst as c
 # Create your views here.
 
 
@@ -24,6 +25,7 @@ def makeContext(context):
     :type context: Dictionary
     '''
     context['projektliste'] = Projekt.objects.all().order_by('name')
+    context['prioritaet']=[c.PRIORITAET_HI,c.PRIORITAET_ME,c.PRIORITAET_LO]
     return context
 
 
@@ -34,6 +36,21 @@ def dashboard(request):
     '''
     meineAufgaben = Aufgabe.objects.filter(bearbeiter=request.user).order_by('faelligkeitsDatum')
     context = makeContext({'meineAufgaben': meineAufgaben})
+    context['title']='Meine Aufgaben'
+    return render_to_response('base.html', context, context_instance=RequestContext(request))
+
+def offeneAufgabenAnzeigen(request):
+
+    meineAufgaben = Aufgabe.objects.filter(status=c.AUFGABE_STATUS_OP).order_by('faelligkeitsDatum')
+    context = makeContext({'meineAufgaben': meineAufgaben})
+    context['title']='Offene Aufgaben'
+    return render_to_response('base.html', context, context_instance=RequestContext(request))
+
+def vonMirErstellteAufgaben(request):
+
+    meineAufgaben = Aufgabe.objects.filter(ersteller=request.user).order_by('faelligkeitsDatum')
+    context = makeContext({'meineAufgaben': meineAufgaben})
+    context['title']='Von mir erstellte Aufgaben'
     return render_to_response('base.html', context, context_instance=RequestContext(request))
 
 
