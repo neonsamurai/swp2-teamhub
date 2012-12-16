@@ -10,7 +10,7 @@
 """
 from django.contrib.auth.models import User
 from django.forms import ModelForm
-
+from django import forms
 from teamhub.models import Projekt, Aufgabe
 
 
@@ -22,7 +22,7 @@ Django forms go here
 class profilForm(ModelForm):
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email')
+        fields = ('username', 'first_name', 'last_name', 'email', 'passwort', 'passwort1', 'bestaetigen')
 
 
 class projektFormBearbeiten(ModelForm):

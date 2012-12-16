@@ -4,13 +4,14 @@
 :platform: Unix, Windows
 :synopsis: Django views for teamhub package.
 
-.. moduleauthor:: Dennis, Rouslan, Tim, Veronika
+.. moduleauthor:: Dennis, Ruslan, Tim, Veronika
 
 
 """
 from django.contrib.auth.views import logout_then_login
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from teamhub.decorators import teamleiterBerechtigung, aufgabeBearbeitenBerechtigung
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from teamhub.models import Aufgabe, Projekt
@@ -89,7 +90,7 @@ to create a new Aufgabe object.
     context = makeContext({'form': form, "title": "Aufgabe Erstellen"})
     return render_to_response('base_aufgabe_bearbeiten.html', context, context_instance=RequestContext(request))
 
-
+@aufgabeBearbeitenBerechtigung
 def aufgabeBearbeiten(request, aufgabeId):
     '''Depending on the request type this view changes a Aufgabe object or provides an input form
 to modify data of a Aufgabe object.
@@ -135,7 +136,7 @@ def projektDetail(request, projektId):
     context = makeContext({'projekt': projekt, 'aufgaben': aufgaben})
     return render_to_response('base_projekt_detail.html', context, context_instance=RequestContext(request))
 
-
+@teamleiterBerechtigung
 def projektErstellen(request):
     '''Depending on the request type this view creates a new Projekt object or provides an input form
 to create a new Projekt object.
@@ -143,8 +144,6 @@ to create a new Projekt object.
     from teamhub.forms import projektFormErstellen
     from teamhub.decorators import decorateSave
 
-    if not request.user.is_staff:
-        return dashboard(request)
     if request.method == 'POST':
         form = projektFormErstellen(request.POST)
         if form.is_valid():
@@ -160,7 +159,7 @@ to create a new Projekt object.
     context = makeContext({'form': form})
     return render_to_response('base_projekt_erstellen.html', context, context_instance=RequestContext(request))
 
-
+@teamleiterBerechtigung
 def projektBearbeiten(request, projektId):
     '''Depending on the request type this view changes a Projekt object or provides an input form
 to modify data of a Projekt object.
@@ -170,9 +169,6 @@ to modify data of a Projekt object.
 '''
     from teamhub.forms import projektFormBearbeiten
     from teamhub.decorators import decorateSave
-
-    if not request.user.is_staff:
-        return dashboard(request)
 
     projekt = Projekt.objects.get(pk=projektId)
 
@@ -201,7 +197,7 @@ def aufgabeDetails(request, aufgabeId):
     context = makeContext({'aufgabe': aufgabe})
     return render_to_response('base_aufgabe.html', context, context_instance=RequestContext(request))
 
-
+@teamleiterBerechtigung
 def benutzerErstellen(request):
     '''Depending on the request type this view either creates a new user in the system,
 or displays an input form to create a new user.
@@ -211,8 +207,8 @@ or displays an input form to create a new user.
     from teamhub.forms import userForm
     from teamhub.decorators import decorateSave
 
-    if not request.user.is_staff:
-        return dashboard(request)
+    '''if not request.user.is_staff:
+        return dashboard(request)'''
     if request.method == "POST":
         form = userForm(request.POST)
         if form.is_valid():

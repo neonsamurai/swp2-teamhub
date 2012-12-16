@@ -4,7 +4,7 @@
 :platform: Unix, Windows
 :synopsis: Custom Django models for teamhub package.
 
-.. moduleauthor:: Dennis, Rouslan, Tim, Veronika
+.. moduleauthor:: Dennis, Ruslan, Tim, Veronika
 
 
 """
@@ -77,6 +77,16 @@ class Aufgabe(models.Model):
         if self.projekt.status==c.PROJEKT_STATUS_CL:
             raise IntegrityError(c.FEHLER_AUFGABE_PROJEKTSTATUS)
         super(Aufgabe, self).save()
+        
+    def getStati(self):
+        if self.status==c.AUFGABE_STATUS_OP:
+            return {c.AUFGABE_STATUS_IP:c.AUFGABE_STATUS_IP,c.AUFGABE_STATUS_PA:c.AUFGABE_STATUS_PA}
+        if self.status==c.AUFGABE_STATUS_IP:
+            return {c.AUFGABE_STATUS_PA:c.AUFGABE_STATUS_PA,c.AUFGABE_STATUS_CL:c.AUFGABE_STATUS_CL}
+        if self.status==c.AUFGABE_STATUS_PA:
+            return {c.AUFGABE_STATUS_IP:c.AUFGABE_STATUS_IP}
+        if self.status==c.AUFGABE_STATUS_CL:
+            return{}
 
 
     def __unicode__(self):

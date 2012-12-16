@@ -4,7 +4,7 @@
 :platform: Unix, Windows
 :synopsis: Unit tests for teamhub package.
 
-.. moduleauthor:: Dennis, Rouslan, Tim, Veronika
+.. moduleauthor:: Dennis, Ruslan, Tim, Veronika
 
 
 """
