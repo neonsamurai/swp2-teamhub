@@ -116,6 +116,7 @@ to modify data of a Aufgabe object.
     else:
         form = aufgabeForm(instance=aufgabe)
 
+
     context = makeContext({'form': form, "title": "Aufgabe bearbeiten",'stati':aufgabe.getStati(),'aktuellerstatus_lang':dict(AUFGABE_STATUS)[aufgabe.status],'aktuellerstatus':aufgabe.status})
     return render_to_response('base_aufgabe_bearbeiten.html', context, context_instance=RequestContext(request))
 
@@ -210,8 +211,6 @@ or displays an input form to create a new user.
     from teamhub.forms import userForm
     from teamhub.decorators import decorateSave
 
-    '''if not request.user.is_staff:
-        return dashboard(request)'''
     if request.method == "POST":
         form = userForm(request.POST)
         if form.is_valid():

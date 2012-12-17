@@ -91,7 +91,6 @@ class Aufgabe(models.Model):
             return dict(AUFGABE_STATUS[2:])
         if self.status==c.AUFGABE_STATUS_PA:
             return dict(AUFGABE_STATUS[1:2])
-
         return{}
 
     def __unicode__(self):
