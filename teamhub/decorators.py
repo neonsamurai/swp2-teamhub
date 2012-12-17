@@ -1,10 +1,6 @@
 # coding: utf-8
-<<<<<<< HEAD
 from teamhub.models import Aufgabe, Projekt
 from django.db.utils import IntegrityError
-=======
-from teamhub.models import Aufgabe
->>>>>>> master
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from django.core.context_processors import csrf
