@@ -46,4 +46,4 @@ class aufgabeForm(ModelForm):
 class userForm(ModelForm):
     class Meta:
         model = User
-        fields = ('username', 'is_staff')
+        fields = ('username', 'is_staff', 'email')

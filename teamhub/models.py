@@ -77,7 +77,7 @@ class Aufgabe(models.Model):
         if self.projekt.status==c.PROJEKT_STATUS_CL:
             raise IntegrityError(c.FEHLER_AUFGABE_PROJEKTSTATUS)
         super(Aufgabe, self).save()
-
+        
 
     def __unicode__(self):
         return self.titel

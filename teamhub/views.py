@@ -142,9 +142,11 @@ def projektErstellen(request):
     '''
     from teamhub.forms import projektFormErstellen
     from teamhub.decorators import decorateSave
-
+    
+    
     if not request.user.is_staff:
         return dashboard(request)
+      
     if request.method == 'POST':
         form = projektFormErstellen(request.POST)
         if form.is_valid():
@@ -170,9 +172,11 @@ def projektBearbeiten(request, projektId):
     '''
     from teamhub.forms import projektFormBearbeiten
     from teamhub.decorators import decorateSave
-
+    
+    
     if not request.user.is_staff:
         return dashboard(request)
+      
 
     projekt = Projekt.objects.get(pk=projektId)
 
@@ -211,8 +215,10 @@ def benutzerErstellen(request):
     from teamhub.forms import userForm
     from teamhub.decorators import decorateSave
 
+   
     if not request.user.is_staff:
         return dashboard(request)
+        
     if request.method == "POST":
         form = userForm(request.POST)
         if form.is_valid():
