@@ -76,7 +76,23 @@ class Aufgabe(models.Model):
             raise IntegrityError (c.FEHLER_AUFGABE_DATUM)
         if self.projekt.status==c.PROJEKT_STATUS_CL:
             raise IntegrityError(c.FEHLER_AUFGABE_PROJEKTSTATUS)
+        if self.bearbeiter and self.status==c.AUFGABE_STATUS_OP:
+            self.status= c.AUFGABE_STATUS_IP
+        if not self.bearbeiter and self.status==c.AUFGABE_STATUS_IP:
+            self.status= c.AUFGABE_STATUS_OP       
         super(Aufgabe, self).save()
+        
+    def getStati(self):
+        if self.status==c.AUFGABE_STATUS_OP:
+            return []
+        if self.status==c.AUFGABE_STATUS_IP:
+            '''return [c.AUFGABE_STATUS_PA, c.AUFGABE_STATUS_CL]'''
+            return {AUFGABE_STATUS[2][0]:AUFGABE_STATUS[2][1],AUFGABE_STATUS[3][0]:AUFGABE_STATUS[3][1]}
+        if self.status==c.AUFGABE_STATUS_PA:
+            return [c.AUFGABE_STATUS_IP]
+        if self.status==c.AUFGABE_STATUS_CL:
+            return[]
+        return []
 
 
     def __unicode__(self):

@@ -10,6 +10,18 @@
         {% csrf_token %}
         {{ form.as_table }}
         <br/>
+        
+         {%if stati%}
+        <label class="radio">
+  			<input type="radio" name="optionsRadios" id="optionsRadios1" value="{{aktuellerstatus}}" checked>{{aktuellerstatus}}
+  		</label>
+        	{%for key, value in stati.items%}
+        <label class="radio">
+  			<input type="radio" name="optionsRadios" id="optionsRadios1" value="{{key}}">{{value}}
+  		</label>
+        	{%endfor%}
+        {%endif%}
+        <br><br>
         <button class="btn btn-primary" type="submit" >Senden</button>
 </form>
 {% endblock %}
