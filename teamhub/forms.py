@@ -22,7 +22,7 @@ Django forms go here
 class profilForm(ModelForm):
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'passwort', 'passwort1', 'bestaetigen')
+        fields = ('username', 'first_name', 'last_name', 'email')
 
 
 class projektFormBearbeiten(ModelForm):

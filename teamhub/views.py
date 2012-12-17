@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import login_required
 from teamhub.decorators import teamleiterBerechtigung, aufgabeBearbeitenBerechtigung
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
-from teamhub.models import Aufgabe, Projekt
+from teamhub.models import Aufgabe, Projekt, AUFGABE_STATUS
 import teamhub.stringConst as c
 # Create your views here.
 
@@ -107,13 +107,16 @@ to modify data of a Aufgabe object.
         if form.is_valid():
             @decorateSave
             def saveAufgabe(form_to_save, request):
-                form_to_save.save()
+                Aufgabe = form_to_save.save(commit=False)
+                if 'stati' in request.POST:
+                    Aufgabe.status = request.POST['stati']
+                Aufgabe.save()
                 return redirect('/aufgabe/' + str(aufgabe.pk) + '/')
             return saveAufgabe(form, request)
     else:
         form = aufgabeForm(instance=aufgabe)
 
-    context = makeContext({'form': form, "title": "Aufgabe bearbeiten"})
+    context = makeContext({'form': form, "title": "Aufgabe bearbeiten",'stati':aufgabe.getStati(),'aktuellerstatus_lang':dict(AUFGABE_STATUS)[aufgabe.status],'aktuellerstatus':aufgabe.status})
     return render_to_response('base_aufgabe_bearbeiten.html', context, context_instance=RequestContext(request))
 
 
