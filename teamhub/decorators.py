@@ -50,7 +50,7 @@ def decorateSave(func):
 def teamleiterBerechtigung(func):
     def wrapper(request, *args, **kwargs):
         if request.user.is_staff:
-            return func(request)
+            return func(request, *args, **kwargs)
         return redirect("/")
     return wrapper
 

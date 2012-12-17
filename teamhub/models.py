@@ -76,7 +76,7 @@ class Aufgabe(models.Model):
             raise IntegrityError (c.FEHLER_AUFGABE_DATUM)
         if self.projekt.status==c.PROJEKT_STATUS_CL:
             raise IntegrityError(c.FEHLER_AUFGABE_PROJEKTSTATUS)
-        if self.status==c.AUFGABE_STATUS_CL:
+        if Aufgabe.objects.get(pk=self.pk).status==c.AUFGABE_STATUS_CL:
             raise IntegrityError(c.FEHLER_AUFGABE_STATUS)
         if self.bearbeiter and self.status==c.AUFGABE_STATUS_OP:
             self.status=c.AUFGABE_STATUS_IP
