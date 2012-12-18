@@ -1,10 +1,10 @@
 # coding: utf-8
 """
 .. module:: models
-   :platform: Unix, Windows
-   :synopsis: Custom Django models for teamhub package.
+:platform: Unix, Windows
+:synopsis: Custom Django models for teamhub package.
 
-.. moduleauthor:: Dennis, Rouslan, Tim, Veronika
+.. moduleauthor:: Dennis, Ruslan, Tim, Veronika
 
 
 """
@@ -38,9 +38,9 @@ PROJEKT_STATUS = (
 
 class Projekt(models.Model):
     '''
-    This class represents a project. Projects are used to organize Aufgabe objects.
+This class represents a project. Projects are used to organize Aufgabe objects.
 
-    '''
+'''
 
     besitzer = models.ForeignKey(User, related_name="besitzer", help_text="Verantwortlicher für das Projekt.", blank=True, null=True)
 
@@ -56,7 +56,7 @@ class Aufgabe(models.Model):
 
     '''This class represents a task.
 
-    '''
+'''
     ersteller = models.ForeignKey(User, related_name="ersteller", help_text="Ersteller dieser Aufgabe.", blank=True, null=True)
     bearbeiter = models.ForeignKey(User, related_name="bearbeiter", blank=True, null=True, help_text="Bearbeiter dieser Aufgabe.")
     projekt = models.ForeignKey(Projekt, related_name="projekt", help_text="Das der Aufgabe übergeordnete Projekt.")
@@ -76,8 +76,21 @@ class Aufgabe(models.Model):
             raise IntegrityError (c.FEHLER_AUFGABE_DATUM)
         if self.projekt.status==c.PROJEKT_STATUS_CL:
             raise IntegrityError(c.FEHLER_AUFGABE_PROJEKTSTATUS)
+        if self.bearbeiter and self.status==c.AUFGABE_STATUS_OP:
+            self.status=c.AUFGABE_STATUS_IP
+        if not self.bearbeiter and self.status==c.AUFGABE_STATUS_IP:
+            self.status=c.AUFGABE_STATUS_OP
         super(Aufgabe, self).save()
         
+    def getStati(self):
+        if self.status==c.AUFGABE_STATUS_OP:
+            return dict(AUFGABE_STATUS[3:])
+        if self.status==c.AUFGABE_STATUS_IP:
+            return dict(AUFGABE_STATUS[2:])
+        if self.status==c.AUFGABE_STATUS_PA:
+            return dict(AUFGABE_STATUS[1:2])
+        return{}
+
 
     def __unicode__(self):
         return self.titel

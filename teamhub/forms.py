@@ -1,16 +1,16 @@
 # coding: utf-8
 """
 .. module:: forms
-   :platform: Unix, Windows
-   :synopsis: Custom Django forms for teamhub package.
+:platform: Unix, Windows
+:synopsis: Custom Django forms for teamhub package.
 
-.. moduleauthor:: Dennis, Rouslan, Tim, Veronika
+.. moduleauthor:: Dennis, Ruslan, Tim, Veronika
 
 
 """
 from django.contrib.auth.models import User
 from django.forms import ModelForm
-
+from django import forms
 from teamhub.models import Projekt, Aufgabe
 
 
@@ -46,4 +46,5 @@ class aufgabeForm(ModelForm):
 class userForm(ModelForm):
     class Meta:
         model = User
-        fields = ('username', 'is_staff', 'email')
+        fields = ('username', 'email','is_staff')
+

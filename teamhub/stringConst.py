@@ -15,3 +15,4 @@ PROJEKT_STATUS_CL = "CL"
 FEHLER_AUFGABE_NAME='Es existiert schon eine Aufgabe mit diesem Namen!'
 FEHLER_AUFGABE_DATUM='Faelligkeitsdatum darf nicht in der Vergangenheit liegen!'
 FEHLER_AUFGABE_PROJEKTSTATUS='Der Projektstatus darf nicht Geschlossen sein!'
+FEHLER_AUFGABE_STATUS='Die Aufgabe ist abgeschlossen und kann nicht mehr verändert werden'

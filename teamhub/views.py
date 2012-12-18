@@ -1,19 +1,20 @@
 # coding: utf-8
 """
 .. module:: views
-   :platform: Unix, Windows
-   :synopsis: Django views for teamhub package.
+:platform: Unix, Windows
+:synopsis: Django views for teamhub package.
 
-.. moduleauthor:: Dennis, Rouslan, Tim, Veronika
+.. moduleauthor:: Dennis, Ruslan, Tim, Veronika
 
 
 """
 from django.contrib.auth.views import logout_then_login
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from teamhub.decorators import teamleiterBerechtigung, aufgabeBearbeitenBerechtigung
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
-from teamhub.models import Aufgabe, Projekt
+from teamhub.models import Aufgabe, Projekt, AUFGABE_STATUS
 import teamhub.stringConst as c
 # Create your views here.
 
@@ -21,9 +22,9 @@ import teamhub.stringConst as c
 def makeContext(context):
     '''Adds default keys to the context dictionary. These are used site wide.
 
-    :param context: The view context dictionary to be appended.
-    :type context: Dictionary
-    '''
+:param context: The view context dictionary to be appended.
+:type context: Dictionary
+'''
     context['projektliste'] = Projekt.objects.all().order_by('name')
     context['prioritaet']=[c.PRIORITAET_HI,c.PRIORITAET_ME,c.PRIORITAET_LO]
     return context
@@ -33,7 +34,7 @@ def makeContext(context):
 def dashboard(request):
     '''The landing page view. It gets all tasks which are assigned to the logged in user.
 
-    '''
+'''
     meineAufgaben = Aufgabe.objects.filter(bearbeiter=request.user).order_by('faelligkeitsDatum')
     context = makeContext({'meineAufgaben': meineAufgaben})
     context['title']='Meine Aufgaben'
@@ -57,20 +58,20 @@ def vonMirErstellteAufgaben(request):
 def aufgabe(request):
     '''The view creates the input form for creating new tasks.
 
-    '''
+'''
     return render_to_response('base_aufgabe_erstellen.html', context_instance=RequestContext(request))
 
 
 def logoutUser(request):
     '''Logs the current user out of the system and redirects to the login screen.
-    '''
+'''
     return logout_then_login(request, '/login/')
 
 
 def aufgabeErstellen(request):
     '''Depending on the request type this view creates a new Aufgabe objects or provides an input form
-    to create a new Aufgabe object.
-    '''
+to create a new Aufgabe object.
+'''
     from teamhub.forms import aufgabeForm
     from teamhub.decorators import decorateSave
 
@@ -89,14 +90,14 @@ def aufgabeErstellen(request):
     context = makeContext({'form': form, "title": "Aufgabe Erstellen"})
     return render_to_response('base_aufgabe_bearbeiten.html', context, context_instance=RequestContext(request))
 
-
+@aufgabeBearbeitenBerechtigung
 def aufgabeBearbeiten(request, aufgabeId):
     '''Depending on the request type this view changes a Aufgabe object or provides an input form
-    to modify data of a Aufgabe object.
+to modify data of a Aufgabe object.
 
-    :param aufgabeId: The foreign key of the Aufgabe object to be modified.
-    :type aufgabeId: int
-    '''
+:param aufgabeId: The foreign key of the Aufgabe object to be modified.
+:type aufgabeId: int
+'''
     from teamhub.forms import aufgabeForm
     from teamhub.decorators import decorateSave
 
@@ -106,19 +107,33 @@ def aufgabeBearbeiten(request, aufgabeId):
         if form.is_valid():
             @decorateSave
             def saveAufgabe(form_to_save, request):
-                form_to_save.save()
+                Aufgabe = form_to_save.save(commit=False)
+                if 'stati' in request.POST:
+                    Aufgabe.status = request.POST['stati']
+                Aufgabe.save()
                 return redirect('/aufgabe/' + str(aufgabe.pk) + '/')
             return saveAufgabe(form, request)
     else:
         form = aufgabeForm(instance=aufgabe)
 
-    context = makeContext({'form': form, "title": "Aufgabe bearbeiten"})
+
+    context = makeContext({'form': form, "title": "Aufgabe bearbeiten",'stati':aufgabe.getStati(),'aktuellerstatus_lang':dict(AUFGABE_STATUS)[aufgabe.status],'aktuellerstatus':aufgabe.status})
     return render_to_response('base_aufgabe_bearbeiten.html', context, context_instance=RequestContext(request))
 
+def aufgabeAnnehmen(request, aufgabeId):
+    from teamhub.decorators import decorateSave
+    
+    aufgabe = Aufgabe.objects.get(pk=aufgabeId)
+    @decorateSave
+    def saveAufgabe(request, aufgabeId):
+        aufgabe.bearbeiter = request.user
+        aufgabe.save()
+        return redirect('/aufgabe/' + str(aufgabe.pk) + '/')
+    return saveAufgabe(request, aufgabeId)
 
 def projektListe(request):
     '''Gives a list of all projects in the system.
-    '''
+'''
     projektliste = Projekt.objects.all()
     context = {'projektliste': projektliste}
     return render_to_response('base_projekt.html', context, context_instance=RequestContext(request))
@@ -127,26 +142,21 @@ def projektListe(request):
 def projektDetail(request, projektId):
     '''Gives the detail view of a project.
 
-    :param projektId: The primary key of the project to be displayed.
-    :type projektId: int
-    '''
+:param projektId: The primary key of the project to be displayed.
+:type projektId: int
+'''
     projekt = Projekt.objects.get(pk=projektId)
     aufgaben = Aufgabe.objects.filter(projekt=projekt).order_by('faelligkeitsDatum')
     context = makeContext({'projekt': projekt, 'aufgaben': aufgaben})
     return render_to_response('base_projekt_detail.html', context, context_instance=RequestContext(request))
 
-
+@teamleiterBerechtigung
 def projektErstellen(request):
     '''Depending on the request type this view creates a new Projekt object or provides an input form
-    to create a new Projekt object.
-    '''
+to create a new Projekt object.
+'''
     from teamhub.forms import projektFormErstellen
     from teamhub.decorators import decorateSave
-    
-    
-    if not request.user.is_staff:
-        return dashboard(request)
-      
     if request.method == 'POST':
         form = projektFormErstellen(request.POST)
         if form.is_valid():
@@ -162,21 +172,16 @@ def projektErstellen(request):
     context = makeContext({'form': form})
     return render_to_response('base_projekt_erstellen.html', context, context_instance=RequestContext(request))
 
-
+@teamleiterBerechtigung
 def projektBearbeiten(request, projektId):
     '''Depending on the request type this view changes a Projekt object or provides an input form
-    to modify data of a Projekt object.
+to modify data of a Projekt object.
 
-    :param projektId: The primary key of the Projekt object to be modified.
-    :type projektId: int
-    '''
+:param projektId: The primary key of the Projekt object to be modified.
+:type projektId: int
+'''
     from teamhub.forms import projektFormBearbeiten
     from teamhub.decorators import decorateSave
-    
-    
-    if not request.user.is_staff:
-        return dashboard(request)
-      
 
     projekt = Projekt.objects.get(pk=projektId)
 
@@ -198,27 +203,23 @@ def projektBearbeiten(request, projektId):
 def aufgabeDetails(request, aufgabeId):
     '''Gives the detail view of a given Aufgabe object.
 
-    :param aufgabeId: The foreign key of the Aufgabe to be displayed.
-    :type aufgabeId: int
-    '''
+:param aufgabeId: The foreign key of the Aufgabe to be displayed.
+:type aufgabeId: int
+'''
     aufgabe = Aufgabe.objects.get(pk=aufgabeId)
     context = makeContext({'aufgabe': aufgabe})
     return render_to_response('base_aufgabe.html', context, context_instance=RequestContext(request))
 
-
+@teamleiterBerechtigung
 def benutzerErstellen(request):
     '''Depending on the request type this view either creates a new user in the system,
-    or displays an input form to create a new user.
+or displays an input form to create a new user.
 
-    .. note : Only users with the is_staff flag set to True can create new users.
-    '''
+.. note : Only users with the is_staff flag set to True can create new users.
+'''
     from teamhub.forms import userForm
     from teamhub.decorators import decorateSave
 
-   
-    if not request.user.is_staff:
-        return dashboard(request)
-        
     if request.method == "POST":
         form = userForm(request.POST)
         if form.is_valid():
@@ -238,7 +239,7 @@ def benutzerErstellen(request):
 
 def userProfilBearbeiten(request):
     '''Allows a user to modify her profile data.
-    '''
+'''
     from teamhub.forms import profilForm
     from teamhub.decorators import decorateSave
 

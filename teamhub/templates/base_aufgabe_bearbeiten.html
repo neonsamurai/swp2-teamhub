@@ -10,6 +10,14 @@
         {% csrf_token %}
         {{ form.as_table }}
         <br/>
+        {%if stati%}
+        <select name="stati">
+		<option value="{{aktuellerstatus}}">{{aktuellerstatus_lang}}</option>
+        	{%for key, value in stati.items%}
+        		<option value="{{key}}">{{value}}</option>
+        	{%endfor%}
+        </select>
+        {%endif%}
         <button class="btn btn-primary" type="submit" >Senden</button>
 </form>
 {% endblock %}
