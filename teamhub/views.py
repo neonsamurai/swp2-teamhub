@@ -120,6 +120,16 @@ to modify data of a Aufgabe object.
     context = makeContext({'form': form, "title": "Aufgabe bearbeiten",'stati':aufgabe.getStati(),'aktuellerstatus_lang':dict(AUFGABE_STATUS)[aufgabe.status],'aktuellerstatus':aufgabe.status})
     return render_to_response('base_aufgabe_bearbeiten.html', context, context_instance=RequestContext(request))
 
+def aufgabeAnnehmen(request, aufgabeId):
+    from teamhub.decorators import decorateSave
+    
+    aufgabe = Aufgabe.objects.get(pk=aufgabeId)
+    @decorateSave
+    def saveAufgabe(request, aufgabeId):
+        aufgabe.bearbeiter = request.user
+        aufgabe.save()
+        return redirect('/aufgabe/' + str(aufgabe.pk) + '/')
+    return saveAufgabe(request, aufgabeId)
 
 def projektListe(request):
     '''Gives a list of all projects in the system.
