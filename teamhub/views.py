@@ -26,7 +26,7 @@ def makeContext(context):
 :type context: Dictionary
 '''
     context['projektliste'] = Projekt.objects.all().order_by('name')
-    context['prioritaet']=[c.PRIORITAET_HI,c.PRIORITAET_ME,c.PRIORITAET_LO]
+    context['prioritaet'] = [c.PRIORITAET_HI, c.PRIORITAET_ME, c.PRIORITAET_LO]
     return context
 
 
@@ -37,21 +37,23 @@ def dashboard(request):
 '''
     meineAufgaben = Aufgabe.objects.filter(bearbeiter=request.user).order_by('faelligkeitsDatum')
     context = makeContext({'meineAufgaben': meineAufgaben})
-    context['title']='Meine Aufgaben'
+    context['title'] = 'Meine Aufgaben'
     return render_to_response('base.html', context, context_instance=RequestContext(request))
+
 
 def offeneAufgabenAnzeigen(request):
 
     meineAufgaben = Aufgabe.objects.filter(status=c.AUFGABE_STATUS_OP).order_by('faelligkeitsDatum')
     context = makeContext({'meineAufgaben': meineAufgaben})
-    context['title']='Offene Aufgaben'
+    context['title'] = 'Offene Aufgaben'
     return render_to_response('base.html', context, context_instance=RequestContext(request))
+
 
 def vonMirErstellteAufgaben(request):
 
     meineAufgaben = Aufgabe.objects.filter(ersteller=request.user).order_by('faelligkeitsDatum')
     context = makeContext({'meineAufgaben': meineAufgaben})
-    context['title']='Von mir erstellte Aufgaben'
+    context['title'] = 'Von mir erstellte Aufgaben'
     return render_to_response('base.html', context, context_instance=RequestContext(request))
 
 
@@ -90,6 +92,7 @@ to create a new Aufgabe object.
     context = makeContext({'form': form, "title": "Aufgabe Erstellen"})
     return render_to_response('base_aufgabe_bearbeiten.html', context, context_instance=RequestContext(request))
 
+
 @aufgabeBearbeitenBerechtigung
 def aufgabeBearbeiten(request, aufgabeId):
     '''Depending on the request type this view changes a Aufgabe object or provides an input form
@@ -116,20 +119,22 @@ to modify data of a Aufgabe object.
     else:
         form = aufgabeForm(instance=aufgabe)
 
-
-    context = makeContext({'form': form, "title": "Aufgabe bearbeiten",'stati':aufgabe.getStati(),'aktuellerstatus_lang':dict(AUFGABE_STATUS)[aufgabe.status],'aktuellerstatus':aufgabe.status})
+    context = makeContext({'form': form, "title": "Aufgabe bearbeiten", 'stati': aufgabe.getStati(), 'aktuellerstatus_lang': dict(AUFGABE_STATUS)[aufgabe.status], 'aktuellerstatus': aufgabe.status})
     return render_to_response('base_aufgabe_bearbeiten.html', context, context_instance=RequestContext(request))
+
 
 def aufgabeAnnehmen(request, aufgabeId):
     from teamhub.decorators import decorateSave
-    
+
     aufgabe = Aufgabe.objects.get(pk=aufgabeId)
+
     @decorateSave
     def saveAufgabe(request, aufgabeId):
         aufgabe.bearbeiter = request.user
         aufgabe.save()
         return redirect('/aufgabe/' + str(aufgabe.pk) + '/')
     return saveAufgabe(request, aufgabeId)
+
 
 def projektListe(request):
     '''Gives a list of all projects in the system.
@@ -149,6 +154,7 @@ def projektDetail(request, projektId):
     aufgaben = Aufgabe.objects.filter(projekt=projekt).order_by('faelligkeitsDatum')
     context = makeContext({'projekt': projekt, 'aufgaben': aufgaben})
     return render_to_response('base_projekt_detail.html', context, context_instance=RequestContext(request))
+
 
 @teamleiterBerechtigung
 def projektErstellen(request):
@@ -171,6 +177,7 @@ to create a new Projekt object.
         form = projektFormErstellen()
     context = makeContext({'form': form})
     return render_to_response('base_projekt_erstellen.html', context, context_instance=RequestContext(request))
+
 
 @teamleiterBerechtigung
 def projektBearbeiten(request, projektId):
@@ -207,8 +214,10 @@ def aufgabeDetails(request, aufgabeId):
 :type aufgabeId: int
 '''
     aufgabe = Aufgabe.objects.get(pk=aufgabeId)
+    aufgabe.status = dict(AUFGABE_STATUS)[aufgabe.status]
     context = makeContext({'aufgabe': aufgabe})
     return render_to_response('base_aufgabe.html', context, context_instance=RequestContext(request))
+
 
 @teamleiterBerechtigung
 def benutzerErstellen(request):

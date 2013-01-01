@@ -47,7 +47,7 @@ This class represents a project. Projects are used to organize Aufgabe objects.
     name = models.CharField(max_length=512, help_text="Name des Projekts.", unique=True)
     beschreibung = models.TextField(help_text="Ausführliche Beschreibung des Projekts.")
     status = models.CharField(max_length=2, default=c.PROJEKT_STATUS_OP, choices=PROJEKT_STATUS, help_text="Zustand des Projekts.")
-    
+
     def __unicode__(self):
         return self.name
 
@@ -68,26 +68,29 @@ class Aufgabe(models.Model):
     erstellDatum = models.DateTimeField(auto_now_add=True, help_text="Die Aufgabe wurde an diesem Tag erstellt.")
     aenderungsDatum = models.DateTimeField(editable=False, auto_now=True, auto_now_add=True, help_text="Zeit der letzten Änderung.")
     faelligkeitsDatum = models.DateTimeField(blank=True, help_text="Die Aufgabe muss bis zu diesem Datum erledigt sein.")
-  
+
     def save(self):
-        if Aufgabe.objects.filter(titel=self.titel,projekt=self.projekt).exclude(pk=self.pk).count()!=0:
-            raise IntegrityError (c.FEHLER_AUFGABE_NAME)
+        if Aufgabe.objects.filter(titel=self.titel, projekt=self.projekt).exclude(pk=self.pk).count() != 0:
+            raise IntegrityError(c.FEHLER_AUFGABE_NAME)
         if self.faelligkeitsDatum < timezone.now():
-            raise IntegrityError (c.FEHLER_AUFGABE_DATUM)
-        if self.projekt.status==c.PROJEKT_STATUS_CL:
+            raise IntegrityError(c.FEHLER_AUFGABE_DATUM)
+        if self.projekt.status == c.PROJEKT_STATUS_CL:
             raise IntegrityError(c.FEHLER_AUFGABE_PROJEKTSTATUS)
         if self.bearbeiter and self.status==c.AUFGABE_STATUS_OP:
             self.status=c.AUFGABE_STATUS_IP
         if not self.bearbeiter and self.status==c.AUFGABE_STATUS_IP:
             self.status=c.AUFGABE_STATUS_OP
+
         super(Aufgabe, self).save()
-        
+
     def getStati(self):
-        if self.status==c.AUFGABE_STATUS_OP:
+        if self.status == c.AUFGABE_STATUS_OP:
             return dict(AUFGABE_STATUS[3:])
-        if self.status==c.AUFGABE_STATUS_IP:
+        if self.status == c.AUFGABE_STATUS_IP:
             return dict(AUFGABE_STATUS[2:])
-        if self.status==c.AUFGABE_STATUS_PA:
+        if self.status == c.AUFGABE_STATUS_PA:
+            return dict(AUFGABE_STATUS[1:2])
+        if self.status == c.AUFGABE_STATUS_CL:
             return dict(AUFGABE_STATUS[1:2])
         return{}
 
