@@ -9,14 +9,16 @@
 
 """
 from django.contrib.auth.views import logout_then_login
-from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from teamhub.decorators import teamleiterBerechtigung, aufgabeBearbeitenBerechtigung
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
-from teamhub.models import Aufgabe, Projekt, AUFGABE_STATUS
+from teamhub.models import Aufgabe, Projekt, AUFGABE_STATUS, TeamhubUser
 import teamhub.stringConst as c
+
+
 # Create your views here.
+
 
 
 def makeContext(context):
@@ -262,7 +264,7 @@ def userProfilBearbeiten(request):
     from teamhub.forms import profilForm
     from teamhub.decorators import decorateSave
 
-    user = User.objects.get(pk=request.user.pk)
+    user = TeamhubUser.objects.get(pk=request.user.pk)
 
     if request.method == 'POST':
         form = profilForm(request.POST, instance=user)
