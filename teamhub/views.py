@@ -9,14 +9,16 @@
 
 """
 from django.contrib.auth.views import logout_then_login
-from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from teamhub.decorators import teamleiterBerechtigung, aufgabeBearbeitenBerechtigung
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
-from teamhub.models import Aufgabe, Projekt, AUFGABE_STATUS
+from teamhub.models import Aufgabe, Projekt, AUFGABE_STATUS, TeamhubUser
 import teamhub.stringConst as c
+
+
 # Create your views here.
+
 
 
 def makeContext(context):
@@ -36,15 +38,16 @@ def dashboard(request):
 
 '''
     meineAufgaben = Aufgabe.objects.filter(bearbeiter=request.user).order_by('faelligkeitsDatum')
-    context = makeContext({'meineAufgaben': meineAufgaben})
-    context['title'] = 'Meine Aufgaben'
+    meineAufgaben=statusAufgaben(meineAufgaben)
+    context = makeContext({'meineAufgaben': meineAufgaben, 'aktuellerstatus_lang': dict(AUFGABE_STATUS)})
+    context['title'] = 'Meine Aufgaben' 
     return render_to_response('base.html', context, context_instance=RequestContext(request))
 
 
 def offeneAufgabenAnzeigen(request):
 
     meineAufgaben = Aufgabe.objects.filter(status=c.AUFGABE_STATUS_OP).order_by('faelligkeitsDatum')
-    context = makeContext({'meineAufgaben': meineAufgaben})
+    context = makeContext({'meineAufgaben': meineAufgaben, 'aktuellerstatus_lang': dict(AUFGABE_STATUS)})
     context['title'] = 'Offene Aufgaben'
     return render_to_response('base.html', context, context_instance=RequestContext(request))
 
@@ -52,9 +55,17 @@ def offeneAufgabenAnzeigen(request):
 def vonMirErstellteAufgaben(request):
 
     meineAufgaben = Aufgabe.objects.filter(ersteller=request.user).order_by('faelligkeitsDatum')
-    context = makeContext({'meineAufgaben': meineAufgaben})
+    context = makeContext({'meineAufgaben': meineAufgaben,'aktuellerstatus_lang': dict(AUFGABE_STATUS)})
     context['title'] = 'Von mir erstellte Aufgaben'
     return render_to_response('base.html', context, context_instance=RequestContext(request))
+
+
+def statusAufgaben(meineAufgaben):
+    for aufgabe in meineAufgaben:
+        aufgabe.status=dict(AUFGABE_STATUS)[aufgabe.status]
+        #print aufgabe.status
+    
+    return meineAufgaben
 
 
 def aufgabe(request):
@@ -152,7 +163,7 @@ def projektDetail(request, projektId):
 '''
     projekt = Projekt.objects.get(pk=projektId)
     aufgaben = Aufgabe.objects.filter(projekt=projekt).order_by('faelligkeitsDatum')
-    context = makeContext({'projekt': projekt, 'aufgaben': aufgaben})
+    context = makeContext({'projekt': projekt, 'aufgaben': aufgaben, 'aktuellerstatus_lang': dict(AUFGABE_STATUS)})
     return render_to_response('base_projekt_detail.html', context, context_instance=RequestContext(request))
 
 
@@ -252,7 +263,7 @@ def userProfilBearbeiten(request):
     from teamhub.forms import profilForm
     from teamhub.decorators import decorateSave
 
-    user = User.objects.get(pk=request.user.pk)
+    user = TeamhubUser.objects.get(pk=request.user.pk)
 
     if request.method == 'POST':
         form = profilForm(request.POST, instance=user)

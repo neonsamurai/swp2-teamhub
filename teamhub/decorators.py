@@ -34,6 +34,12 @@ def decorateSave(func):
             if msg == c.FEHLER_AUFGABE_PROJEKTSTATUS or msg == c.FEHLER_AUFGABE_STATUS:
                 form._errors['__all__'] = form.error_class([msg])
                 context['form'] = form
+            if msg == c.FEHLER_TEAMHUBUSER_USERNAME_INVALID:
+                form._errors["username"] = form.error_class([msg])
+                del form.cleaned_data["username"]
+                context['form'] = form
+                context = makeContext(context)
+                return render_to_response('base_profil.html', context)
             context = makeContext(context)
             return render_to_response('base_aufgabe_bearbeiten.html', context)
 
