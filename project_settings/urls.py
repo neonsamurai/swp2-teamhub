@@ -24,12 +24,14 @@ urlpatterns = patterns('',
     url(r'^logout/','teamhub.views.logoutUser'),
     url(r'^benutzer/','teamhub.views.benutzerErstellen'),
     url(r'^suchen/','teamhub.views.search'),
+    url(r'^passwaendern/','teamhub.views.passwortAendern'),
     # Examples:
     # url(r'^project_settings/', include('project_settings.foo.urls')),
 
     # Admin urls
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
+    
     
     # Comments framework urls
     url(r'^comments/', include('django.contrib.comments.urls')),

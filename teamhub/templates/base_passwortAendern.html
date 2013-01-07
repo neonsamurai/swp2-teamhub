@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block sectiontitle %}Passwort Ändern{% endblock %}
+
+{% block content %}
+
+	<p>{{erfolg}}</p>
+
+<form method="post" action="">
+	{% csrf_token %}
+	{{ form.as_table }}
+	<br /><input type="submit" value="Senden" />
+</form>
+{% endblock %}

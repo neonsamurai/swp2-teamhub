@@ -1,6 +1,7 @@
 # coding: utf-8
 
 from teamhub.models import Aufgabe, Projekt
+from django.contrib.auth.models import User
 from django.db.utils import IntegrityError
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
@@ -67,3 +68,27 @@ def aufgabeBearbeitenBerechtigung(func):
             return func(request, aufgabe.pk)
         return redirect("/")
     return wrapper
+
+def passwAendern(func):
+    def wrapper(form,request):
+        user = User.objects.get(pk=request.user.pk)
+        passwAlt = form.cleaned_data['passwAlt']
+        passwNeu1 = form.cleaned_data['passwNeu1'] 
+        passwNeu2 = form.cleaned_data['passwNeu2']
+        if not user.check_password(passwAlt):
+            raise Exception(c.FEHLER_PASSWD_ALT)
+        if not passwNeu1 == passwNeu2:
+            raise Exception(c.FEHLER_PASSWD_NEU)
+        user.set_password(passwNeu2)
+        user.save()
+        #return func(form, request)
+
+        context = {}
+        context.update(csrf(request))
+        context['form'] = form
+        context['erfolg']=c.PASSWD_GEAENDERT
+        context = makeContext(context)
+        return render_to_response('base_passwortAendern.html', context)
+
+    return wrapper       
+

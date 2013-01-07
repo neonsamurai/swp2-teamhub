@@ -280,6 +280,26 @@ def userProfilBearbeiten(request):
     context = makeContext({'form': form})
     return render_to_response('base_profil.html', context, context_instance=RequestContext(request))
 
+def passwortAendern(request):
+    from teamhub.forms import passwortAendernForm
+    from teamhub.decorators import decorateSave, passwAendern
+    
+    if request.method == 'POST':
+        form = passwortAendernForm(request.POST)
+        if form.is_valid():
+            
+            @decorateSave
+            @passwAendern
+            def benutzerSave(form, request):
+                return redirect('/passwaendern/')
+            return benutzerSave(form, request)          
+    else:
+        form = passwortAendernForm()
+
+    context = makeContext({'form': form})
+    return render_to_response('base_passwortAendern.html', context, context_instance=RequestContext(request))
+
+
 def search(request):
     '''Implementierung einer einfachen suche. Es wird in Titel und Beschreibung gesucht.'''
     from django.db.models import Q

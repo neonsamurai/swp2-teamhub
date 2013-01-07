@@ -17,3 +17,7 @@ FEHLER_AUFGABE_DATUM='Faelligkeitsdatum darf nicht in der Vergangenheit liegen!'
 
 FEHLER_AUFGABE_PROJEKTSTATUS='Der Projektstatus darf nicht Geschlossen sein!'
 FEHLER_AUFGABE_STATUS='Die Aufgabe ist abgeschlossen und kann nicht mehr verändert werden'
+
+FEHLER_PASSWD_NEU='Die Passwörter stimmen nicht überein'
+FEHLER_PASSWD_ALT='Das alte Passwort ist falsch'
+PASSWD_GEAENDERT='Das Passwort wurde erfolgreich geändert!'
