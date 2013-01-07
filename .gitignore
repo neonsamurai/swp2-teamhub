@@ -15,6 +15,7 @@ Django_TeamHub.egg-info
 db/*
 
 # IDE files
+.ropeproject
 *.project
 *.pydevproject
 .settings

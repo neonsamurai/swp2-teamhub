@@ -1,4 +1,13 @@
 # coding: utf-8
+"""
+.. module:: models
+:platform: Unix, Windows
+:synopsis: Custom Django models for teamhub package.
+
+.. moduleauthor:: Dennis, Ruslan, Tim, Veronika
+
+
+"""
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -29,26 +38,27 @@ PROJEKT_STATUS = (
 
 class Projekt(models.Model):
     '''
-    Repräsentation eines Projekts. Das Projekt dient als Container für Aufgaben.
+This class represents a project. Projects are used to organize Aufgabe objects.
 
-    '''
+'''
 
-    besitzer = models.ForeignKey(User, related_name="besitzer", help_text="Verantwortlicher für das Projekt.",blank=True, null=True)
+    besitzer = models.ForeignKey(User, related_name="besitzer", help_text="Verantwortlicher für das Projekt.", blank=True, null=True)
 
     name = models.CharField(max_length=512, help_text="Name des Projekts.", unique=True)
     beschreibung = models.TextField(help_text="Ausführliche Beschreibung des Projekts.")
     status = models.CharField(max_length=2, default=c.PROJEKT_STATUS_OP, choices=PROJEKT_STATUS, help_text="Zustand des Projekts.")
-    
+
     def __unicode__(self):
         return self.name
 
 
 class Aufgabe(models.Model):
 
-    '''
-    Repräsentation einer Aufgabe.
-    '''
-    ersteller = models.ForeignKey(User, related_name="ersteller", help_text="Ersteller dieser Aufgabe.",blank=True, null=True)
+
+    '''This class represents a task.
+
+'''
+    ersteller = models.ForeignKey(User, related_name="ersteller", help_text="Ersteller dieser Aufgabe.", blank=True, null=True)
     bearbeiter = models.ForeignKey(User, related_name="bearbeiter", blank=True, null=True, help_text="Bearbeiter dieser Aufgabe.")
     projekt = models.ForeignKey(Projekt, related_name="projekt", help_text="Das der Aufgabe übergeordnete Projekt.")
 
@@ -61,15 +71,31 @@ class Aufgabe(models.Model):
     faelligkeitsDatum = models.DateTimeField(blank=True, help_text="Die Aufgabe muss bis zu diesem Datum erledigt sein.")
   
     def save(self):
-        if Aufgabe.objects.filter(titel=self.titel,projekt=self.projekt).exclude(pk=self.pk).count()!=0:
-            raise IntegrityError (c.FEHLER_AUFGABE_NAME)
+
+        if Aufgabe.objects.filter(titel=self.titel, projekt=self.projekt).exclude(pk=self.pk).count() != 0:
+            raise IntegrityError(c.FEHLER_AUFGABE_NAME)
         if self.faelligkeitsDatum < timezone.now():
-            raise IntegrityError (c.FEHLER_AUFGABE_DATUM)
-        if self.projekt.status==c.PROJEKT_STATUS_CL:
+            raise IntegrityError(c.FEHLER_AUFGABE_DATUM)
+        if self.projekt.status == c.PROJEKT_STATUS_CL:
             raise IntegrityError(c.FEHLER_AUFGABE_PROJEKTSTATUS)
+        if self.bearbeiter and self.status==c.AUFGABE_STATUS_OP:
+            self.status=c.AUFGABE_STATUS_IP
+        if not self.bearbeiter and self.status==c.AUFGABE_STATUS_IP:
+            self.status=c.AUFGABE_STATUS_OP
+
         super(Aufgabe, self).save()
+
+    def getStati(self):
+        if self.status == c.AUFGABE_STATUS_OP:
+            return dict(AUFGABE_STATUS[3:])
+        if self.status == c.AUFGABE_STATUS_IP:
+            return dict(AUFGABE_STATUS[2:])
+        if self.status == c.AUFGABE_STATUS_PA:
+            return dict(AUFGABE_STATUS[1:2])
+        if self.status == c.AUFGABE_STATUS_CL:
+            return dict(AUFGABE_STATUS[1:2])
+        return{}
 
 
     def __unicode__(self):
         return self.titel
-

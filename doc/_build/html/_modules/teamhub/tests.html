@@ -1,0 +1,183 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>teamhub.tests &mdash; Teamhub 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Teamhub 0.1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Teamhub 0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for teamhub.tests</h1><div class="highlight"><pre>
+<span class="c"># coding: utf-8</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This file demonstrates writing tests using the unittest module. These will pass</span>
+<span class="sd">when you run &quot;manage.py test&quot;.</span>
+
+<span class="sd">Replace this with more appropriate tests for your application.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">TestCase</span>
+<span class="kn">from</span> <span class="nn">teamhub.models</span> <span class="kn">import</span> <span class="n">Projekt</span><span class="p">,</span> <span class="n">Aufgabe</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="c">#from django.test.client import Client</span>
+<span class="kn">from</span> <span class="nn">django.utils</span> <span class="kn">import</span> <span class="n">timezone</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">from</span> <span class="nn">django.db.utils</span> <span class="kn">import</span> <span class="n">IntegrityError</span>
+<span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="kn">import</span> <span class="n">ValidationError</span>
+
+
+<div class="viewcode-block" id="AufgabeTest"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.tests.AufgabeTest">[docs]</a><span class="k">class</span> <span class="nc">AufgabeTest</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="AufgabeTest.test_Aufgabe"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.tests.AufgabeTest.test_Aufgabe">[docs]</a>    <span class="k">def</span> <span class="nf">test_Aufgabe</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="n">email</span><span class="o">=</span><span class="s">&#39;user@user.com&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">&#39;user&#39;</span><span class="p">)</span>
+        <span class="n">user</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="n">testProjekt</span> <span class="o">=</span> <span class="n">Projekt</span><span class="p">(</span><span class="n">besitzer</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;testProjekt&#39;</span><span class="p">,</span> <span class="n">beschreibung</span><span class="o">=</span><span class="s">&#39;Test,test,test!!!&#39;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s">&#39;OP&#39;</span><span class="p">)</span>
+        <span class="n">testProjekt</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="c">#Ein Datum-Objekt erstellen(Morgen)</span>
+        <span class="n">fDatum</span> <span class="o">=</span> <span class="n">timezone</span><span class="o">.</span><span class="n">make_aware</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">timezone</span><span class="o">.</span><span class="n">get_default_timezone</span><span class="p">())</span>
+
+        <span class="c">#Eine gültige Aufgabe erstellen</span>
+        <span class="n">aufgabe</span> <span class="o">=</span> <span class="n">Aufgabe</span><span class="p">(</span><span class="n">ersteller</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">bearbeiter</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">projekt</span><span class="o">=</span><span class="n">testProjekt</span><span class="p">,</span> <span class="n">titel</span><span class="o">=</span><span class="s">&quot;Testaufgabe&quot;</span><span class="p">,</span> <span class="n">beschreibung</span><span class="o">=</span><span class="s">&quot;Beschreibung der Testaufgabe&quot;</span><span class="p">,</span> <span class="n">faelligkeitsDatum</span><span class="o">=</span><span class="n">fDatum</span><span class="p">)</span>
+        <span class="n">aufgabe</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="c">#Testen, ob eine Aufgabe mit dem gleichen Namen erstellt werden kann</span>
+        <span class="n">aufgabe1</span> <span class="o">=</span> <span class="n">Aufgabe</span><span class="p">(</span><span class="n">ersteller</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">bearbeiter</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">projekt</span><span class="o">=</span><span class="n">testProjekt</span><span class="p">,</span> <span class="n">titel</span><span class="o">=</span><span class="s">&quot;Testaufgabe&quot;</span><span class="p">,</span> <span class="n">beschreibung</span><span class="o">=</span><span class="s">&quot;Beschreibung der Testaufgabe&quot;</span><span class="p">,</span> <span class="n">faelligkeitsDatum</span><span class="o">=</span><span class="n">fDatum</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertRaisesRegexp</span><span class="p">(</span><span class="n">IntegrityError</span><span class="p">,</span> <span class="s">&#39;Es existiert schon eine Aufgabe mit dem Namen: Testaufgabe!&#39;</span><span class="p">,</span> <span class="n">aufgabe1</span><span class="o">.</span><span class="n">save</span><span class="p">)</span>
+
+        <span class="c">#Testen, ob eine Aufgabe mit einem Faelligkeitsdatum, das in Vergangenheit liegt, erstellt werden kann</span>
+        <span class="n">aufgabe</span><span class="o">.</span><span class="n">faelligkeitsDatum</span> <span class="o">=</span> <span class="n">timezone</span><span class="o">.</span><span class="n">make_aware</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">timezone</span><span class="o">.</span><span class="n">get_default_timezone</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertRaisesRegexp</span><span class="p">(</span><span class="n">IntegrityError</span><span class="p">,</span> <span class="s">&#39;Fälligkeitsdatum darf nicht in der Vergangenheit liegen!&#39;</span><span class="p">,</span> <span class="n">aufgabe</span><span class="o">.</span><span class="n">save</span><span class="p">)</span>
+
+        <span class="c">#Testen, ob eine Aufgabe in einem Projekt, das den Status &quot;Geschlossen&quot; hat, erstellt werden kann</span>
+        <span class="n">testProjekt</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="s">&quot;CL&quot;</span>
+        <span class="n">testProjekt</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="n">aufgabe1</span> <span class="o">=</span> <span class="n">Aufgabe</span><span class="p">(</span><span class="n">ersteller</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">bearbeiter</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">projekt</span><span class="o">=</span><span class="n">testProjekt</span><span class="p">,</span> <span class="n">titel</span><span class="o">=</span><span class="s">&quot;Aufgabe zum Testen&quot;</span><span class="p">,</span> <span class="n">beschreibung</span><span class="o">=</span><span class="s">&quot;Beschreibung der Testaufgabe&quot;</span><span class="p">,</span> <span class="n">faelligkeitsDatum</span><span class="o">=</span><span class="n">fDatum</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertRaisesRegexp</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">,</span> <span class="s">&#39;Das Projektstatus darf nicht geschlossen sein!&#39;</span><span class="p">,</span> <span class="n">aufgabe1</span><span class="o">.</span><span class="n">save</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="ProjektTest"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.tests.ProjektTest">[docs]</a><span class="k">class</span> <span class="nc">ProjektTest</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ProjektTest.test_Projekt_Erstellen"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.tests.ProjektTest.test_Projekt_Erstellen">[docs]</a>    <span class="k">def</span> <span class="nf">test_Projekt_Erstellen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c">#Zwei Testuser werden erstellt</span>
+        <span class="n">besitzer1</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">&#39;1234&#39;</span><span class="p">)</span>
+        <span class="n">besitzer2</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s">&#39;other_user&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">&#39;1234&#39;</span><span class="p">)</span>
+        <span class="n">besitzer1</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="n">besitzer2</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="c">#self.queryset=[]</span>
+        <span class="c">#Projekt.objects.all()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">Projekt</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#39;---Projekttabelle ist nicht leer!---&#39;</span><span class="p">)</span>
+
+        <span class="c">#Testprojekt wird erstellt</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">testProjekt</span> <span class="o">=</span> <span class="n">Projekt</span><span class="p">(</span><span class="n">besitzer</span><span class="o">=</span><span class="n">besitzer1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;testProjekt&#39;</span><span class="p">,</span> <span class="n">beschreibung</span><span class="o">=</span><span class="s">&#39;Test,test,test!!!&#39;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s">&#39;OP&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">Projekt</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#39;---Projekttabelle ist nicht leer!---&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">testProjekt</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">Projekt</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">(),</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;---Projekttabelle ist nicht korrekt!---&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">testProjekt</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;---Projektid stimmt nicht!---&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">testProjekt</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s">&#39;testProjekt&#39;</span><span class="p">,</span> <span class="s">&#39;---Projektname stimmt nicht!---&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">testProjekt</span><span class="o">.</span><span class="n">beschreibung</span><span class="p">,</span> <span class="s">&#39;Test,test,test!!!&#39;</span><span class="p">,</span> <span class="s">&#39;---Projektbeschreibung stimmt nicht!---&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">testProjekt</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="s">&#39;OP&#39;</span><span class="p">,</span> <span class="s">&#39;---Projektstatus stimmt nicht!---&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">testProjekt</span><span class="o">.</span><span class="n">besitzer</span><span class="p">,</span> <span class="n">besitzer1</span><span class="p">,</span> <span class="s">&#39;---Projektbesitzer stimmt nicht!---&#39;</span><span class="p">)</span>
+
+        <span class="c">#Im Testprojekt werden die Daten ausgetauscht</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">testProjekt</span><span class="o">.</span><span class="n">besitzer</span> <span class="o">=</span> <span class="n">besitzer2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">testProjekt</span><span class="o">.</span><span class="n">beschreibung</span> <span class="o">=</span> <span class="s">&#39;Eine andere Beschreibung&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">testProjekt</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;Projekt-Test&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">testProjekt</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="s">&#39;CL&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">testProjekt</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">testProjekt</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s">&#39;Projekt-Test&#39;</span><span class="p">,</span> <span class="s">&#39;---Projektname stimmt nicht!---&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">testProjekt</span><span class="o">.</span><span class="n">beschreibung</span><span class="p">,</span> <span class="s">&#39;Eine andere Beschreibung&#39;</span><span class="p">,</span> <span class="s">&#39;---Projektbeschreibung stimmt nicht!---&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">testProjekt</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="s">&#39;CL&#39;</span><span class="p">,</span> <span class="s">&#39;---Projektstatus stimmt nicht!---&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">testProjekt</span><span class="o">.</span><span class="n">besitzer</span><span class="p">,</span> <span class="n">besitzer2</span><span class="p">,</span> <span class="s">&#39;---Projektbesitzer stimmt nicht!---&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">testProjekt</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">Projekt</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#39;---Projekttabelle ist nicht leer!---&#39;</span><span class="p">)</span>
+</div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Teamhub 0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Dennis, Rouslan, Veronika, Tim.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

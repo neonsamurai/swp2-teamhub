@@ -6,9 +6,21 @@
 
 
 {% block content %}
+
 <form method="post" action="">
         {% csrf_token %}
         {{ form.as_table }}
-        <br /><input type="submit" value="Senden" />
+        {%if stati%}
+        <p>Status der Aufgabe ändern.</p>
+        <select name="stati">
+		<option value="{{aktuellerstatus}}">{{aktuellerstatus_lang}}</option>
+        	{%for key, value in stati.items%}
+        		<option value="{{key}}">{{value}}</option>
+        	{%endfor%}
+        </select>
+        {%endif%}
+        <br> <br> <br>
+        <button class="btn btn-primary" type="submit" >Senden</button>
 </form>
+
 {% endblock %}
