@@ -36,15 +36,16 @@ def dashboard(request):
 
 '''
     meineAufgaben = Aufgabe.objects.filter(bearbeiter=request.user).order_by('faelligkeitsDatum')
-    context = makeContext({'meineAufgaben': meineAufgaben})
-    context['title'] = 'Meine Aufgaben'
+    meineAufgaben=statusAufgaben(meineAufgaben)
+    context = makeContext({'meineAufgaben': meineAufgaben, 'aktuellerstatus_lang': dict(AUFGABE_STATUS)})
+    context['title'] = 'Meine Aufgaben' 
     return render_to_response('base.html', context, context_instance=RequestContext(request))
 
 
 def offeneAufgabenAnzeigen(request):
 
     meineAufgaben = Aufgabe.objects.filter(status=c.AUFGABE_STATUS_OP).order_by('faelligkeitsDatum')
-    context = makeContext({'meineAufgaben': meineAufgaben})
+    context = makeContext({'meineAufgaben': meineAufgaben, 'aktuellerstatus_lang': dict(AUFGABE_STATUS)})
     context['title'] = 'Offene Aufgaben'
     return render_to_response('base.html', context, context_instance=RequestContext(request))
 
@@ -52,9 +53,17 @@ def offeneAufgabenAnzeigen(request):
 def vonMirErstellteAufgaben(request):
 
     meineAufgaben = Aufgabe.objects.filter(ersteller=request.user).order_by('faelligkeitsDatum')
-    context = makeContext({'meineAufgaben': meineAufgaben})
+    context = makeContext({'meineAufgaben': meineAufgaben,'aktuellerstatus_lang': dict(AUFGABE_STATUS)})
     context['title'] = 'Von mir erstellte Aufgaben'
     return render_to_response('base.html', context, context_instance=RequestContext(request))
+
+
+def statusAufgaben(meineAufgaben):
+    for aufgabe in meineAufgaben:
+        aufgabe.status=dict(AUFGABE_STATUS)[aufgabe.status]
+        #print aufgabe.status
+    
+    return meineAufgaben
 
 
 def aufgabe(request):
@@ -152,7 +161,7 @@ def projektDetail(request, projektId):
 '''
     projekt = Projekt.objects.get(pk=projektId)
     aufgaben = Aufgabe.objects.filter(projekt=projekt).order_by('faelligkeitsDatum')
-    context = makeContext({'projekt': projekt, 'aufgaben': aufgaben})
+    context = makeContext({'projekt': projekt, 'aufgaben': aufgaben, 'aktuellerstatus_lang': dict(AUFGABE_STATUS)})
     return render_to_response('base_projekt_detail.html', context, context_instance=RequestContext(request))
 
 
