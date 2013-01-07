@@ -9,8 +9,8 @@
 
 """
 from django.contrib.auth.models import User
-from django.forms import ModelForm
-from django import forms
+from django.forms import ModelForm, RegexField
+
 from teamhub.models import Projekt, Aufgabe
 
 
@@ -23,6 +23,11 @@ class profilForm(ModelForm):
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email')
+        username = RegexField(label="Username", max_length=30,
+                                    regex=r'^[\w.@+-]+$',
+                                    help_text="Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only.",
+                                    error_messages={
+                                        'invalid': "This value may contain only letters, numbers and @/./+/-/_ characters."})
 
 
 class projektFormBearbeiten(ModelForm):
