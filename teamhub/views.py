@@ -62,7 +62,6 @@ def vonMirErstellteAufgaben(request):
 def statusAufgaben(meineAufgaben):
     for aufgabe in meineAufgaben:
         aufgabe.status = dict(AUFGABE_STATUS)[aufgabe.status]
-        #print aufgabe.status
 
     return meineAufgaben
 
