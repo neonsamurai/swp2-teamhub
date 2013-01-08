@@ -4,9 +4,11 @@ from teamhub.models import Aufgabe, Projekt
 from django.contrib.auth.models import User
 from django.db.utils import IntegrityError
 from django.shortcuts import render_to_response, redirect
-from django.template import RequestContext
 from django.core.context_processors import csrf
+from django.template import RequestContext
 import teamhub.stringConst as c
+
+from teamhub.models import TeamhubUser
 
 
 def makeContext(context):
@@ -43,9 +45,9 @@ def decorateSave(func):
                 del form.cleaned_data["username"]
                 context['form'] = form
                 context = makeContext(context)
-                return render_to_response('base_profil.html', context)
+                return render_to_response('base_profil.html', context, context_instance=RequestContext(request))
             context = makeContext(context)
-            return render_to_response('base_aufgabe_bearbeiten.html', context)
+            return render_to_response('base_aufgabe_bearbeiten.html', context, context_instance=RequestContext(request))
 
         except Exception, e:
             msg = str(e)
@@ -54,7 +56,7 @@ def decorateSave(func):
             form._errors['__all__'] = form.error_class([msg])
             context['form'] = form
             context = makeContext(context)
-            return render_to_response('base_aufgabe_bearbeiten.html', context)
+            return render_to_response('base_aufgabe_bearbeiten.html', context, context_instance=RequestContext(request))
 
     return wrapper
 
@@ -70,7 +72,7 @@ def teamleiterBerechtigung(func):
 def aufgabeBearbeitenBerechtigung(func):
     def wrapper(request, *args, **kwargs):
         aufgabe = Aufgabe.objects.get(pk=kwargs['aufgabeId'])
-        if request.user == aufgabe.bearbeiter or request.user == aufgabe.ersteller:
+        if TeamhubUser.objects.get(pk=request.user.pk) == aufgabe.bearbeiter or TeamhubUser.objects.get(pk=request.user.pk) == aufgabe.ersteller:
             return func(request, aufgabe.pk)
         return redirect("/")
     return wrapper

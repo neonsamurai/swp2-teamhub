@@ -14,13 +14,15 @@ from django.contrib.auth.models import User
 from teamhub.models import Projekt, Aufgabe
 from django.utils import timezone
 from django import forms
+from teamhub.models import Projekt, Aufgabe, TeamhubUser
+
 
 '''
 Django forms go here
 '''
 class profilForm(ModelForm):
     class Meta:
-        model = User
+        model = TeamhubUser
         fields = ('username', 'first_name', 'last_name', 'email')
 
 
@@ -43,11 +45,14 @@ class aufgabeForm(ModelForm):
                 
 class userForm(ModelForm):
     class Meta:
-        model = User
-        fields = ('username', 'email','is_staff')
+        model = TeamhubUser
+        fields = ('username', 'email', 'is_staff')
         
 class passwortAendernForm(forms.Form):
     passwAlt = forms.CharField(label= "Altes Passwort", max_length=128, min_length=4)
     passwNeu1 = forms.CharField(label= "Neues Passwort", max_length=128, min_length=4)
     passwNeu2 = forms.CharField(label= "Neues Passwort widerholen", max_length=128, min_length=4)
+
+
+       
 
