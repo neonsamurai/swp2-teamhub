@@ -5,9 +5,9 @@
 
 {% block content %}
 
-<div class="container">	
+<div class="container">
 	<div class="hero-unit" style="color: black; black;  border-width: 0; box-shadow: 4px 4px 4px #666;">
-	{%if user == aufgabe.ersteller or user == aufgabe.bearbeiter%}
+	{%if benutzer == aufgabe.ersteller or benutzer == aufgabe.bearbeiter%}
 		<p><a class="btn btn-primary btn-medium" href="/aufgabe/{{aufgabe.pk}}/bearbeiten/">Aufgabe bearbeiten</a></p>
      {%endif%}
 			<table class="table table-striped table-hover">
@@ -16,15 +16,15 @@
            			<td></td>
            			<td><small>Fällig am: {{aufgabe.faelligkeitsDatum}}</small></td>
            				<tr>
-           			
+
         			<td width="35%"><small> Erstellt von: {{aufgabe.ersteller}}</small></td>
             		<td width="35%"><small>Bearbeiter: {{aufgabe.bearbeiter}}</small></td>
             		<td><small>Status: {{aufgabe.status}}</small></td>
            		</thead>
-           			
+
 			</table>
         <h2 style="color: gray;">{{aufgabe.titel}}</h2>
-        <p>{{aufgabe.beschreibung}}</p> 
+        <p>{{aufgabe.beschreibung}}</p>
      </div>
 
 
@@ -38,7 +38,7 @@
     {% get_comment_form for aufgabe as form %}
     <form action="{% comment_form_target %}" method="POST">
     {% csrf_token %}
-    
+
     <div>Dein Kommentar:<br /> {{ form.comment }}</div>
     <div>{{ form.content_type }}</div>
     <div>{{ form.object_pk }}</div>

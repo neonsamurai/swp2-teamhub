@@ -36,7 +36,7 @@ def dashboard(request):
     '''The landing page view. It gets all tasks which are assigned to the logged in user.
 
 '''
-    meineAufgaben = Aufgabe.objects.filter(bearbeiter=request.user).order_by('faelligkeitsDatum')
+    meineAufgaben = Aufgabe.objects.filter(bearbeiter=TeamhubUser.objects.get(pk=request.user.pk)).order_by('faelligkeitsDatum')
     meineAufgaben = statusAufgaben(meineAufgaben)
     context = makeContext({'meineAufgaben': meineAufgaben, 'aktuellerstatus_lang': dict(AUFGABE_STATUS)})
     context['title'] = 'Meine Aufgaben'
@@ -53,7 +53,7 @@ def offeneAufgabenAnzeigen(request):
 
 def vonMirErstellteAufgaben(request):
 
-    meineAufgaben = Aufgabe.objects.filter(ersteller=request.user).order_by('faelligkeitsDatum')
+    meineAufgaben = Aufgabe.objects.filter(ersteller=TeamhubUser.objects.get(pk=request.user.pk)).order_by('faelligkeitsDatum')
     context = makeContext({'meineAufgaben': meineAufgaben, 'aktuellerstatus_lang': dict(AUFGABE_STATUS)})
     context['title'] = 'Von mir erstellte Aufgaben'
     return render_to_response('base.html', context, context_instance=RequestContext(request))
@@ -93,7 +93,7 @@ to create a new Aufgabe object.
             @decorateSave
             def saveAufgabe(form_to_save, request):
                 newAufgabe = form_to_save.save(commit=False)
-                newAufgabe.ersteller = request.user
+                newAufgabe.ersteller = TeamhubUser.objects.get(pk=request.user.pk)
                 newAufgabe.save()
                 return redirect('/aufgabe/' + str(newAufgabe.pk) + '/')
             return saveAufgabe(form, request)
@@ -140,7 +140,7 @@ def aufgabeAnnehmen(request, aufgabeId):
 
     @decorateSave
     def saveAufgabe(request, aufgabeId):
-        aufgabe.bearbeiter = request.user
+        aufgabe.bearbeiter = TeamhubUser.objects.get(pk=request.user.pk)
         aufgabe.save()
         return redirect('/aufgabe/' + str(aufgabe.pk) + '/')
     return saveAufgabe(request, aufgabeId)
@@ -180,7 +180,7 @@ to create a new Projekt object.
             @decorateSave
             def projektSave(form_to_save, request):
                 newProject = form_to_save.save(commit=False)
-                newProject.besitzer = request.user
+                newProject.besitzer = TeamhubUser.objects.get(pk=request.user.pk)
                 newProject.save()
                 return redirect('/projekte/' + str(newProject.pk) + '/')
             return projektSave(form, request)
@@ -226,7 +226,7 @@ def aufgabeDetails(request, aufgabeId):
 '''
     aufgabe = Aufgabe.objects.get(pk=aufgabeId)
     aufgabe.status = dict(AUFGABE_STATUS)[aufgabe.status]
-    context = makeContext({'aufgabe': aufgabe})
+    context = makeContext({'aufgabe': aufgabe,'benutzer':TeamhubUser.objects.get(pk=request.user.pk)})
     return render_to_response('base_aufgabe.html', context, context_instance=RequestContext(request))
 
 
