@@ -58,13 +58,14 @@ class TeamhubUser(User):
         super(TeamhubUser, self).save(*args, **kwargs)
 
 
+        
 class Projekt(models.Model):
     '''
 This class represents a project. Projects are used to organize Aufgabe objects.
 
 '''
 
-    besitzer = models.ForeignKey(TeamhubUser, related_name="besitzer", help_text="Verantwortlicher für das Projekt.", blank=True, null=True)
+    besitzer = models.ForeignKey(User, related_name="besitzer", help_text="Verantwortlicher für das Projekt.", blank=True, null=True)
 
     name = models.CharField(max_length=512, help_text="Name des Projekts.", unique=True)
     beschreibung = models.TextField(help_text="Ausführliche Beschreibung des Projekts.")
@@ -80,8 +81,8 @@ class Aufgabe(models.Model):
     '''This class represents a task.
 
 '''
-    ersteller = models.ForeignKey(TeamhubUser, related_name="ersteller", help_text="Ersteller dieser Aufgabe.", blank=True, null=True)
-    bearbeiter = models.ForeignKey(TeamhubUser, related_name="bearbeiter", blank=True, null=True, help_text="Bearbeiter dieser Aufgabe.")
+    ersteller = models.ForeignKey(User, related_name="ersteller", help_text="Ersteller dieser Aufgabe.", blank=True, null=True)
+    bearbeiter = models.ForeignKey(User, related_name="bearbeiter", blank=True, null=True, help_text="Bearbeiter dieser Aufgabe.")
     projekt = models.ForeignKey(Projekt, related_name="projekt", help_text="Das der Aufgabe übergeordnete Projekt.")
 
     status = models.CharField(max_length=2, default=c.AUFGABE_STATUS_OP, choices=AUFGABE_STATUS, help_text="Bearbeitungsstatus der Aufgabe.")
