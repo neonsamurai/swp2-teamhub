@@ -87,7 +87,6 @@ def passwAendern(func):
             raise Exception(c.FEHLER_PASSWD_NEU)
         user.set_password(passwNeu2)
         user.save()
-        #return func(form, request)
 
         context = {}
         context.update(csrf(request))

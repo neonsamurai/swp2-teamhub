@@ -19,6 +19,7 @@ import teamhub.stringConst as c
 
 # Create your views here.
 
+
 def makeContext(context):
     '''Adds default keys to the context dictionary. These are used site wide.
 
@@ -36,9 +37,9 @@ def dashboard(request):
 '''
     meineAufgaben = Aufgabe.objects.filter(bearbeiter=request.user).order_by('faelligkeitsDatum')
 
-    meineAufgaben=statusAufgaben(meineAufgaben)
+    meineAufgaben = statusAufgaben(meineAufgaben)
     context = makeContext({'meineAufgaben': meineAufgaben, 'aktuellerstatus_lang': dict(AUFGABE_STATUS)})
-    context['title'] = 'Meine Aufgaben' 
+    context['title'] = 'Meine Aufgaben'
     return render_to_response('base.html', context, context_instance=RequestContext(request))
 
 
@@ -53,16 +54,16 @@ def offeneAufgabenAnzeigen(request):
 def vonMirErstellteAufgaben(request):
 
     meineAufgaben = Aufgabe.objects.filter(ersteller=request.user).order_by('faelligkeitsDatum')
-    context = makeContext({'meineAufgaben': meineAufgaben,'aktuellerstatus_lang': dict(AUFGABE_STATUS)})
+    context = makeContext({'meineAufgaben': meineAufgaben, 'aktuellerstatus_lang': dict(AUFGABE_STATUS)})
     context['title'] = 'Von mir erstellte Aufgaben'
     return render_to_response('base.html', context, context_instance=RequestContext(request))
 
 
 def statusAufgaben(meineAufgaben):
     for aufgabe in meineAufgaben:
-        aufgabe.status=dict(AUFGABE_STATUS)[aufgabe.status]
+        aufgabe.status = dict(AUFGABE_STATUS)[aufgabe.status]
         #print aufgabe.status
-    
+
     return meineAufgaben
 
 
