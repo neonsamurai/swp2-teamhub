@@ -30,6 +30,7 @@ def makeContext(context):
     context['prioritaet'] = [c.PRIORITAET_HI, c.PRIORITAET_ME, c.PRIORITAET_LO]
     return context
 
+
 @login_required
 def dashboard(request):
     '''The landing page view. It gets all tasks which are assigned to the logged in user.
@@ -179,7 +180,6 @@ to create a new Projekt object.
     from teamhub.forms import projektFormErstellen
     from teamhub.decorators import decorateSave
 
-
     if request.method == 'POST':
         form = projektFormErstellen(request.POST)
         if form.is_valid():
@@ -234,7 +234,7 @@ def aufgabeDetails(request, aufgabeId):
 '''
     aufgabe = Aufgabe.objects.get(pk=aufgabeId)
     aufgabe.status = dict(AUFGABE_STATUS)[aufgabe.status]
-    context = makeContext({'aufgabe': aufgabe,'benutzer':TeamhubUser.objects.get(pk=request.user.pk)})
+    context = makeContext({'aufgabe': aufgabe, 'benutzer': TeamhubUser.objects.get(pk=request.user.pk)})
     return render_to_response('base_aufgabe.html', context, context_instance=RequestContext(request))
 
 
@@ -247,7 +247,6 @@ or displays an input form to create a new user.
 '''
     from teamhub.forms import userForm
     from teamhub.decorators import decorateSave
-
 
     if request.method == "POST":
         form = userForm(request.POST)
@@ -289,19 +288,20 @@ def userProfilBearbeiten(request):
     context = makeContext({'form': form})
     return render_to_response('base_profil.html', context, context_instance=RequestContext(request))
 
+
 def passwortAendern(request):
     from teamhub.forms import passwortAendernForm
     from teamhub.decorators import decorateSave, passwAendern
-    
+
     if request.method == 'POST':
         form = passwortAendernForm(request.POST)
         if form.is_valid():
-            
+
             @decorateSave
             @passwAendern
             def benutzerSave(form, request):
                 return redirect('/passwaendern/')
-            return benutzerSave(form, request)          
+            return benutzerSave(form, request)
     else:
         form = passwortAendernForm()
 

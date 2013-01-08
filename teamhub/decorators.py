@@ -17,7 +17,6 @@ def makeContext(context):
     return context
 
 
-
 def decorateSave(func):
     def wrapper(form, request):
         try:
@@ -77,11 +76,12 @@ def aufgabeBearbeitenBerechtigung(func):
         return redirect("/")
     return wrapper
 
+
 def passwAendern(func):
-    def wrapper(form,request):
+    def wrapper(form, request):
         user = User.objects.get(pk=request.user.pk)
         passwAlt = form.cleaned_data['passwAlt']
-        passwNeu1 = form.cleaned_data['passwNeu1'] 
+        passwNeu1 = form.cleaned_data['passwNeu1']
         passwNeu2 = form.cleaned_data['passwNeu2']
         if not user.check_password(passwAlt):
             raise Exception(c.FEHLER_PASSWD_ALT)
@@ -93,9 +93,8 @@ def passwAendern(func):
         context = {}
         context.update(csrf(request))
         context['form'] = form
-        context['erfolg']=c.PASSWD_GEAENDERT
+        context['erfolg'] = c.PASSWD_GEAENDERT
         context = makeContext(context)
-        return render_to_response('base_passwortAendern.html', context)
+        return render_to_response('base_passwortAendern.html', context, context_instance=RequestContext(request))
 
-    return wrapper       
-
+    return wrapper
