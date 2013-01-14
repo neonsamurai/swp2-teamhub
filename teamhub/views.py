@@ -41,7 +41,7 @@ def dashboard(request):
     meineAufgaben = statusAufgaben(meineAufgaben)
     context = makeContext({'meineAufgaben': meineAufgaben, 'aktuellerstatus_lang': dict(AUFGABE_STATUS)})
     context['title'] = 'Meine Aufgaben'
-    return render_to_response('base.html', context, context_instance=RequestContext(request))
+    return render_to_response('base_aufgabe_liste.html', context, context_instance=RequestContext(request))
 
 
 def offeneAufgabenAnzeigen(request):
@@ -49,7 +49,7 @@ def offeneAufgabenAnzeigen(request):
     meineAufgaben = Aufgabe.objects.filter(status=c.AUFGABE_STATUS_OP).order_by('faelligkeitsDatum')
     context = makeContext({'meineAufgaben': meineAufgaben, 'aktuellerstatus_lang': dict(AUFGABE_STATUS)})
     context['title'] = 'Offene Aufgaben'
-    return render_to_response('base.html', context, context_instance=RequestContext(request))
+    return render_to_response('base_aufgabe_liste.html', context, context_instance=RequestContext(request))
 
 
 def vonMirErstellteAufgaben(request):
@@ -57,7 +57,7 @@ def vonMirErstellteAufgaben(request):
     meineAufgaben = Aufgabe.objects.filter(ersteller=TeamhubUser.objects.get(pk=request.user.pk)).order_by('faelligkeitsDatum')
     context = makeContext({'meineAufgaben': meineAufgaben, 'aktuellerstatus_lang': dict(AUFGABE_STATUS)})
     context['title'] = 'Von mir erstellte Aufgaben'
-    return render_to_response('base.html', context, context_instance=RequestContext(request))
+    return render_to_response('base_aufgabe_liste.html', context, context_instance=RequestContext(request))
 
 
 def statusAufgaben(meineAufgaben):
@@ -233,8 +233,8 @@ def aufgabeDetails(request, aufgabeId):
 :type aufgabeId: int
 '''
     aufgabe = Aufgabe.objects.get(pk=aufgabeId)
-    aufgabe.status = dict(AUFGABE_STATUS)[aufgabe.status]
-    context = makeContext({'aufgabe': aufgabe, 'benutzer': TeamhubUser.objects.get(pk=request.user.pk)})
+  
+    context = makeContext({'aufgabe': aufgabe, 'aktuellerstatus_lang': dict(AUFGABE_STATUS), 'benutzer': TeamhubUser.objects.get(pk=request.user.pk)})
     return render_to_response('base_aufgabe.html', context, context_instance=RequestContext(request))
 
 
