@@ -51,7 +51,6 @@ def decorateSave(func):
 
         except Exception, e:
             msg = str(e)
-            #msg= 'Unerwarteter Fehler ist aufgetretten. Bitte wenden Sie sich an Administrator'
             context = {}
             context.update(csrf(request))
             form._errors['__all__'] = form.error_class([msg])
