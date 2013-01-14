@@ -8,6 +8,8 @@ from django.core.context_processors import csrf
 from django.template import RequestContext
 import teamhub.stringConst as c
 
+
+
 from teamhub.models import TeamhubUser
 
 
@@ -32,7 +34,6 @@ def decorateSave(func):
                 del form.cleaned_data["titel"]
                 context['form'] = form
             if msg == c.FEHLER_AUFGABE_DATUM:
-
                 form._errors["faelligkeitsDatum"] = form.error_class([msg])
                 del form.cleaned_data["faelligkeitsDatum"]
                 context['form'] = form
@@ -50,6 +51,7 @@ def decorateSave(func):
 
         except Exception, e:
             msg = str(e)
+            #msg= 'Unerwarteter Fehler ist aufgetretten. Bitte wenden Sie sich an Administrator'
             context = {}
             context.update(csrf(request))
             form._errors['__all__'] = form.error_class([msg])
@@ -98,3 +100,4 @@ def passwAendern(func):
         return render_to_response('base_passwortAendern.html', context, context_instance=RequestContext(request))
 
     return wrapper
+

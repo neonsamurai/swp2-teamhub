@@ -107,7 +107,7 @@ to create a new Aufgabe object.
     return render_to_response('base_aufgabe_bearbeiten.html', context, context_instance=RequestContext(request))
 
 
-@aufgabeBearbeitenBerechtigung
+
 def aufgabeBearbeiten(request, aufgabeId):
     '''Depending on the request type this view changes a Aufgabe object or provides an input form
 to modify data of a Aufgabe object.
@@ -143,14 +143,14 @@ def aufgabeAnnehmen(request, aufgabeId):
     from teamhub.decorators import decorateSave
 
     aufgabe = Aufgabe.objects.get(pk=aufgabeId)
-
+    
     @decorateSave
     def saveAufgabe(request, aufgabeId):
         aufgabe.bearbeiter = TeamhubUser.objects.get(pk=request.user.pk)
         aufgabe.save()
         return redirect('/aufgabe/' + str(aufgabe.pk) + '/')
     return saveAufgabe(request, aufgabeId)
-
+    
 
 def projektListe(request):
     '''Gives a list of all projects in the system.
@@ -264,7 +264,6 @@ or displays an input form to create a new user.
 
     context = makeContext({'form': form})
     return render_to_response('base_benutzer_erstellen.html', context, context_instance=RequestContext(request))
-
 
 def userProfilBearbeiten(request):
     '''Allows a user to modify her profile data.
