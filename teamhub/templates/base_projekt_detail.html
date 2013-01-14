@@ -46,7 +46,11 @@
   	   				 				{% ifequal aufgabe.prioritaet prioritaet.2 %}
   	   				 <div class="thumbnail alert alert-success" style="color: black; black;  border-width: 0; box-shadow: 4px 4px 4px #666;">
   	   				 		{%endifequal%}
-      	
+
+     {% if aufgabe.status == 'OP' %}
+        <p><a class="btn btn-success btn-mini pull-right" href="/aufgabe/{{aufgabe.pk}}/aufgabeAnnehmen/">Aufgabe annehmen</a></p>
+      {%endif%} 	
+
 		<table class="table table-striped ">
 				<tbody>
 					<th width="25%"><small>Ersteller: {{aufgabe.ersteller}}</small></th>
@@ -57,7 +61,6 @@
 		</table>
 		<h3><a class="text-info" style="color: #6699CC;" href="/aufgabe/{{aufgabe.pk}}/"> {{aufgabe.titel}}</a></h3>
 									
-
 {% endfor %}
 </li>
 </ul>
