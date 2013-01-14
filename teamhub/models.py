@@ -105,6 +105,7 @@ class Aufgabe(models.Model):
             self.status=c.AUFGABE_STATUS_IP
         if not self.bearbeiter and self.status==c.AUFGABE_STATUS_IP:
             self.status=c.AUFGABE_STATUS_OP
+            
 
         super(Aufgabe, self).save()
 
