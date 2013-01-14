@@ -13,6 +13,7 @@
   {% if aufgabe.status == 'OP' %}
     <a class="btn btn-success btn-medium pull-right" href="/aufgabe/{{aufgabe.pk}}/aufgabeAnnehmen/">Aufgabe annehmen</a>
   {%endif%}
+
 			<table class="table table-striped table-hover">
 				<thead>
 					<td><small>Erstellt am: {{aufgabe.erstellDatum}}</small></td>

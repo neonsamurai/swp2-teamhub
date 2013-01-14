@@ -8,6 +8,8 @@ from django.core.context_processors import csrf
 from django.template import RequestContext
 import teamhub.stringConst as c
 
+
+
 from teamhub.models import TeamhubUser
 
 
@@ -32,7 +34,6 @@ def decorateSave(func):
                 del form.cleaned_data["titel"]
                 context['form'] = form
             if msg == c.FEHLER_AUFGABE_DATUM:
-
                 form._errors["faelligkeitsDatum"] = form.error_class([msg])
                 del form.cleaned_data["faelligkeitsDatum"]
                 context['form'] = form
@@ -98,3 +99,4 @@ def passwAendern(func):
         return render_to_response('base_passwortAendern.html', context, context_instance=RequestContext(request))
 
     return wrapper
+
