@@ -20,9 +20,9 @@ def makeContext(context):
 
 
 def decorateSave(func):
-    def wrapper(form, request):
+    def wrapper(form, request, template):
         try:
-            return func(form, request)
+            return func(form, request, template)
         except IntegrityError, e:
 
             msg = str(e)
@@ -44,10 +44,7 @@ def decorateSave(func):
                 form._errors["username"] = form.error_class([msg])
                 del form.cleaned_data["username"]
                 context['form'] = form
-                context = makeContext(context)
-                return render_to_response('base_profil.html', context, context_instance=RequestContext(request))
-            context = makeContext(context)
-            return render_to_response('base_aufgabe_bearbeiten.html', context, context_instance=RequestContext(request))
+            return render_to_response(template, context, context_instance=RequestContext(request))
 
         except Exception, e:
             msg = str(e)
@@ -56,7 +53,7 @@ def decorateSave(func):
             form._errors['__all__'] = form.error_class([msg])
             context['form'] = form
             context = makeContext(context)
-            return render_to_response('base_aufgabe_bearbeiten.html', context, context_instance=RequestContext(request))
+            return render_to_response(template, context, context_instance=RequestContext(request))
 
     return wrapper
 
@@ -79,7 +76,7 @@ def aufgabeBearbeitenBerechtigung(func):
 
 
 def passwAendern(func):
-    def wrapper(form, request):
+    def wrapper(form, request, template):
         user = User.objects.get(pk=request.user.pk)
         passwAlt = form.cleaned_data['passwAlt']
         passwNeu1 = form.cleaned_data['passwNeu1']
@@ -96,7 +93,7 @@ def passwAendern(func):
         context['form'] = form
         context['erfolg'] = c.PASSWD_GEAENDERT
         context = makeContext(context)
-        return render_to_response('base_passwortAendern.html', context, context_instance=RequestContext(request))
+        return render_to_response(template, context, context_instance=RequestContext(request))
 
     return wrapper
 

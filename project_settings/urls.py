@@ -24,6 +24,7 @@ urlpatterns = patterns('',
     url(r'^benutzer/','teamhub.views.benutzerErstellen'),
     url(r'^suchen/','teamhub.views.search'),
     url(r'^passwaendern/','teamhub.views.passwortAendern'),
+    url(r'^passwzurueck/','teamhub.views.passwortZuruecksetzen'),
     # Examples:
     # url(r'^project_settings/', include('project_settings.foo.urls')),
 
