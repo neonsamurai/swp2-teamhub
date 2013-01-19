@@ -22,7 +22,7 @@ urlpatterns = patterns('',
     url(r'^login/','django.contrib.auth.views.login'),
     url(r'^logout/','teamhub.views.logoutUser'),
     url(r'^benutzer/','teamhub.views.benutzerErstellen'),
-    url(r'^suchen/','teamhub.views.search'),
+    url(r'^suchen/','teamhub.views.aufgabenSuchen'),
     url(r'^passwaendern/','teamhub.views.passwortAendern'),
     # Examples:
     # url(r'^project_settings/', include('project_settings.foo.urls')),

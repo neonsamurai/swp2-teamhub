@@ -14,6 +14,7 @@ from teamhub.decorators import teamleiterBerechtigung, aufgabeBearbeitenBerechti
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from teamhub.models import Aufgabe, Projekt, AUFGABE_STATUS, TeamhubUser
+from django.utils import timezone
 import teamhub.stringConst as c
 
 
@@ -49,6 +50,8 @@ def offeneAufgabenAnzeigen(request):
     meineAufgaben = Aufgabe.objects.filter(status=c.AUFGABE_STATUS_OP).order_by('faelligkeitsDatum')
     context = makeContext({'meineAufgaben': meineAufgaben, 'aktuellerstatus_lang': dict(AUFGABE_STATUS)})
     context['title'] = 'Offene Aufgaben'
+    aktuellesDatum= timezone.now()
+    
     return render_to_response('base_aufgabe_liste.html', context, context_instance=RequestContext(request))
 
 
@@ -144,13 +147,15 @@ def aufgabeAnnehmen(request, aufgabeId):
 
     aufgabe = Aufgabe.objects.get(pk=aufgabeId)
     
+    
     @decorateSave
     def saveAufgabe(request, aufgabeId):
         aufgabe.bearbeiter = TeamhubUser.objects.get(pk=request.user.pk)
         aufgabe.save()
         return redirect('/aufgabe/' + str(aufgabe.pk) + '/')
+     
     return saveAufgabe(request, aufgabeId)
-    
+   
 
 def projektListe(request):
     '''Gives a list of all projects in the system.
@@ -308,7 +313,7 @@ def passwortAendern(request):
     return render_to_response('base_passwortAendern.html', context, context_instance=RequestContext(request))
 
 
-def search(request):
+def aufgabenSuchen(request):
     '''Implementierung einer einfachen suche. Es wird in Titel und Beschreibung gesucht.'''
     from django.db.models import Q
 
