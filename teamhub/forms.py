@@ -20,7 +20,6 @@ from teamhub.models import Projekt, Aufgabe, TeamhubUser
 Django forms go here
 '''
 
-
 class profilForm(ModelForm):
     class Meta:
         model = TeamhubUser
@@ -55,3 +54,4 @@ class passwortAendernForm(forms.Form):
     passwAlt = forms.CharField(widget=PasswordInput, label="Altes Passwort", max_length=128, min_length=4)
     passwNeu1 = forms.CharField(widget=PasswordInput, label="Neues Passwort", max_length=128, min_length=4)
     passwNeu2 = forms.CharField(widget=PasswordInput, label="Neues Passwort widerholen", max_length=128, min_length=4)
+

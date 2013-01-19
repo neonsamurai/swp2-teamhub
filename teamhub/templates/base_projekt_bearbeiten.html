@@ -5,14 +5,21 @@
 
 {% block content %}
 
-<div class="container-fluid" "span12">
+<form action="" method="post">
+	{% csrf_token %}
+   	<label for="id_projektName">Name: </label>
+      <p class="text-error">{{form.name.errors|striptags}}</p>
+      {{ form.name }}
 
-<form method="post" action="">      
-        {% csrf_token %}
-        {{ form.as_table }}
-        <br><br>
-        <button class="btn btn-primary" type="submit" >Senden</button>
+    <label for="id_beschreibung">Beschreibung:</label>
+   	  <p class="text-error">{{form.beschreibung.errors|striptags}}</p>
+      {{ form.beschreibung }}
 
+    <label for="id_status">Status:</label>
+   	  <p class="text-error">{{form.status.errors|striptags}}</p>
+      {{ form.status }}
+
+     <br><br>
+     <button class="btn btn-primary" type="submit">Senden</button>
 </form>
-</div>
 {% endblock %}

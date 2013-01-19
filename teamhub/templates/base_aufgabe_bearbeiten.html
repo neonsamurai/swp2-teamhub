@@ -4,23 +4,49 @@
 
 {% block sectiontitle %}{{title}}{% endblock %}
 
-
 {% block content %}
 
-<form method="post" action="">
+<form action="" method="post">
         {% csrf_token %}
-        {{ form.as_table }}
-        {%if stati%}
+   <div class="fieldWrapper">
+       
+        <label for="id_bearbeiter">Bearbeiter: </label>
+                <p class="text-error">{{form.bearbeiter.errors|striptags}}</p>
+                {{ form.bearbeiter }}
+      
+        <label for="id_projekt">Projekt:</label>
+                <p class="text-error">{{form.projekt.errors|striptags}}</p>
+                {{ form.projekt }}
+    
+        <label for="id_prioritaet">Priorität:</label>
+                <p class="text-error">{{ form.prioritaet.errors|striptags }}</p>
+                {{ form.prioritaet }}
+   
+        <label for="id_titel">Titel:</label>
+                <p class="text-error">{{ form.titel.errors|striptags }}</p>
+                {{ form.titel }}
+   
+        <label for="id_beschreibung">Beschreibung:</label>
+                <p class="text-error">{{ form.beschreibung.errors|striptags }}</p>
+                {{ form.beschreibung }}
+
+        <label for="id_faelligkeitsdatum">Fälligkeitsdatum:</label>
+                <p class="text-error">{{ form.faelligkeitsDatum.errors|striptags }}</p>
+                {{ form.faelligkeitsDatum }}
+   
+
+     {%if stati%}
         <p>Status der Aufgabe ändern.</p>
         <select name="stati">
-		<option value="{{aktuellerstatus}}">{{aktuellerstatus_lang}}</option>
-        	{%for key, value in stati.items%}
-        		<option value="{{key}}">{{value}}</option>
-        	{%endfor%}
+                <option value="{{aktuellerstatus}}">{{aktuellerstatus_lang}}</option>
+                {%for key, value in stati.items%}
+                        <option value="{{key}}">{{value}}</option>
+                {%endfor%}
         </select>
         {%endif%}
-        <br> <br> <br>
-        <button class="btn btn-primary" type="submit" >Senden</button>
+     <br><br>
+     <button class="btn btn-primary" type="submit">Senden</button>
+  </div>
 </form>
 
 {% endblock %}

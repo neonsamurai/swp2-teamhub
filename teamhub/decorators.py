@@ -56,7 +56,7 @@ def decorateSave(func):
             form._errors['__all__'] = form.error_class([msg])
             context['form'] = form
             context = makeContext(context)
-            return render_to_response('base_aufgabe_bearbeiten.html', context, context_instance=RequestContext(request))
+            return render_to_response('base_passwortAendern.html', context, context_instance=RequestContext(request))
 
     return wrapper
 

@@ -233,7 +233,7 @@ def aufgabeDetails(request, aufgabeId):
 :type aufgabeId: int
 '''
     aufgabe = Aufgabe.objects.get(pk=aufgabeId)
-  
+    
     context = makeContext({'aufgabe': aufgabe, 'aktuellerstatus_lang': dict(AUFGABE_STATUS), 'benutzer': TeamhubUser.objects.get(pk=request.user.pk)})
     return render_to_response('base_aufgabe.html', context, context_instance=RequestContext(request))
 
@@ -326,3 +326,5 @@ def search(request):
         anfrage = "Bitte geben Sie ein Suchbegriff ein!!!"
         context = makeContext({"anfrage": anfrage})
     return render_to_response('base_search.html', context, context_instance=RequestContext(request))
+
+ 
