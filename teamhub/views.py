@@ -324,7 +324,7 @@ def passwortZuruecksetzen(request):
     return render_to_response(template, context, context_instance=RequestContext(request))
 
 
-def search(request):
+def aufgabeSuchen(request):
     '''Implementierung einer einfachen suche. Es wird in Titel und Beschreibung gesucht.'''
     from django.db.models import Q
 
