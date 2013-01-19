@@ -67,18 +67,18 @@
 						<li class="dropdown">
 							<a class="btn-danger dropdown-toggle "
 							data-toggle="dropdown" href="#" style=" color: white;"><i class="icon-cog "></i> Admin Tools <i class="caret"></i></a>
-						<ul class="dropdown-menu">
-  							<li>
-								<a href="/benutzer/"><i class="icon-user"></i> Benutzer erstellen</a>
-							</li>
-							<li>
-								<a href="/passwzurueck/"><i class="icon-folder-close"></i> Passwort zurücksetzen</a>
-							</li>
-							<li class="divider"></li>
-							<li>
-								<a href="/projekte/erstellen/"><i class="icon-folder-close"></i> Projekt erstellen</a>
-							</li>
-  						</ul>
+								<ul class="dropdown-menu">
+  									<li>
+										<a href="/benutzer/"><i class="icon-user"></i> Benutzer erstellen</a>
+									</li>
+									<li>
+										<a href="/passwzurueck/"><i class="icon-folder-close"></i> Passwort zurücksetzen</a>
+									</li>
+									<li class="divider"></li>
+									<li>
+										<a href="/projekte/erstellen/"><i class="icon-folder-close"></i> Projekt erstellen</a>
+									</li>
+  								</ul>
   						</li>
   					{%endif%}
 					</ul>
@@ -93,16 +93,13 @@
   								<button class="btn" type="submit">Search</button>
   						</select>
 					</form>
-
-
-
 				</div>
-				</div>
-				{% endblock %}
+			</div>
+			{% endblock %}
 
-				<div class="page-header">
-					<h1>{%block sectiontitle %}{{title}}{% endblock %}</h1>
-				</div>
+			<div class="page-header">
+				<h1>{%block sectiontitle %}{{title}}{% endblock %}</h1>
+			</div>
 			{% block content %}
 			{% endblock %}
 			{% block liste %}
