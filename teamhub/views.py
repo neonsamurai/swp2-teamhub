@@ -38,7 +38,6 @@ def dashboard(request):
 '''
 
     meineAufgaben = Aufgabe.objects.filter(bearbeiter=TeamhubUser.objects.get(pk=request.user.pk)).order_by('faelligkeitsDatum')
-    meineAufgaben = statusAufgaben(meineAufgaben)
     context = makeContext({'meineAufgaben': meineAufgaben, 'aktuellerstatus_lang': dict(AUFGABE_STATUS)})
     context['title'] = 'Meine Aufgaben'
     return render_to_response('base_aufgabe_liste.html', context, context_instance=RequestContext(request))
@@ -58,14 +57,6 @@ def vonMirErstellteAufgaben(request):
     context = makeContext({'meineAufgaben': meineAufgaben, 'aktuellerstatus_lang': dict(AUFGABE_STATUS)})
     context['title'] = 'Von mir erstellte Aufgaben'
     return render_to_response('base_aufgabe_liste.html', context, context_instance=RequestContext(request))
-
-
-def statusAufgaben(meineAufgaben):
-    for aufgabe in meineAufgaben:
-        aufgabe.status = dict(AUFGABE_STATUS)[aufgabe.status]
-
-    return meineAufgaben
-
 
 def aufgabe(request):
 
@@ -107,7 +98,7 @@ to create a new Aufgabe object.
     return render_to_response(template, context, context_instance=RequestContext(request))
 
 
-
+@aufgabeBearbeitenBerechtigung
 def aufgabeBearbeiten(request, aufgabeId):
     '''Depending on the request type this view changes a Aufgabe object or provides an input form
 to modify data of a Aufgabe object.
