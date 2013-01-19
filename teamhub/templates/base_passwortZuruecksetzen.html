@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block sectiontitle %}Passwort zurücksetzen {% endblock %}
+
+{% block content %}
+
+	<p>{{erfolg}}</p>
+
+<form method="post" action="">
+	{% csrf_token %}
+	<select class="span2" name="benutzer">
+		<option value="">Benutzer Auswählen</option>
+		{% for benutzer in benutzerliste%}
+			<option>{{benutzer.username}}</option>
+		{% endfor %}
+  	</select>
+    <button class="btn btn-primary" type="submit">Zurücksetzen</button>
+</form>
+{% endblock %}

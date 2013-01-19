@@ -11,7 +11,7 @@
 """
 from django import forms
 from django.forms import ModelForm
-from django.forms.widgets import PasswordInput
+from django.forms.widgets import PasswordInput, Select
 
 from teamhub.models import Projekt, Aufgabe, TeamhubUser
 

@@ -10,11 +10,10 @@ Das System sollte mehrere Ansichten bieten z.B. Übersicht aller Aufgaben, Über
 
 # Aufgabenbereiche und Verantwortliche
 
-* 2 Templates: Ruslan
-* 3 Unit-Tests / Build-System: Dennis, Tim
-* 2 Geschäftslogik / Oberflächenschicht: Veronika
-* 1 (Persistenzschicht / Models / Schema)
-* Code Dokumentation-Tools: Tim
+* Tim: Build-System, Codedokumentation, Forms, Model
+* Veronika: Views, 
+* Ruslan: Templates
+* Dennis: Unittest, Decorator
 
 # Erste Schritte
 
