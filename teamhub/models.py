@@ -2,9 +2,9 @@
 """
 .. module:: models
 :platform: Unix, Windows
-:synopsis: Custom Django models for teamhub package.
+:synopsis: Custom Django models für teamhub Paket.
 
-.. moduleauthor:: Dennis, Ruslan, Tim, Veronika
+.. moduleauthor:: Tim Jagodzinski
 
 
 """
@@ -39,17 +39,17 @@ PROJEKT_STATUS = (
 
 class TeamhubUser(User):
     '''
-    This class represents a user. It is used to extend the functionality of the standard django user model.
+    Repräsentation eines Benutzers. Die Proxyklasse wird für erweiternde Funktionen verwendet,
+    die über die von Django bereitgestellten hinausgehen.
     '''
     class Meta:
         proxy = True
 
     def save(self, *args, **kwargs):
-        '''Validates username to be composed only of allowed characters according to
-        regular expression defined in the function. Only usernames matching r'^[\w.@+-]+$'
-        are allowed.
+        '''Überprüft den Benutzernamen auf nicht erlaubte Zeichen. Nur Benutzernamen, welche dem
+        regulären Ausdruck r'^[\w.@+-]+$' folgen sind erlaubt.
 
-        :throws IntegrityError: If username consists of illegal characters.
+        :throws IntegrityError: Falls das Feld unsername nicht erlaubte Zeichen enthält.
         '''
         pattern = re.compile(r'^[\w.@+-]+$')
 
@@ -58,10 +58,20 @@ class TeamhubUser(User):
         super(TeamhubUser, self).save(*args, **kwargs)
 
 
-
 class Projekt(models.Model):
     '''
-This class represents a project. Projects are used to organize Aufgabe objects.
+    Repräsentation eines Projekts. Projekte werden zur Organisation von Aufgaben benutzt.
+        .. py:attribute:: besitzer
+        Fremdschlüssel, der auf ein TeamhubUser-Objekt verweist. Kann nicht mehr geändert werden.
+
+        .. py:attribute:: name
+        String, Name bzw. Titel des Projekts. Ist veränderbar.
+
+        .. py:attribute:: beschreibung
+        String, Ausführliche Beschreibung des Projekts. Ist veränderbar.
+
+        .. py:attribute:: status
+        String, Bearbeitungsstatus des Projekts. Kann nur die Werte "Offen" oder "Geschlossen" sein.
 
 '''
 
@@ -77,8 +87,37 @@ This class represents a project. Projects are used to organize Aufgabe objects.
 
 class Aufgabe(models.Model):
 
+    '''Repräsentation einer Aufgabe.
 
-    '''This class represents a task.
+        .. py:attribute:: ersteller
+        Fremdschlüssel, verweist auf ein TeamhubUser-Objekt, ist unveränderbar.
+
+        .. py:attribute:: bearbeiter
+        Fremdschlüssel, verweist auf ein TeamhubUser-Objekt, ist veränderlich.
+
+        .. py:attribute:: projekt
+        Fremdschlüssel, verweist auf ein Projekt-Objekt, ist veränderlich.
+
+        .. py:attribute:: status
+        String, Bearbeitungsstatus der Aufgabe, kann je nach Zustand folgende Werte annehmen: "Offen", "In Bearbeitung", "Angehalten", "Geschlossen". Veränderlich.
+
+        .. py:attribute:: prioritaet
+        String, Bearbeitungspriorität der Aufgabe, kann die Werte "Niedrig", "Mittel", "Hoch" annehmen. Veränderlich.
+
+        .. py:attribute:: titel
+        String, Titel bzw. Kurzbeschreibung der Aufgabe, ist veränderlich.
+
+        .. py:attribute:: beschreibung
+        String, ausführliche Beschreibung der Aufgabe, ist veränderlich.
+
+        .. py:attribute:: erstellDatum
+        Datum, Zeitpunkt der Erstellung der Aufgabe, ist unveränderlich.
+
+        .. py:attribute:: aenderungsDatum
+        Datum, Zeitpunkt der letzten Änderung an der Aufgabe, wird automatisch vom System gesetzt.
+
+        .. py:attribute:: faelligkeitsDatum
+        Datum, Zeitpunkt zu dem die Aufgabe erfüllt sein soll, ist veränderlich.
 
 '''
     ersteller = models.ForeignKey(TeamhubUser, related_name="ersteller", help_text="Ersteller dieser Aufgabe.", blank=True, null=True)
@@ -94,6 +133,17 @@ class Aufgabe(models.Model):
     faelligkeitsDatum = models.DateTimeField(blank=True, help_text="Die Aufgabe muss bis zu diesem Datum erledigt sein.")
 
     def save(self):
+        '''
+        Speichert das Objekt ab. Zuvor wird eine Reihe von Validierungen durchgeführt.
+
+        Validierungen:
+
+        * Name innerhalb des Projekts nicht eindeutig.
+        * Fälligkeitsdatum liegt in der Vergangenheit.
+        * Projekt ist bereits geschlossen.
+
+        .. throws: IntegrityError Falls eine der Validierungen fehlschlägt.
+        '''
 
         if Aufgabe.objects.filter(titel=self.titel, projekt=self.projekt).exclude(pk=self.pk).count() != 0:
             raise IntegrityError(c.FEHLER_AUFGABE_NAME)
@@ -101,14 +151,21 @@ class Aufgabe(models.Model):
             raise IntegrityError(c.FEHLER_AUFGABE_DATUM)
         if self.projekt.status == c.PROJEKT_STATUS_CL:
             raise IntegrityError(c.FEHLER_AUFGABE_PROJEKTSTATUS)
-        if self.bearbeiter and self.status==c.AUFGABE_STATUS_OP:
-            self.status=c.AUFGABE_STATUS_IP
-        if not self.bearbeiter and self.status==c.AUFGABE_STATUS_IP:
-            self.status=c.AUFGABE_STATUS_OP
+        if self.bearbeiter and self.status == c.AUFGABE_STATUS_OP:
+            self.status = c.AUFGABE_STATUS_IP
+        if not self.bearbeiter and self.status == c.AUFGABE_STATUS_IP:
+            self.status = c.AUFGABE_STATUS_OP
 
         super(Aufgabe, self).save()
 
     def getStati(self):
+        '''
+        Erzeugt ein Dictionary mit erlaubten Status-Schlüsseln für die Anzeige in Formularen.
+
+        Erlaubte Wege:
+
+        .. img: img/status.svg
+        '''
         if self.status == c.AUFGABE_STATUS_OP:
             return dict(AUFGABE_STATUS[3:])
         if self.status == c.AUFGABE_STATUS_IP:
@@ -119,7 +176,5 @@ class Aufgabe(models.Model):
             return dict(AUFGABE_STATUS[1:2])
         return{}
 
-
     def __unicode__(self):
         return self.titel
-
