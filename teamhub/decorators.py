@@ -23,6 +23,7 @@ def makeContext(context, request):
         aufgabe=Aufgabe.objects.get(pk=treffer.group('aufgabeId'))
         context['stati']=aufgabe.getStati()
         context['aktuellerstatus_lang']=dict(AUFGABE_STATUS)[aufgabe.status]
+        context['aktuellerstatus']= aufgabe.status
     return context
 
 def decorateSave(func):
