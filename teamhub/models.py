@@ -97,7 +97,6 @@ class Aufgabe(models.Model):
 
         if Aufgabe.objects.filter(titel=self.titel, projekt=self.projekt).exclude(pk=self.pk).count() != 0:
             raise IntegrityError(c.FEHLER_AUFGABE_NAME)
-        #if self.faelligkeitsDatum < timezone.now() and not self.pk:
         if self.faelligkeitsDatum < timezone.now():
             raise IntegrityError(c.FEHLER_AUFGABE_DATUM)
         if self.projekt.status == c.PROJEKT_STATUS_CL:

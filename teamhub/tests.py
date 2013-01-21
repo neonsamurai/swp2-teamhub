@@ -286,11 +286,14 @@ class TestCase(TestCase):
         #Berechtigung prüfen (teamleiterBerechtigung in decorators.py)
         response=self.client.post('/benutzer/')
         self.assertRedirects(response, '/')
+        response=self.client.post('/passwzurueck/')
+        self.assertRedirects(response, '/')
         
         # Passwort zurücksetzen
         self.client.get('/logout/')
         self.client.login(username='user', password='user')
-        self.client.post('/passwzurueck/',{'benutzer':'OhneBerechtigung'})
+        userOhneBerechtigung=TeamhubUser.objects.get(username='OhneBerechtigung')
+        self.client.post('/passwzurueck/',{'benutzerliste':userOhneBerechtigung.pk})
         userOhneBerechtigung=TeamhubUser.objects.get(username='OhneBerechtigung')
         self.assertEqual(userOhneBerechtigung.check_password('user'), False, '---Passwort ist nicht korrekt!---')
         self.assertEqual(userOhneBerechtigung.check_password('test'), True, '---Passwort ist nicht korrekt!---')
