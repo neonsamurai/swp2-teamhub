@@ -16,7 +16,6 @@ from teamhub.models import TeamhubUser
 def makeContext(context):
     context['projektliste'] = Projekt.objects.all().order_by('name')
     context['prioritaet'] = [c.PRIORITAET_HI, c.PRIORITAET_ME, c.PRIORITAET_LO]
-    return context
 
 
 def decorateSave(func):
@@ -68,7 +67,7 @@ def teamleiterBerechtigung(func):
 def aufgabeBearbeitenBerechtigung(func):
     def wrapper(request, *args, **kwargs):
         aufgabe = Aufgabe.objects.get(pk=kwargs['aufgabeId'])
-        if TeamhubUser.objects.get(pk=request.user.pk) == aufgabe.bearbeiter or TeamhubUser.objects.get(pk=request.user.pk) == aufgabe.ersteller:
+        if TeamhubUser.objects.get(pk=request.user.pk) == aufgabe.bearbeiter or TeamhubUser.objects.get(pk=request.user.pk) == aufgabe.ersteller or aufgabe.bearbeiter == None :
             return func(request, aufgabe.pk)
         return redirect("/")
     return wrapper
