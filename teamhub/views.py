@@ -15,6 +15,7 @@ from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from teamhub.models import Aufgabe, Projekt, AUFGABE_STATUS, TeamhubUser
 import teamhub.stringConst as c
+from django.utils import timezone
 
 
 # Create your views here.
@@ -28,6 +29,7 @@ def makeContext(context):
 '''
     context['projektliste'] = Projekt.objects.all().order_by('name')
     context['prioritaet'] = [c.PRIORITAET_HI, c.PRIORITAET_ME, c.PRIORITAET_LO]
+    context['dateNow']=timezone.now()
     return context
 
 

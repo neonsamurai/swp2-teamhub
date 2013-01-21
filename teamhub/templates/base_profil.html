@@ -4,10 +4,25 @@
 {% block sectiontitle %}Dein Profil{% endblock %}
 
 {% block content %}
-<form method="post" action="">
+<form action="" method="post">
 	{% csrf_token %}
-	{{ form.as_table }}
-	<br><br>
-        <button class="btn btn-primary" type="submit">Senden</button>
+	<label for="id_username">Benutzername: </label>
+    	<p class="text-error">{{form.username.errors|striptags}}</p>
+      	{{ form.username }}
+
+   	<label for="id_first_name">Vorname:</label>
+   		<p class="text-error">{{form.first_name.errors|striptags}}</p>
+       	{{ form.first_name }}
+
+    <label for="id_first_name">Name:</label>
+   		<p class="text-error">{{form.last_name.errors|striptags}}</p>
+       	{{ form.last_name }}
+
+    <label for="id_email">Email-Adresse:</label>
+   		<p class="text-error">{{form.email.errors|striptags}}</p>
+       	{{ form.email }}
+
+     <br><br>
+     <button class="btn btn-primary" type="submit">Senden</button>
 </form>
 {% endblock %}

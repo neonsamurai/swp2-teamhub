@@ -7,9 +7,9 @@
 
 <form action="" method="post">
 	{% csrf_token %}
-  <p class="alert-error">{{ form.non_field_errors|striptags }}</p>
+  <p class="text-error">{{ form.non_field_errors|striptags }}</p>
    <div class="fieldWrapper">
-        <p class="alert-error">{{form.passwAlt.errors|striptags}}</p>
+        <p class="text-error">{{form.passwAlt.errors|striptags}}</p>
         <label for="id_passwAlt">Altes Passwort: </label>
         {{ form.passwAlt }}
       </div>
