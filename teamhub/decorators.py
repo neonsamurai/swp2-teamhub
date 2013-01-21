@@ -98,7 +98,7 @@ def passwAendern(func):
         context.update(csrf(request))
         context['form'] = form
         context['erfolg'] = c.PASSWD_GEAENDERT
-        context = makeContext(context)
+        context = makeContext(context, request)
         return render_to_response(template, context, context_instance=RequestContext(request))
 
     return wrapper
