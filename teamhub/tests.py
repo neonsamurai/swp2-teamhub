@@ -25,10 +25,6 @@ class TestCase(TestCase):
         '''Sets the basic test environment. This function is called before every unit test.
 '''
         self.client = Client()
-        #self.testUser = TeamhubUser(username='tim', email='tim.jagodzinski@gmail.com', is_staff=True)
-        #self.testUser.set_password("tim")
-        #self.testUser.save()
-        #self.c.login(username='tim', password='tim')
         self.faelligkeitsDatumRichtig = '2015-12-12 12:00'
         self.faelligkeitsDatumRichtig2 = '2014-12-12 12:00'
         self.faelligkeitsDatumFalsch = '2010-12-12 12:00'
@@ -242,7 +238,7 @@ class TestCase(TestCase):
         
     def testViews(self):
         
-         # Vorbereitung
+        # Vorbereitung
         testUser = TeamhubUser(username='user', email='user@user.com', is_staff=True)
         testUser.set_password("user")
         testUser.save()
@@ -287,7 +283,7 @@ class TestCase(TestCase):
         self.assertEqual(userOhneBerechtigung.last_name, 'Mustermann', '---Nachname ist nicht korrekt!---')
         self.assertEqual(userOhneBerechtigung.email, 'max@gmail.com', '---Email ist nicht korrekt!---')
         
-        #Berechtigung prüfen
+        #Berechtigung prüfen (teamleiterBerechtigung in decorators.py)
         response=self.client.post('/benutzer/')
         self.assertRedirects(response, '/')
         
@@ -302,22 +298,19 @@ class TestCase(TestCase):
         #<-------------------------------------------
 
         #------------------Projekt------------------>
-        #Vorbereitung
-        
-        
-        
-        # Projekte Erstellen, Verändern, Zugrifberechtigung testen
+
+        # Prüfen ob Projekttabelle leer ist
         response=self.client.post('/projekte/')
         self.assertItemsEqual(response.context['projektliste'], [], '---Es sind schon Projekte vorhanden!---')
         self.assertEqual(Projekt.objects.all().count(), 0, '---Projekttabelle ist nicht leer!---')
 
-        #Testprojekt wird erstellt
+        # Testprojekt wird erstellt
         self.client.post('/projekte/erstellen/', {'name': 'TestProjekt', 'beschreibung': 'Eine Beschreibung des Projekts'})
         self.assertEqual(Projekt.objects.all().count(), 1, '---Projekttabelle ist nicht korrekt!---')
         response=self.client.post('/projekte/')
         self.assertItemsEqual(response.context['projektliste'], Projekt.objects.all(), '---Es wurde kein Projekt erstellt!---')
         
-        #Prüfung des Testprojekts
+        # Prüfung des Testprojekts auch ProjektDetails
         testprojekt = Projekt.objects.get(name='TestProjekt')
         response=self.client.post('/projekte/'+str(testprojekt.pk)+'/')
         self.assertEqual(response.context['projekt'], testprojekt, '---Erstellter und gespeicherter Projekt stimmen nicht überein!---')
@@ -326,10 +319,10 @@ class TestCase(TestCase):
         self.assertEqual(testprojekt.beschreibung, 'Eine Beschreibung des Projekts', '---Projektbeschreibung ist nicht korrekt!---')
         self.assertEqual(testprojekt.status, c.PROJEKT_STATUS_OP, '---Projektstatus ist nicht korrekt!---')
         
-        #Testprojekt bearbeiten
+        # Testprojekt bearbeiten
         self.client.post('/projekte/' + str(testprojekt.pk) + '/bearbeiten/', {'name': 'TestProjektNummer2', 'beschreibung': 'Eine andere Beschreibung des Projekts', 'status': c.PROJEKT_STATUS_CL})
 
-        #Prüfung des bearbeiteten Testprojekts
+        # Prüfung des bearbeiteten Testprojekts
         testprojekt = Projekt.objects.get(name='TestProjektNummer2')
         self.assertEqual(testprojekt.name, 'TestProjektNummer2', '---Projektname ist nicht korrekt!---')
         self.assertEqual(testprojekt.beschreibung, 'Eine andere Beschreibung des Projekts', '---Projektbeschreibung ist nicht korrekt!---')
@@ -337,7 +330,7 @@ class TestCase(TestCase):
         response=self.client.post('/projekte/'+str(testprojekt.pk)+'/')
         self.assertEqual(response.context['projekt'], testprojekt, '---Erstellter und gespeicherter Projekt stimmen nicht überein!---')
         
-        #Testen von Zugriffsberechtigungen
+        # Testen von Zugriffsberechtigungen (teamleiterBerechtigung in decorators.py)
         self.client.get('/logout/')
         self.client.login(username='OhneBerechtigung', password='test')
         response = self.client.post('/projekte/erstellen/')
@@ -352,14 +345,17 @@ class TestCase(TestCase):
         #<----------------------------------------------------------------------
         
         #--------------------Aufgabe------------------------------------------->
-        #Vorbereitung
+        # Vorbereitung
         testprojektnummer2 = Projekt(besitzer=testUser, name='Ein Projekt zum Testen', beschreibung='Eine Beschreibung des Projekts Nummer 2',status=c.PROJEKT_STATUS_OP)
         testprojektnummer2.save()
         
-        #Eine gültige Testaufgabe wird erstellt ,'erstellDatum':timezone.now(),'aenderungsDatum':timezone.now()
+        # Prüfen ob Aufgabentabelle leer ist
+        self.assertEqual(Aufgabe.objects.all().count(), 0, '---Projekttabelle ist nicht leer!---')
+        
+        # Eine gültige Testaufgabe wird erstellt ,'erstellDatum':timezone.now(),'aenderungsDatum':timezone.now()
         self.client.post('/aufgabe/erstellen/', {'bearbeiter': testUser.pk, 'projekt': testprojektnummer2.pk, 'prioritaet': c.PRIORITAET_ME, 'titel': "Testaufgabe", 'beschreibung': "Beschreibung der Testaufgabe", 'faelligkeitsDatum': self.faelligkeitsDatumRichtig})
 
-        #Prüfung der Testaufgabe
+        # Prüfung der Testaufgabe auch AufgabeDetails
         testaufgabe = Aufgabe.objects.get(pk=1)
         response=self.client.post('/aufgabe/'+str(testaufgabe.pk)+'/')
         self.assertEqual(response.context['aufgabe'], testaufgabe, '---Erstellter und gespeicherte Aufgabe stimmen nicht überein!---')
@@ -371,7 +367,7 @@ class TestCase(TestCase):
         self.assertEqual(testaufgabe.beschreibung, 'Beschreibung der Testaufgabe', '---Aufgabenbeschreibung ist nicht korrekt!---')
         self.assertEqual((testaufgabe.faelligkeitsDatum + datetime.timedelta(hours=1)).strftime('%Y-%m-%d %H:%M'), self.faelligkeitsDatumRichtig, '---Fälligkeitsdatum der Aufgabe ist nicht korrekt!---')
 
-        # Geschäftsregeln testen
+        # Geschäftsregeln testen (gleichzeitig decorateSave in decorators.py)
         response = self.client.post('/aufgabe/erstellen/', {'bearbeiter': testUser.pk, 'projekt': testprojektnummer2.pk, 'prioritaet': c.PRIORITAET_ME, 'titel': "Testaufgabe", 'beschreibung': "Beschreibung der Testaufgabe", 'faelligkeitsDatum': self.faelligkeitsDatumRichtig})
         self.assertFormError(response, 'form', 'titel', c.FEHLER_AUFGABE_NAME)
 
@@ -388,10 +384,8 @@ class TestCase(TestCase):
         testaufgabe2 = Aufgabe.objects.get(titel="Testaufgabe", projekt=testprojekt)
         response=self.client.post('/aufgabe/'+str(testaufgabe2.pk)+'/')
         self.assertEqual(response.context['aufgabe'], testaufgabe2, '---Erstellter und gespeicherte Aufgabe stimmen nicht überein!---')
-        
-         
-        
-        #Die Testaufgabe wird verändert       
+      
+        # Die Testaufgabe wird verändert       
         self.client.post('/aufgabe/' + str(testaufgabe.pk) + '/bearbeiten/', {'bearbeiter': userOhneBerechtigung.pk, 'projekt': testprojekt.pk, 'prioritaet': c.PRIORITAET_LO, 'titel': "Andere Testaufgabe", 'beschreibung': "Beschreibung der anderen Testaufgabe", 'faelligkeitsDatum': self.faelligkeitsDatumRichtig2})
 
         # Prüfung der veränderten Testaufgabe
@@ -406,8 +400,7 @@ class TestCase(TestCase):
         self.assertEqual(testaufgabe.beschreibung, 'Beschreibung der anderen Testaufgabe', '---Aufgabenbeschreibung ist nicht korrekt!---')
         self.assertEqual((testaufgabe.faelligkeitsDatum + datetime.timedelta(hours=1)).strftime('%Y-%m-%d %H:%M'), self.faelligkeitsDatumRichtig2, '---Fälligkeitsdatum der Aufgabe ist nicht korrekt!---')
 
-
-        #Testen von Zugriffsberechtigungen
+        # Testen von Zugriffsberechtigungen (aufgabeBearbeitenBerechtigung in decorators.py)
         self.client.get('/logout/')
         userOhneBerechtigung = TeamhubUser(username='keineBerechtigung', email='user@user.com', is_staff=False)
         userOhneBerechtigung.set_password("user")
@@ -420,7 +413,50 @@ class TestCase(TestCase):
         
         #----------------------Listenansichten--------------------------------->
         
+        # Vorbereitung
+        self.client.get('/logout/')
+        self.client.login(username='OhneBerechtigung', password='test')
+        userOhneBerechtigung=TeamhubUser.objects.get(username='OhneBerechtigung')
+        
+        # Dashboard
+        response=self.client.post('/')
+        self.assertItemsEqual(response.context['meineAufgaben'], Aufgabe.objects.filter(bearbeiter=userOhneBerechtigung).order_by('faelligkeitsDatum'), '---Falsche Lise---')
+        
+        # offene Aufgabe anzeigen
+        response=self.client.post('/aufgabe/offeneAufgaben/')
+        self.assertItemsEqual(response.context['meineAufgaben'], Aufgabe.objects.filter(status=c.AUFGABE_STATUS_OP).order_by('faelligkeitsDatum'), '---Falsche Lise---')
+        
+        #von mir erstellte Aufgaben anzeigen
+        response=self.client.post('/aufgabe/vonMirErstellteAufgaben/')
+        self.assertItemsEqual(response.context['meineAufgaben'], Aufgabe.objects.filter(ersteller=userOhneBerechtigung).order_by('faelligkeitsDatum'), '---Falsche Lise---')
+
+        
         #<---------------------------------------------------------------------
+        
+        #---------------------------Suchfunktion------------------------------>
+        
+        # Vorbereitung
+        self.client.post('/aufgabe/erstellen/', {'bearbeiter': userOhneBerechtigung.pk, 'projekt': testprojekt.pk, 'prioritaet': c.PRIORITAET_ME, 'titel': "Testaufgabe für Suche", 'beschreibung': "Beschreibung der Testaufgabe für Suche", 'faelligkeitsDatum': self.faelligkeitsDatumRichtig})
+        self.client.post('/aufgabe/erstellen/', {'bearbeiter': userOhneBerechtigung.pk, 'projekt': testprojektnummer2.pk, 'prioritaet': c.PRIORITAET_ME, 'titel': "TestaufgabeNummer2 für Suche", 'beschreibung': "Beschreibung der 2. Testaufgabe", 'faelligkeitsDatum': self.faelligkeitsDatumRichtig})
+        
+        # Testen von Suchanfragen
+        aufgabeQuery = Aufgabe.objects.all()
+
+        response = self.client.get('/suchen/', {'search': 'Test', 'projekt': ''})
+        self.assertItemsEqual(response.context['aufgabe'], aufgabeQuery, '---Falsche Suchergebnisse---')
+        response = self.client.get('/suchen/', {'search': 'Beschreibung', 'projekt': ''})
+        self.assertItemsEqual(response.context['aufgabe'], aufgabeQuery, '---Falsche Suchergebnisse---')
+        response = self.client.get('/suchen/', {'search': 'Beschreibung der Testaufgabe für Suche', 'projekt': ''})
+        self.assertItemsEqual(response.context['aufgabe'], aufgabeQuery.filter(titel="Testaufgabe für Suche"), '---Falsche Suchergebnisse---')
+        response = self.client.get('/suchen/', {'search': 'Test', 'projekt': 'Ein Projekt zum Testen'})
+        self.assertItemsEqual(response.context['aufgabe'], aufgabeQuery.filter(titel="TestaufgabeNummer2 für Suche"), '---Falsche Suchergebnisse---')
+        response = self.client.get('/suchen/', {'search': 'TestaufgabeNummer2 für Suche', 'projekt': 'TestProjektNummer2'})
+        self.assertItemsEqual(response.context['aufgabe'], [], '---Falsche Suchergebnisse---')
+        response = self.client.get('/suchen/', {'search': '', 'projekt': ''})
+        self.assertEqual(response.context['anfrage'], "Bitte geben Sie ein Suchbegriff ein!!!", '---Falsche Suchergebnisse---')
+        
+        #<---------------------------------------------------------------------
+
         
 if __name__ == "__main__":
     unittest.main()
