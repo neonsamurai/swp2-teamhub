@@ -9,13 +9,14 @@
 
 <form method="post" action="">
 	{% csrf_token %}
-	<select class="span2" name="benutzer">
-		<option value="">Benutzer Auswählen</option>
-		{% for benutzer in benutzerliste%}
-			<option>{{benutzer.username}}</option>
-		{% endfor %}
-  	</select>
-  	<br><br>
+	<p class="text-error">{{ form.non_field_errors|striptags }}</p> 
+	 <div class="fieldWrapper">
+        <p class="text-error">{{form.benutzerliste.errors|striptags}}</p>
+        <label for="id_passwAlt">Benutzerliste: </label>      	
+    {{ form.benutzerliste}}
+    </div>
+    <br><br>
     <button class="btn btn-primary" type="submit">Zurücksetzen</button>
 </form>
+
 {% endblock %}

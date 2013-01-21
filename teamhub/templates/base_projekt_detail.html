@@ -29,6 +29,7 @@
          {% if projekt.status == 'CL'%}
 		{% else %}
 		<br/>
+
 <div class="Aufgaben">
 <h2>Aufgaben:</h2> 
 <br><a class="btn btn-primary btn-medium pull-left"  href="/aufgabe/erstellen/">Aufgabe erstellen</a>
@@ -48,7 +49,7 @@
   	   				 		{%endifequal%}
 
      {% if aufgabe.status == 'OP' %}
-        <p><a class="btn btn-success btn-mini pull-right" href="/aufgabe/{{aufgabe.pk}}/aufgabeAnnehmen/">Aufgabe annehmen</a></p>
+        <p><a class="btn btn-success btn-mini pull-right" href="/aufgabe/{{aufgabe.pk}}/bearbeiten/">Aufgabe annehmen</a></p>
       {%endif%} 	
 
 		<table class="table table-striped ">

@@ -132,20 +132,6 @@ to modify data of a Aufgabe object.
 
     return render_to_response(template, context, context_instance=RequestContext(request))
 
-
-def aufgabeAnnehmen(request, aufgabeId):
-    from teamhub.decorators import decorateSave
-    
-    aufgabe = Aufgabe.objects.get(pk=aufgabeId)
-    aufgabe.bearbeiter = TeamhubUser.objects.get(pk=request.user.pk)
-    
-    @decorateSave
-    def saveAufgabe(form, request, template):      
-        aufgabe.save()
-        return redirect('/aufgabe/' + str(aufgabe.pk) + '/')
-    return saveAufgabe(None,request, None)
-    
-
 def projektListe(request):
     '''Gives a list of all projects in the system.
 '''
@@ -307,22 +293,27 @@ def passwortAendern(request):
     context = makeContext({'form': form})
     return render_to_response(template, context, context_instance=RequestContext(request))
 
+@teamleiterBerechtigung
 def passwortZuruecksetzen(request):
     from teamhub.decorators import decorateSave
+    from teamhub.forms import passwortZuruecksetzenForm
 
     template='base_passwortZuruecksetzen.html'
-    benutzerliste=TeamhubUser.objects.all().order_by('username')
     
     if request.method == 'POST':
-        if 'benutzer' in request.POST and request.POST['benutzer']:
+        form=passwortZuruecksetzenForm(request.POST)
+        if form.is_valid():
             @decorateSave
             def zuruecksetzen(form, request, template):
-                user = TeamhubUser.objects.get(username=request.POST['benutzer'])
+                print request.POST['benutzerliste']
+                user = TeamhubUser.objects.get(pk=request.POST['benutzerliste'])
                 user.set_password("test")
                 user.save()
                 return redirect('/passwzurueck/')
-            return zuruecksetzen(None, request, template)
-    context = makeContext({'benutzerliste': benutzerliste})
+            return zuruecksetzen(form, request, template)
+    else:
+        form=passwortZuruecksetzenForm()
+    context = makeContext({'form':form})
     return render_to_response(template, context, context_instance=RequestContext(request))
 
 

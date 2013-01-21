@@ -7,6 +7,7 @@
 
 <form action="" method="post">
 	{% csrf_token %}
+<p class="text-error">{{ form.non_field_errors|striptags }}</p>
 	<label for="id_projektNamae">Name: </label>
     	<p class="text-error">{{form.name.errors|striptags}}</p>
       	{{ form.name }}
