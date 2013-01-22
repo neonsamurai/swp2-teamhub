@@ -11,7 +11,7 @@ Das System sollte mehrere Ansichten bieten z.B. Übersicht aller Aufgaben, Über
 # Aufgabenbereiche und Verantwortliche
 
 * Tim: Build-System, Codedokumentation, Forms, Model
-* Veronika: Views, 
+* Veronika: Views
 * Ruslan: Templates
 * Dennis: Unittest, Decorator
 

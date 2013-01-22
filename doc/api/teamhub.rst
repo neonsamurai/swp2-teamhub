@@ -9,20 +9,25 @@ teamhub Package
     :undoc-members:
     :show-inheritance:
 
+:mod:`decorators` Module
+------------------------
+
+.. automodule:: teamhub.decorators
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 :mod:`forms` Module
 -------------------
 
 .. automodule:: teamhub.forms
     :members:
-    :undoc-members:
-    :show-inheritance:
 
 :mod:`models` Module
 --------------------
 
 .. automodule:: teamhub.models
     :members:
-    :undoc-members:
     :show-inheritance:
 
 :mod:`tests` Module
@@ -30,7 +35,6 @@ teamhub Package
 
 .. automodule:: teamhub.tests
     :members:
-    :undoc-members:
     :show-inheritance:
 
 :mod:`views` Module
@@ -38,6 +42,5 @@ teamhub Package
 
 .. automodule:: teamhub.views
     :members:
-    :undoc-members:
     :show-inheritance:
 
