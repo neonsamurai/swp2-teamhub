@@ -41,7 +41,7 @@
 {% render_comment_list for aufgabe %}
 {% if user.is_authenticated %}
     {% get_comment_form for aufgabe as form %}
-    <form action="{% comment_form_target %}" method="POST">
+  <form action="{% comment_form_target %}" method="POST">
     {% csrf_token %}
 
     <div>Dein Kommentar:<br /> {{ form.comment }}</div>
@@ -53,7 +53,7 @@
     <br>
     <button class="btn btn-primary" type="submit" id="id_submit">Senden</button>
     
-    </form>
+  </form>
 {% else %}
     <p>Bitte <a href="{% url 'auth_login' %}">anmelden</a>, wenn Du einen Kommentar hinterlassen m&ouml;chtest</p>
 {% endif %}

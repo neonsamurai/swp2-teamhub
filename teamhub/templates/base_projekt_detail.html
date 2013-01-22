@@ -20,18 +20,18 @@
         <h2>{{projekt.name}}</h2>
         <p>{{projekt.beschreibung}}</p>
         
-</div>
+  </div>
 
-{% if projekt.status == 'CL'%}
-{% else %}
-<br/>
-<div class="Aufgaben">
-  <h2>Aufgaben:</h2> 
-  <br><a class="btn btn-primary btn-medium pull-left"  href="/aufgabe/erstellen/">Aufgabe erstellen</a>
-{%endif%}
-  <br><br>
-  <ul class="thumbnails">
-	{% for aufgabe in aufgaben %}
+  {% if projekt.status == 'CL'%}
+  {% else %}
+  <br/>
+  <div class="Aufgaben">
+    <h2>Aufgaben:</h2> 
+    <br><a class="btn btn-primary btn-medium pull-left"  href="/aufgabe/erstellen/">Aufgabe erstellen</a>
+    {%endif%}
+    <br><br>
+    <ul class="thumbnails">
+	   {% for aufgabe in aufgaben %}
 	   <li class="span12">
 		    {% ifequal aufgabe.prioritaet prioritaet.0 %}
   	       <div class="thumbnail alert alert-error" style="color: black; black;  border-width: 0; box-shadow: 4px 4px 4px #666;">
@@ -43,29 +43,28 @@
   	   			<div class="thumbnail alert alert-success" style="color: black; black;  border-width: 0; box-shadow: 4px 4px 4px #666;">
   	   	{%endifequal%}
 
-     {% if aufgabe.status == 'OP' %}
+        {% if aufgabe.status == 'OP' %}
           <p><a class="btn btn-success btn-mini pull-right" href="/aufgabe/{{aufgabe.pk}}/bearbeiten/">Aufgabe annehmen</a></p>
-      {%endif%} 	
+        {%endif%} 	
 
-		        <table class="table table-striped ">
-				      <tbody>
-					       <th width="25%"><small>Ersteller: {{aufgabe.ersteller}}</small></th>
-					       <th width="25%"><small>Bearbeiter: {{aufgabe.bearbeiter}}</small></th>
-					       <th width="25%"><small>Status: {{ aufgabestatus_lang|getItem:aufgabe.status}}</small></th>
-					       {% if aufgabe.faelligkeitsDatum <= dateNow %}
-                 <th width="20%" style="color: #FF0000;"><strong><small>{{ aufgabe.faelligkeitsDatum }}</strong></small></th>
-                 {%else%}
-                 <th width="20%"><small>{{ aufgabe.faelligkeitsDatum }}</th>
-                {%endif%}
-				      </tbody>	
-		        </table>
-		        <h3><a class="text-info" style="color: #6699CC;" href="/aufgabe/{{aufgabe.pk}}/"> {{aufgabe.titel}}</a></h3>
-									
-  {% endfor %}
-      </li>
-    </ul>
+		          <table class="table table-striped ">
+  				      <tbody>
+  					       <th width="25%"><small>Ersteller: {{aufgabe.ersteller}}</small></th>
+  					       <th width="25%"><small>Bearbeiter: {{aufgabe.bearbeiter}}</small></th>
+  					       <th width="25%"><small>Status: {{ aufgabestatus_lang|getItem:aufgabe.status}}</small></th>
+  					       {% if aufgabe.faelligkeitsDatum <= dateNow %}
+                   <th width="20%" style="color: #FF0000;"><strong><small>{{ aufgabe.faelligkeitsDatum }}</strong></small></th>
+                   {%else%}
+                   <th width="20%"><small>{{ aufgabe.faelligkeitsDatum }}</th>
+                  {%endif%}
+  				      </tbody>	
+  		        </table>
+  		        <h3><a class="text-info" style="color: #6699CC;" href="/aufgabe/{{aufgabe.pk}}/"> {{aufgabe.titel}}</a></h3>			
+      {% endfor %}
+        </li>
+      </ul>
+    </div>
   </div>
-</div>
 </div>
 {% endblock %}
 
