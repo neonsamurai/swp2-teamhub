@@ -24,14 +24,16 @@
 				<thead>
 					<th><small>Projekt:</small></th>
 					<th><small>Ersteller:</small></th>
+					<th><small>Bearbeiter:</small></th>
 					<th><small>Status:</small></th>
 					<th><small>Fälligkeit:</small></th>
 				</thead>
 
 				<tr>
-					<td width="40%"><small>{{aufgabe.projekt}}</td>
-					<td width="20%"><small>{{aufgabe.ersteller}}</td>
-					<td width="20%"><small>{{aufgabestatus_lang|getItem:aufgabe.status}}</small></td>
+					<td width="30%"><small>{{aufgabe.projekt}}</td>
+					<td width="15%"><small>{{aufgabe.ersteller}}</td>
+					<td width="15%"><small>{{aufgabe.bearbeiter}}</td>
+					<td width="15%"><small>{{aufgabestatus_lang|getItem:aufgabe.status}}</small></td>
 					{% if aufgabe.faelligkeitsDatum <= dateNow %}
 					<td width="20%" style="color: #FF0000;"><strong><small>{{ aufgabe.faelligkeitsDatum }}</strong></small></td>
 					{%else%}
