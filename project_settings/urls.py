@@ -4,7 +4,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 urlpatterns = patterns('',
-    
+
     # TeamHub custom URLs
     url(r'^$', 'teamhub.views.dashboard', name='home'),
     url(r'^aufgabe/(?P<aufgabeId>\d+)/$', 'teamhub.views.aufgabeDetails' , name='aufgabeDetails'),
@@ -17,7 +17,6 @@ urlpatterns = patterns('',
     url(r'^projekte/erstellen/','teamhub.views.projektErstellen'),
     url(r'^aufgabe/erstellen/','teamhub.views.aufgabeErstellen'),
     url(r'^projekte/','teamhub.views.projektListe'),
-    url(r'^aufgabe/','teamhub.views.aufgabe'),
     url(r'^login/','django.contrib.auth.views.login'),
     url(r'^logout/','teamhub.views.logoutUser'),
     url(r'^benutzer/','teamhub.views.benutzerErstellen'),
@@ -30,9 +29,9 @@ urlpatterns = patterns('',
     # Admin urls
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
-    
-    
+
+
     # Comments framework urls
     url(r'^comments/', include('django.contrib.comments.urls')),
-    
+
 )
