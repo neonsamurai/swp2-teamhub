@@ -1,7 +1,9 @@
 # coding: utf-8
 """
 .. module:: models
+
 :platform: Unix, Windows
+
 :synopsis: Custom Django models für teamhub Paket.
 
 .. moduleauthor:: Tim Jagodzinski
@@ -50,6 +52,7 @@ class TeamhubUser(User):
         regulären Ausdruck r'^[\w.@+-]+$' folgen sind erlaubt.
 
         :throws IntegrityError: Falls das Feld unsername nicht erlaubte Zeichen enthält.
+
         '''
         pattern = re.compile(r'^[\w.@+-]+$')
 
@@ -62,15 +65,19 @@ class Projekt(models.Model):
     '''
     Repräsentation eines Projekts. Projekte werden zur Organisation von Aufgaben benutzt.
         .. py:attribute:: besitzer
+
         Fremdschlüssel, der auf ein TeamhubUser-Objekt verweist. Kann nicht mehr geändert werden.
 
         .. py:attribute:: name
+
         String, Name bzw. Titel des Projekts. Ist veränderbar.
 
         .. py:attribute:: beschreibung
+
         String, Ausführliche Beschreibung des Projekts. Ist veränderbar.
 
         .. py:attribute:: status
+
         String, Bearbeitungsstatus des Projekts. Kann nur die Werte "Offen" oder "Geschlossen" sein.
 
 '''
@@ -90,33 +97,43 @@ class Aufgabe(models.Model):
     '''Repräsentation einer Aufgabe.
 
         .. py:attribute:: ersteller
+
         Fremdschlüssel, verweist auf ein TeamhubUser-Objekt, ist unveränderbar.
 
         .. py:attribute:: bearbeiter
+
         Fremdschlüssel, verweist auf ein TeamhubUser-Objekt, ist veränderlich.
 
         .. py:attribute:: projekt
+
         Fremdschlüssel, verweist auf ein Projekt-Objekt, ist veränderlich.
 
         .. py:attribute:: status
+
         String, Bearbeitungsstatus der Aufgabe, kann je nach Zustand folgende Werte annehmen: "Offen", "In Bearbeitung", "Angehalten", "Geschlossen". Veränderlich.
 
         .. py:attribute:: prioritaet
+
         String, Bearbeitungspriorität der Aufgabe, kann die Werte "Niedrig", "Mittel", "Hoch" annehmen. Veränderlich.
 
         .. py:attribute:: titel
+
         String, Titel bzw. Kurzbeschreibung der Aufgabe, ist veränderlich.
 
         .. py:attribute:: beschreibung
+
         String, ausführliche Beschreibung der Aufgabe, ist veränderlich.
 
         .. py:attribute:: erstellDatum
+
         Datum, Zeitpunkt der Erstellung der Aufgabe, ist unveränderlich.
 
         .. py:attribute:: aenderungsDatum
+
         Datum, Zeitpunkt der letzten Änderung an der Aufgabe, wird automatisch vom System gesetzt.
 
         .. py:attribute:: faelligkeitsDatum
+
         Datum, Zeitpunkt zu dem die Aufgabe erfüllt sein soll, ist veränderlich.
 
 '''
@@ -143,6 +160,7 @@ class Aufgabe(models.Model):
         * Projekt ist bereits geschlossen.
 
         .. throws: IntegrityError Falls eine der Validierungen fehlschlägt.
+
         '''
 
         if Aufgabe.objects.filter(titel=self.titel, projekt=self.projekt).exclude(pk=self.pk).count() != 0:
@@ -164,7 +182,8 @@ class Aufgabe(models.Model):
 
         Erlaubte Wege:
 
-        .. img: img/status.svg
+        .. image:: /img/status.png
+
         '''
         if self.status == c.AUFGABE_STATUS_OP:
             return dict(AUFGABE_STATUS[3:])

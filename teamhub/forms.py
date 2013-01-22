@@ -2,7 +2,9 @@
 
 """
 .. module:: forms
+
 :platform: Unix, Windows
+
 :synopsis: Custom Django forms für teamhub Paket.
 
 .. moduleauthor:: Tim Jagodzinski
@@ -69,5 +71,6 @@ class passwortAendernForm(forms.Form):
     passwNeu1 = forms.CharField(widget=PasswordInput, label="Neues Passwort", max_length=128, min_length=4)
     passwNeu2 = forms.CharField(widget=PasswordInput, label="Neues Passwort widerholen", max_length=128, min_length=4)
 
+
 class passwortZuruecksetzenForm(forms.Form):
-    benutzerliste= forms.ModelChoiceField(queryset=TeamhubUser.objects.all())
+    benutzerliste = forms.ModelChoiceField(queryset=TeamhubUser.objects.all())

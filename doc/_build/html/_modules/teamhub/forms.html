@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>teamhub.forms &mdash; Teamhub 0.1 documentation</title>
+    <title>teamhub.forms &mdash; Teamhub 0.1 Dokumentation</title>
     
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -25,21 +25,22 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Teamhub 0.1 documentation" href="../../index.html" />
-    <link rel="up" title="Module code" href="../index.html" /> 
+    <script type="text/javascript" src="../../_static/translations.js"></script>
+    <link rel="top" title="Teamhub 0.1 Dokumentation" href="../../index.html" />
+    <link rel="up" title="Modul-Quellcode" href="../index.html" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
+          <a href="../../genindex.html" title="Allgemeiner Index"
+             accesskey="I">Index</a></li>
         <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li><a href="../../index.html">Teamhub 0.1 documentation</a> &raquo;</li>
-          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+          <a href="../../py-modindex.html" title="Python-Modulindex"
+             >Module</a> |</li>
+        <li><a href="../../index.html">Teamhub 0.1 Dokumentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Modul-Quellcode</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -48,7 +49,7 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <h1>Source code for teamhub.forms</h1><div class="highlight"><pre>
+  <h1>Quellcode für teamhub.forms</h1><div class="highlight"><pre>
 <span class="kn">from</span> <span class="nn">django.forms</span> <span class="kn">import</span> <span class="n">ModelForm</span><span class="p">,</span> <span class="n">CharField</span>
 <span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
 <span class="kn">from</span> <span class="nn">teamhub.models</span> <span class="kn">import</span> <span class="n">Projekt</span><span class="p">,</span> <span class="n">Aufgabe</span>
@@ -58,36 +59,36 @@
 <span class="sd">&#39;&#39;&#39;</span>
 
 
-<div class="viewcode-block" id="profilForm"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.forms.profilForm">[docs]</a><span class="k">class</span> <span class="nc">profilForm</span><span class="p">(</span><span class="n">ModelForm</span><span class="p">):</span>
-<div class="viewcode-block" id="profilForm.Meta"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.forms.profilForm.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+<div class="viewcode-block" id="profilForm"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.forms.profilForm">[Doku]</a><span class="k">class</span> <span class="nc">profilForm</span><span class="p">(</span><span class="n">ModelForm</span><span class="p">):</span>
+<div class="viewcode-block" id="profilForm.Meta"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.forms.profilForm.Meta">[Doku]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">User</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="s">&#39;first_name&#39;</span><span class="p">,</span> <span class="s">&#39;last_name&#39;</span><span class="p">,</span> <span class="s">&#39;email&#39;</span><span class="p">)</span>
 
 </div></div>
-<div class="viewcode-block" id="projektForm"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.forms.projektForm">[docs]</a><span class="k">class</span> <span class="nc">projektForm</span><span class="p">(</span><span class="n">ModelForm</span><span class="p">):</span>
-<div class="viewcode-block" id="projektForm.Meta"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.forms.projektForm.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+<div class="viewcode-block" id="projektForm"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.forms.projektForm">[Doku]</a><span class="k">class</span> <span class="nc">projektForm</span><span class="p">(</span><span class="n">ModelForm</span><span class="p">):</span>
+<div class="viewcode-block" id="projektForm.Meta"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.forms.projektForm.Meta">[Doku]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">Projekt</span>
 
 </div></div>
-<div class="viewcode-block" id="projektFormErstellen"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.forms.projektFormErstellen">[docs]</a><span class="k">class</span> <span class="nc">projektFormErstellen</span><span class="p">(</span><span class="n">ModelForm</span><span class="p">):</span>
-<div class="viewcode-block" id="projektFormErstellen.Meta"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.forms.projektFormErstellen.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+<div class="viewcode-block" id="projektFormErstellen"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.forms.projektFormErstellen">[Doku]</a><span class="k">class</span> <span class="nc">projektFormErstellen</span><span class="p">(</span><span class="n">ModelForm</span><span class="p">):</span>
+<div class="viewcode-block" id="projektFormErstellen.Meta"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.forms.projektFormErstellen.Meta">[Doku]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">Projekt</span>
         <span class="n">exclude</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;status&#39;</span><span class="p">,)</span>
 
 </div></div>
-<div class="viewcode-block" id="aufgabeForm"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.forms.aufgabeForm">[docs]</a><span class="k">class</span> <span class="nc">aufgabeForm</span><span class="p">(</span><span class="n">ModelForm</span><span class="p">):</span>
-<div class="viewcode-block" id="aufgabeForm.Meta"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.forms.aufgabeForm.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+<div class="viewcode-block" id="aufgabeForm"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.forms.aufgabeForm">[Doku]</a><span class="k">class</span> <span class="nc">aufgabeForm</span><span class="p">(</span><span class="n">ModelForm</span><span class="p">):</span>
+<div class="viewcode-block" id="aufgabeForm.Meta"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.forms.aufgabeForm.Meta">[Doku]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">Aufgabe</span>
 
 </div></div>
-<div class="viewcode-block" id="aufgabeErstellenForm"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.forms.aufgabeErstellenForm">[docs]</a><span class="k">class</span> <span class="nc">aufgabeErstellenForm</span><span class="p">(</span><span class="n">ModelForm</span><span class="p">):</span>
-<div class="viewcode-block" id="aufgabeErstellenForm.Meta"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.forms.aufgabeErstellenForm.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+<div class="viewcode-block" id="aufgabeErstellenForm"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.forms.aufgabeErstellenForm">[Doku]</a><span class="k">class</span> <span class="nc">aufgabeErstellenForm</span><span class="p">(</span><span class="n">ModelForm</span><span class="p">):</span>
+<div class="viewcode-block" id="aufgabeErstellenForm.Meta"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.forms.aufgabeErstellenForm.Meta">[Doku]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">Aufgabe</span>
         <span class="n">exclude</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;ersteller&#39;</span><span class="p">,</span> <span class="s">&#39;status&#39;</span><span class="p">,)</span>
 
 </div></div>
-<div class="viewcode-block" id="userForm"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.forms.userForm">[docs]</a><span class="k">class</span> <span class="nc">userForm</span><span class="p">(</span><span class="n">ModelForm</span><span class="p">):</span>
-<div class="viewcode-block" id="userForm.Meta"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.forms.userForm.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+<div class="viewcode-block" id="userForm"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.forms.userForm">[Doku]</a><span class="k">class</span> <span class="nc">userForm</span><span class="p">(</span><span class="n">ModelForm</span><span class="p">):</span>
+<div class="viewcode-block" id="userForm.Meta"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.forms.userForm.Meta">[Doku]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">User</span>
         <span class="n">fields</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;username&#39;</span><span class="p">,</span><span class="s">&#39;is_staff&#39;</span><span class="p">)</span></div></div>
 </pre></div>
@@ -98,15 +99,15 @@
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
+  <h3>Schnellsuche</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <input type="submit" value="Los" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
     <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
+    Geben Sie Suchbegriffe oder einen Modul-, Klassen- oder Funktionsnamen ein.
     </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
@@ -118,18 +119,18 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
+          <a href="../../genindex.html" title="Allgemeiner Index"
+             >Index</a></li>
         <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li><a href="../../index.html">Teamhub 0.1 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+          <a href="../../py-modindex.html" title="Python-Modulindex"
+             >Module</a> |</li>
+        <li><a href="../../index.html">Teamhub 0.1 Dokumentation</a> &raquo;</li>
+          <li><a href="../index.html" >Modul-Quellcode</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2012, Dennis, Rouslan, Veronika, Tim.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+        &copy; Copyright 2012, Dennis Lipps, Ruslan Mousarov, Veronika Gross, Tim Jagodzinski.
+      Mit <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3 erstellt.
     </div>
   </body>
 </html>

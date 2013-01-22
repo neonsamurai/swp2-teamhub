@@ -1,10 +1,12 @@
 # coding: utf-8
 """
 .. module:: views
+
 :platform: Unix, Windows
+
 :synopsis: Django views für teamhub Paket.
 
-.. moduleauthor:: Dennis, Ruslan, Tim, Veronika
+.. moduleauthor:: Veronika Gross
 
 
 """
@@ -24,9 +26,11 @@ from django.utils import timezone
 def makeContext(context):
     '''Fügt dem context Dictionary Standardwerte hinzu. Diese werden Seitenweit verwendet.
 
-:param context: Das Kontext-Dictionary, das standardisiert werden soll.
-:type context: Dictionary
-'''
+    :param context: Das Kontext-Dictionary, das standardisiert werden soll.
+
+    :type context: Dictionary
+
+    '''
     context['projektliste'] = Projekt.objects.all().order_by('name')
     context['prioritaet'] = [c.PRIORITAET_HI, c.PRIORITAET_ME, c.PRIORITAET_LO]
     context['dateNow'] = timezone.now()
@@ -48,7 +52,7 @@ def dashboard(request):
 def offeneAufgabenAnzeigen(request):
     '''
     Diese View sammelt alle Aufgaben, die im Status "offen" stehen.
-    '''
+'''
 
     meineAufgaben = Aufgabe.objects.filter(status=c.AUFGABE_STATUS_OP).order_by('faelligkeitsDatum')
     context = makeContext({'meineAufgaben': meineAufgaben, 'aktuellerstatus_lang': dict(AUFGABE_STATUS)})
@@ -104,8 +108,9 @@ def aufgabeBearbeiten(request, aufgabeId):
     oder stellt ein Eingabeformular zum Verändern eines Aufgabenobjekts bereit.
 
 
-:param aufgabeId: Primärschlüssel des Aufgabenobjekts, welches verändert werden soll.
-:type aufgabeId: int
+    :param aufgabeId: Primärschlüssel des Aufgabenobjekts, welches verändert werden soll.
+
+    :type aufgabeId: int
 '''
     from teamhub.forms import aufgabeForm
     from teamhub.decorators import decorateSave
@@ -143,8 +148,9 @@ def projektListe(request):
 def projektDetail(request, projektId):
     '''Erstellt die Detailansicht eines Projekts.
 
-:param projektId: Der Primärschlüssel des angezeigten Projekts.
-:type projektId: int
+    :param projektId: Der Primärschlüssel des angezeigten Projekts.
+
+    :type projektId: int
 '''
     projekt = Projekt.objects.get(pk=projektId)
     aufgaben = Aufgabe.objects.filter(projekt=projekt).order_by('faelligkeitsDatum')
@@ -185,8 +191,9 @@ def projektBearbeiten(request, projektId):
     oder stellt ein Eingabeformular zum Verändern eines Projektobjekts bereit.
 
 
-:param projektId: Primärschlüssel des Projektobjekts, welches verändert werden soll.
-:type projektId: int
+    :param projektId: Primärschlüssel des Projektobjekts, welches verändert werden soll.
+
+    :type projektId: int
 '''
     from teamhub.forms import projektFormBearbeiten
     from teamhub.decorators import decorateSave
@@ -212,8 +219,9 @@ def projektBearbeiten(request, projektId):
 def aufgabeDetails(request, aufgabeId):
     '''Erzeugt die Detailansicht eines Aufgabenobjekts.
 
-:param aufgabeId: Der Primärschlüssel des angezeigten Aufgabenobjekts.
-:type aufgabeId: int
+    :param aufgabeId: Der Primärschlüssel des angezeigten Aufgabenobjekts.
+
+    :type aufgabeId: int
 '''
     aufgabe = Aufgabe.objects.get(pk=aufgabeId)
 
@@ -226,7 +234,8 @@ def benutzerErstellen(request):
     '''Abhängig vom Requesttyp erstellt diese View entweder ein neues Userobjekt oder stellt ein Formular
     bereit, mit dem ein neues Userobjekt erstellt werden kann.
 
-.. note : Nur Benutzer mit dem 'is_staff'-Flag auf 'True' können weitere Benutzerkonten erstellen.
+    .. note : Nur Benutzer mit dem 'is_staff'-Flag auf 'True' können weitere Benutzerkonten erstellen.
+
 '''
     from teamhub.forms import userForm
     from teamhub.decorators import decorateSave
@@ -306,6 +315,7 @@ def passwortZuruecksetzen(request):
 
     .. note : Das Standardpasswort lautet "test". Es sollte vom betroffenden Benutzer möglichst
     schnell auf ein geeigneteres Passwort geändert werden
+
     '''
     from teamhub.decorators import decorateSave
     from teamhub.forms import passwortZuruecksetzenForm
@@ -330,7 +340,10 @@ def passwortZuruecksetzen(request):
 
 
 def aufgabeSuchen(request):
-    '''Implementierung einer einfachen suche. Es wird in Titel und Beschreibung gesucht.'''
+    '''
+    Implementierung einer einfachen Suche. Es wird in Titel und Beschreibung gesucht.
+'''
+
     from django.db.models import Q
 
     if 'search' in request.GET and request.GET['search']:

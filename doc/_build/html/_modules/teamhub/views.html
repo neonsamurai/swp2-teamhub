@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>teamhub.views &mdash; Teamhub 0.1 documentation</title>
+    <title>teamhub.views &mdash; Teamhub 0.1 Dokumentation</title>
     
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -25,21 +25,22 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Teamhub 0.1 documentation" href="../../index.html" />
-    <link rel="up" title="Module code" href="../index.html" /> 
+    <script type="text/javascript" src="../../_static/translations.js"></script>
+    <link rel="top" title="Teamhub 0.1 Dokumentation" href="../../index.html" />
+    <link rel="up" title="Modul-Quellcode" href="../index.html" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
+          <a href="../../genindex.html" title="Allgemeiner Index"
+             accesskey="I">Index</a></li>
         <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li><a href="../../index.html">Teamhub 0.1 documentation</a> &raquo;</li>
-          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+          <a href="../../py-modindex.html" title="Python-Modulindex"
+             >Module</a> |</li>
+        <li><a href="../../index.html">Teamhub 0.1 Dokumentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Modul-Quellcode</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -48,7 +49,7 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <h1>Source code for teamhub.views</h1><div class="highlight"><pre>
+  <h1>Quellcode für teamhub.views</h1><div class="highlight"><pre>
 <span class="c"># coding: utf-8</span>
 <span class="kn">from</span> <span class="nn">django.contrib.auth.views</span> <span class="kn">import</span> <span class="n">logout_then_login</span>
 <span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
@@ -60,7 +61,7 @@
 
 
 <span class="nd">@login_required</span>
-<div class="viewcode-block" id="dashboard"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.views.dashboard">[docs]</a><span class="k">def</span> <span class="nf">dashboard</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<div class="viewcode-block" id="dashboard"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.views.dashboard">[Doku]</a><span class="k">def</span> <span class="nf">dashboard</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Erstellt die Dashboardansicht mit den dafür nötigen Daten:</span>
 <span class="sd">        * Meine zugewiesenen Tickets</span>
@@ -71,18 +72,18 @@
     <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;base.html&#39;</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="aufgabe"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.views.aufgabe">[docs]</a><span class="k">def</span> <span class="nf">aufgabe</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<div class="viewcode-block" id="aufgabe"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.views.aufgabe">[Doku]</a><span class="k">def</span> <span class="nf">aufgabe</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;base_aufgabe_erstellen.html&#39;</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="logoutUser"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.views.logoutUser">[docs]</a><span class="k">def</span> <span class="nf">logoutUser</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<div class="viewcode-block" id="logoutUser"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.views.logoutUser">[Doku]</a><span class="k">def</span> <span class="nf">logoutUser</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Meldet den Anwender vom System ab und leitet auf die Login-Seite weiter.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">return</span> <span class="n">logout_then_login</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;/login/&#39;</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="aufgabeErstellen"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.views.aufgabeErstellen">[docs]</a><span class="k">def</span> <span class="nf">aufgabeErstellen</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<div class="viewcode-block" id="aufgabeErstellen"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.views.aufgabeErstellen">[Doku]</a><span class="k">def</span> <span class="nf">aufgabeErstellen</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="kn">from</span> <span class="nn">teamhub.forms</span> <span class="kn">import</span> <span class="n">aufgabeErstellenForm</span>
 
     <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
@@ -98,7 +99,7 @@
     <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;base_aufgabe_bearbeiten.html&#39;</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">context_instance</span><span class="o">=</span><span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
 
 </div>
-<div class="viewcode-block" id="aufgabeBearbeiten"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.views.aufgabeBearbeiten">[docs]</a><span class="k">def</span> <span class="nf">aufgabeBearbeiten</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">aufgabeId</span><span class="p">):</span>
+<div class="viewcode-block" id="aufgabeBearbeiten"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.views.aufgabeBearbeiten">[Doku]</a><span class="k">def</span> <span class="nf">aufgabeBearbeiten</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">aufgabeId</span><span class="p">):</span>
     <span class="kn">from</span> <span class="nn">teamhub.forms</span> <span class="kn">import</span> <span class="n">aufgabeForm</span>
 
     <span class="n">aufgabe</span> <span class="o">=</span> <span class="n">Aufgabe</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">aufgabeId</span><span class="p">)</span>
@@ -114,13 +115,13 @@
     <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;base_aufgabe_bearbeiten.html&#39;</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">context_instance</span><span class="o">=</span><span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
 
 </div>
-<div class="viewcode-block" id="projektListe"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.views.projektListe">[docs]</a><span class="k">def</span> <span class="nf">projektListe</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<div class="viewcode-block" id="projektListe"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.views.projektListe">[Doku]</a><span class="k">def</span> <span class="nf">projektListe</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="n">projektliste</span> <span class="o">=</span> <span class="n">Projekt</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
     <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;projektliste&#39;</span><span class="p">:</span> <span class="n">projektliste</span><span class="p">}</span>
     <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;base_projekt.html&#39;</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="projektDetail"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.views.projektDetail">[docs]</a><span class="k">def</span> <span class="nf">projektDetail</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">projektId</span><span class="p">):</span>
+<div class="viewcode-block" id="projektDetail"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.views.projektDetail">[Doku]</a><span class="k">def</span> <span class="nf">projektDetail</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">projektId</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Erstellt die Detailansicht eines Projekts.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -129,7 +130,7 @@
     <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;base_projekt_detail.html&#39;</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="projektErstellen"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.views.projektErstellen">[docs]</a><span class="k">def</span> <span class="nf">projektErstellen</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<div class="viewcode-block" id="projektErstellen"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.views.projektErstellen">[Doku]</a><span class="k">def</span> <span class="nf">projektErstellen</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="kn">from</span> <span class="nn">teamhub.forms</span> <span class="kn">import</span> <span class="n">projektFormErstellen</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_staff</span><span class="p">:</span>
@@ -145,7 +146,7 @@
     <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;base_projekt_erstellen.html&#39;</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">context_instance</span><span class="o">=</span><span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
 
 </div>
-<div class="viewcode-block" id="projektBearbeiten"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.views.projektBearbeiten">[docs]</a><span class="k">def</span> <span class="nf">projektBearbeiten</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">projektId</span><span class="p">):</span>
+<div class="viewcode-block" id="projektBearbeiten"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.views.projektBearbeiten">[Doku]</a><span class="k">def</span> <span class="nf">projektBearbeiten</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">projektId</span><span class="p">):</span>
     <span class="kn">from</span> <span class="nn">teamhub.forms</span> <span class="kn">import</span> <span class="n">projektForm</span>
     
     <span class="k">if</span> <span class="ow">not</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_staff</span><span class="p">:</span>
@@ -165,7 +166,7 @@
     <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;base_projekt_bearbeiten.html&#39;</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">context_instance</span><span class="o">=</span><span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
 
 </div>
-<div class="viewcode-block" id="aufgabeDetails"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.views.aufgabeDetails">[docs]</a><span class="k">def</span> <span class="nf">aufgabeDetails</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">aufgabeId</span><span class="p">):</span>
+<div class="viewcode-block" id="aufgabeDetails"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.views.aufgabeDetails">[Doku]</a><span class="k">def</span> <span class="nf">aufgabeDetails</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">aufgabeId</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Erstellt die Detailansicht für eine Aufgabe.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -174,7 +175,7 @@
     <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;base_aufgabe.html&#39;</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="benutzerErstellen"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.views.benutzerErstellen">[docs]</a><span class="k">def</span> <span class="nf">benutzerErstellen</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<div class="viewcode-block" id="benutzerErstellen"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.views.benutzerErstellen">[Doku]</a><span class="k">def</span> <span class="nf">benutzerErstellen</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="kn">from</span> <span class="nn">teamhub.forms</span> <span class="kn">import</span> <span class="n">userForm</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_staff</span><span class="p">:</span>
@@ -193,7 +194,7 @@
     <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;base_benutzer_erstellen.html&#39;</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">context_instance</span><span class="o">=</span><span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
 
 </div>
-<div class="viewcode-block" id="userProfilBearbeiten"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.views.userProfilBearbeiten">[docs]</a><span class="k">def</span> <span class="nf">userProfilBearbeiten</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<div class="viewcode-block" id="userProfilBearbeiten"><a class="viewcode-back" href="../../api/teamhub.html#teamhub.views.userProfilBearbeiten">[Doku]</a><span class="k">def</span> <span class="nf">userProfilBearbeiten</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Erstellt die Bearbeitungsansicht für das Profil des angemeldeten Benutzers.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -219,15 +220,15 @@
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
+  <h3>Schnellsuche</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <input type="submit" value="Los" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
     <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
+    Geben Sie Suchbegriffe oder einen Modul-, Klassen- oder Funktionsnamen ein.
     </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
@@ -239,18 +240,18 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
+          <a href="../../genindex.html" title="Allgemeiner Index"
+             >Index</a></li>
         <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li><a href="../../index.html">Teamhub 0.1 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+          <a href="../../py-modindex.html" title="Python-Modulindex"
+             >Module</a> |</li>
+        <li><a href="../../index.html">Teamhub 0.1 Dokumentation</a> &raquo;</li>
+          <li><a href="../index.html" >Modul-Quellcode</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2012, Dennis, Rouslan, Veronika, Tim.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+        &copy; Copyright 2012, Dennis Lipps, Ruslan Mousarov, Veronika Gross, Tim Jagodzinski.
+      Mit <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3 erstellt.
     </div>
   </body>
 </html>

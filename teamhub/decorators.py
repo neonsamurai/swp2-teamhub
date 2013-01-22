@@ -1,5 +1,14 @@
 # coding: utf-8
+"""
+.. module:: decorators
 
+:platform: Unix, Windows
+
+:synopsis: Sammlung von Dekoratorfunktionen, die in Teamhub verwendet werden. Hauptsächlich werden hier die Ausnahebehandlung sowie die Berechtigungsprüfung abgehandelt.
+
+.. moduleauthor:: Dennis Lipps
+
+"""
 from teamhub.models import Aufgabe, Projekt, AUFGABE_STATUS
 from django.contrib.auth.models import User
 from django.db.utils import IntegrityError
