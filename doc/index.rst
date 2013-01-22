@@ -17,6 +17,9 @@ auf unserem `Github-Repository`_ entgegen.
 
 .. _Github-Repository: https://github.com/neonsamurai/swp2-teamhub
 
+Inhalt
+======
+
 .. toctree::
     :maxdepth: 2
 
@@ -32,6 +35,11 @@ Das Team
 * Veronika: Views
 * Ruslan: Templates
 * Dennis: Unittest, Decorator
+
+Analyse-Klassendiagramm
+=======================
+
+.. image:: img/klassendiagramm.png
 
 Index und Tabellen
 ==================
