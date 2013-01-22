@@ -23,6 +23,7 @@ def makeContext(context, request):
         aufgabe=Aufgabe.objects.get(pk=treffer.group('aufgabeId'))
         context['stati']=aufgabe.getStati()
         context['aktuellerstatus_lang']=dict(AUFGABE_STATUS)[aufgabe.status]
+        context['aktuellerstatus']= aufgabe.status
     return context
 
 def decorateSave(func):
@@ -98,7 +99,7 @@ def passwAendern(func):
         context.update(csrf(request))
         context['form'] = form
         context['erfolg'] = c.PASSWD_GEAENDERT
-        context = makeContext(context)
+        context = makeContext(context, request)
         return render_to_response(template, context, context_instance=RequestContext(request))
 
     return wrapper
