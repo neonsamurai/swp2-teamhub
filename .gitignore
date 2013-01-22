@@ -22,4 +22,4 @@ db/*
 *.sublime-*
 
 # Sphinx doc buildfiles
-doc/_build
+doc/_build*
