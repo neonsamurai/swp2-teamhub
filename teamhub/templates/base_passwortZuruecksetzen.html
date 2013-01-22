@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block sectiontitle %}Passwort zurücksetzen {% endblock %}
+
+{% block content %}
+
+	<p>{{erfolg}}</p>
+
+<form method="post" action="">
+	{% csrf_token %}
+	<p class="text-error">{{ form.non_field_errors|striptags }}</p> 
+	 <div class="fieldWrapper">
+        <p class="text-error">{{form.benutzerliste.errors|striptags}}</p>
+        <label for="id_passwAlt">Benutzerliste: </label>      	
+    {{ form.benutzerliste}}
+    </div>
+    <br><br>
+    <button class="btn btn-primary" type="submit">Zurücksetzen</button>
+</form>
+
+{% endblock %}

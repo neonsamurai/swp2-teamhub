@@ -16,6 +16,7 @@ from django.template import RequestContext
 from teamhub.models import Aufgabe, Projekt, AUFGABE_STATUS, TeamhubUser
 from django.utils import timezone
 import teamhub.stringConst as c
+from django.utils import timezone
 
 
 # Create your views here.
@@ -29,6 +30,7 @@ def makeContext(context):
 '''
     context['projektliste'] = Projekt.objects.all().order_by('name')
     context['prioritaet'] = [c.PRIORITAET_HI, c.PRIORITAET_ME, c.PRIORITAET_LO]
+    context['dateNow']=timezone.now()
     return context
 
 
@@ -39,7 +41,6 @@ def dashboard(request):
 '''
 
     meineAufgaben = Aufgabe.objects.filter(bearbeiter=TeamhubUser.objects.get(pk=request.user.pk)).order_by('faelligkeitsDatum')
-    meineAufgaben = statusAufgaben(meineAufgaben)
     context = makeContext({'meineAufgaben': meineAufgaben, 'aktuellerstatus_lang': dict(AUFGABE_STATUS)})
     context['title'] = 'Meine Aufgaben'
     return render_to_response('base_aufgabe_liste.html', context, context_instance=RequestContext(request))
@@ -61,14 +62,6 @@ def vonMirErstellteAufgaben(request):
     context = makeContext({'meineAufgaben': meineAufgaben, 'aktuellerstatus_lang': dict(AUFGABE_STATUS)})
     context['title'] = 'Von mir erstellte Aufgaben'
     return render_to_response('base_aufgabe_liste.html', context, context_instance=RequestContext(request))
-
-
-def statusAufgaben(meineAufgaben):
-    for aufgabe in meineAufgaben:
-        aufgabe.status = dict(AUFGABE_STATUS)[aufgabe.status]
-
-    return meineAufgaben
-
 
 def aufgabe(request):
 
@@ -93,24 +86,24 @@ to create a new Aufgabe object.
 
     from teamhub.forms import aufgabeForm
     from teamhub.decorators import decorateSave
-
+    template='base_aufgabe_bearbeiten.html'
     if request.method == 'POST':
         form = aufgabeForm(request.POST)
         if form.is_valid():
             @decorateSave
-            def saveAufgabe(form_to_save, request):
+            def saveAufgabe(form_to_save, request, template):
                 newAufgabe = form_to_save.save(commit=False)
                 newAufgabe.ersteller = TeamhubUser.objects.get(pk=request.user.pk)
                 newAufgabe.save()
                 return redirect('/aufgabe/' + str(newAufgabe.pk) + '/')
-            return saveAufgabe(form, request)
+            return saveAufgabe(form, request, template)
     else:
         form = aufgabeForm()
     context = makeContext({'form': form, "title": "Aufgabe Erstellen"})
-    return render_to_response('base_aufgabe_bearbeiten.html', context, context_instance=RequestContext(request))
+    return render_to_response(template, context, context_instance=RequestContext(request))
 
 
-
+@aufgabeBearbeitenBerechtigung
 def aufgabeBearbeiten(request, aufgabeId):
     '''Depending on the request type this view changes a Aufgabe object or provides an input form
 to modify data of a Aufgabe object.
@@ -120,42 +113,28 @@ to modify data of a Aufgabe object.
 '''
     from teamhub.forms import aufgabeForm
     from teamhub.decorators import decorateSave
-
+    
+    template='base_aufgabe_bearbeiten.html'
     aufgabe = Aufgabe.objects.get(pk=aufgabeId)
     if request.method == 'POST':
         form = aufgabeForm(request.POST, instance=aufgabe)
         if form.is_valid():
             @decorateSave
-            def saveAufgabe(form_to_save, request):
+            def saveAufgabe(form_to_save, request, template):
 
                 Aufgabe = form_to_save.save(commit=False)
                 if 'stati' in request.POST:
                     Aufgabe.status = request.POST['stati']
                 Aufgabe.save()
                 return redirect('/aufgabe/' + str(aufgabe.pk) + '/')
-            return saveAufgabe(form, request)
+            return saveAufgabe(form, request, template)
     else:
         form = aufgabeForm(instance=aufgabe)
 
     context = makeContext({'form': form, "title": "Aufgabe bearbeiten", 'stati': aufgabe.getStati(), 'aktuellerstatus_lang': dict(AUFGABE_STATUS)[aufgabe.status], 'aktuellerstatus': aufgabe.status})
 
-    return render_to_response('base_aufgabe_bearbeiten.html', context, context_instance=RequestContext(request))
+    return render_to_response(template, context, context_instance=RequestContext(request))
 
-
-def aufgabeAnnehmen(request, aufgabeId):
-    from teamhub.decorators import decorateSave
-
-    aufgabe = Aufgabe.objects.get(pk=aufgabeId)
-    
-    
-    @decorateSave
-    def saveAufgabe(request, aufgabeId):
-        aufgabe.bearbeiter = TeamhubUser.objects.get(pk=request.user.pk)
-        aufgabe.save()
-        return redirect('/aufgabe/' + str(aufgabe.pk) + '/')
-     
-    return saveAufgabe(request, aufgabeId)
-   
 
 def projektListe(request):
     '''Gives a list of all projects in the system.
@@ -185,21 +164,22 @@ to create a new Projekt object.
     from teamhub.forms import projektFormErstellen
     from teamhub.decorators import decorateSave
 
+    template='base_projekt_erstellen.html'
     if request.method == 'POST':
         form = projektFormErstellen(request.POST)
         if form.is_valid():
             @decorateSave
-            def projektSave(form_to_save, request):
+            def projektSave(form_to_save, request, template):
                 newProject = form_to_save.save(commit=False)
                 newProject.besitzer = TeamhubUser.objects.get(pk=request.user.pk)
                 newProject.save()
                 return redirect('/projekte/' + str(newProject.pk) + '/')
-            return projektSave(form, request)
+            return projektSave(form, request, template)
 
     else:
         form = projektFormErstellen()
     context = makeContext({'form': form})
-    return render_to_response('base_projekt_erstellen.html', context, context_instance=RequestContext(request))
+    return render_to_response(template, context, context_instance=RequestContext(request))
 
 
 @teamleiterBerechtigung
@@ -214,21 +194,22 @@ to modify data of a Projekt object.
     from teamhub.forms import projektFormBearbeiten
     from teamhub.decorators import decorateSave
 
+    template='base_projekt_bearbeiten.html'
     projekt = Projekt.objects.get(pk=projektId)
 
     if request.method == 'POST':
         form = projektFormBearbeiten(request.POST, instance=projekt)
         if form.is_valid():
             @decorateSave
-            def projektSave(form_to_save, request):
+            def projektSave(form_to_save, request, template):
                 form_to_save.save()
                 return redirect('/projekte/' + projektId + '/')
-            return projektSave(form, request)
+            return projektSave(form, request, template)
     else:
         form = projektFormBearbeiten(instance=projekt)
 
     context = makeContext({'form': form})
-    return render_to_response('base_projekt_bearbeiten.html', context, context_instance=RequestContext(request))
+    return render_to_response(template, context, context_instance=RequestContext(request))
 
 
 def aufgabeDetails(request, aufgabeId):
@@ -238,7 +219,7 @@ def aufgabeDetails(request, aufgabeId):
 :type aufgabeId: int
 '''
     aufgabe = Aufgabe.objects.get(pk=aufgabeId)
-  
+    
     context = makeContext({'aufgabe': aufgabe, 'aktuellerstatus_lang': dict(AUFGABE_STATUS), 'benutzer': TeamhubUser.objects.get(pk=request.user.pk)})
     return render_to_response('base_aufgabe.html', context, context_instance=RequestContext(request))
 
@@ -252,50 +233,54 @@ or displays an input form to create a new user.
 '''
     from teamhub.forms import userForm
     from teamhub.decorators import decorateSave
-
+    
+    template='base_benutzer_erstellen.html'
     if request.method == "POST":
         form = userForm(request.POST)
         if form.is_valid():
             @decorateSave
-            def benutzerSave(form_to_save, request):
+            def benutzerSave(form_to_save, request, template):
 
                 user = form_to_save.save()
                 user.set_password("test")
                 user.save()
                 return dashboard(request)
-            return benutzerSave(form, request)
+            return benutzerSave(form, request, template)
     else:
         form = userForm()
 
     context = makeContext({'form': form})
-    return render_to_response('base_benutzer_erstellen.html', context, context_instance=RequestContext(request))
+    return render_to_response(template, context, context_instance=RequestContext(request))
 
 def userProfilBearbeiten(request):
     '''Allows a user to modify her profile data.
 '''
     from teamhub.forms import profilForm
     from teamhub.decorators import decorateSave
-
+    
+    template='base_profil.html'
     user = TeamhubUser.objects.get(pk=request.user.pk)
 
     if request.method == 'POST':
         form = profilForm(request.POST, instance=user)
         if form.is_valid():
             @decorateSave
-            def benutzerSave(form_to_save, request):
+            def benutzerSave(form_to_save, request, template):
                 form.save()
                 return redirect('/profil/')
-            return benutzerSave(form, request)
+            return benutzerSave(form, request, template)
     else:
         form = profilForm(instance=user)
 
     context = makeContext({'form': form})
-    return render_to_response('base_profil.html', context, context_instance=RequestContext(request))
+    return render_to_response(template, context, context_instance=RequestContext(request))
 
 
 def passwortAendern(request):
     from teamhub.forms import passwortAendernForm
     from teamhub.decorators import decorateSave, passwAendern
+    
+    template='base_passwortAendern.html'
 
     if request.method == 'POST':
         form = passwortAendernForm(request.POST)
@@ -303,17 +288,41 @@ def passwortAendern(request):
 
             @decorateSave
             @passwAendern
-            def benutzerSave(form, request):
+            def benutzerSave(form, request, template):
                 return redirect('/passwaendern/')
-            return benutzerSave(form, request)
+            return benutzerSave(form, request, template)
     else:
         form = passwortAendernForm()
 
     context = makeContext({'form': form})
-    return render_to_response('base_passwortAendern.html', context, context_instance=RequestContext(request))
+    return render_to_response(template, context, context_instance=RequestContext(request))
+
+@teamleiterBerechtigung
+def passwortZuruecksetzen(request):
+    from teamhub.decorators import decorateSave
+    from teamhub.forms import passwortZuruecksetzenForm
+
+    template='base_passwortZuruecksetzen.html'
+    
+    if request.method == 'POST':
+        form=passwortZuruecksetzenForm(request.POST)
+        if form.is_valid():
+            @decorateSave
+            def zuruecksetzen(form, request, template):
+                print request.POST['benutzerliste']
+                user = TeamhubUser.objects.get(pk=request.POST['benutzerliste'])
+                user.set_password("test")
+                user.save()
+                return redirect('/passwzurueck/')
+            return zuruecksetzen(form, request, template)
+    else:
+        form=passwortZuruecksetzenForm()
+    context = makeContext({'form':form})
+    return render_to_response(template, context, context_instance=RequestContext(request))
 
 
-def aufgabenSuchen(request):
+def aufgabeSuchen(request):
+
     '''Implementierung einer einfachen suche. Es wird in Titel und Beschreibung gesucht.'''
     from django.db.models import Q
 
@@ -331,3 +340,5 @@ def aufgabenSuchen(request):
         anfrage = "Bitte geben Sie ein Suchbegriff ein!!!"
         context = makeContext({"anfrage": anfrage})
     return render_to_response('base_search.html', context, context_instance=RequestContext(request))
+
+ 

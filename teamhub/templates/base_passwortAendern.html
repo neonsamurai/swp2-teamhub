@@ -5,12 +5,24 @@
 
 {% block content %}
 
-	<p>{{erfolg}}</p>
-
-<form method="post" action="">
+<form action="" method="post">
 	{% csrf_token %}
-	{{ form.as_table }}
-	<br><br>
-    <button class="btn btn-primary" type="submit">Senden</button>
+  <p class="text-error">{{ form.non_field_errors|striptags }}</p>
+   <div class="fieldWrapper">
+        <p class="text-error">{{form.passwAlt.errors|striptags}}</p>
+        <label for="id_passwAlt">Altes Passwort: </label>
+        {{ form.passwAlt }}
+      </div>
+        <p class="text-error">{{form.passwNeu1.errors|striptags}}</p>
+        <label for="id_passwNeu1">Neues Passwort: (min. 4 Zeichen)</label>
+        {{ form.passwNeu1 }}
+    </div>
+    <div class="fieldWrapper">
+        <p class="text-error">{{ form.passwNeu2.errors|striptags }}</p>
+        <label for="id_passwNeu2">Neues Passwort widerholen:</label>
+        {{ form.passwNeu2 }}
+    </div>
+     <button class="btn btn-primary" type="submit">Senden</button>
 </form>
+
 {% endblock %}

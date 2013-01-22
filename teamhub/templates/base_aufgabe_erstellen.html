@@ -1,4 +1,58 @@
 {% extends "base.html" %}
 {% load url from future %}
 
-{% block sectiontitle %}Aufgabenliste <a class="btn pull-right" href="/aufgabe/erstellen/">Aufgabe erstellen</a>{% endblock %}
+{% block sectiontitle %}{{title}}{% endblock %}
+
+
+{% block content %}
+
+
+
+<form action="" method="post">
+	{% csrf_token %}
+<p class="text-error">{{ form.non_field_errors|striptags }}</p>
+   <div class="fieldWrapper">
+        <p class="text-error">{{form.bearbeiter.errors|striptags}}</p>
+        <label for="id_bearbeiter">Bearbeiter: </label>
+        {{ form.bearbeiter }}
+      
+        <p class="text-error">{{form.projekt.errors|striptags}}</p>
+        <label for="id_projekt">Projekt:</label>
+        {{ form.projekt }}
+    
+    
+        <p class="text-error">{{ form.prioritaet.errors|striptags }}</p>
+        <label for="id_prioritaet">Priorität:</label>
+        {{ form.prioritaet }}
+   
+  
+        <p class="text-error">{{ form.titel.errors|striptags }}</p>
+        <label for="id_titel">Titel:</label>
+        {{ form.titel }}
+   
+    
+        <p class="text-error">{{ form.beschreibung.errors|striptags }}</p>
+        <label for="id_beschreibung">Beschreibung:</label>
+        {{ form.beschreibung }}
+   
+     
+        <p class="text-error">{{ form.faelligkeitsDatum.errors|striptags }}</p>
+        <label for="id_faelligkeitsdatum">Fälligkeitsdatum:</label>
+        {{ form.faelligkeitsDatum }}
+   
+
+     {%if stati%}
+        <p>Status der Aufgabe ändern.</p>
+        <select name="stati">
+		<option value="{{aktuellerstatus}}">{{aktuellerstatus_lang}}</option>
+        	{%for key, value in stati.items%}
+        		<option value="{{key}}">{{value}}</option>
+        	{%endfor%}
+        </select>
+        {%endif%}
+     <br><br>
+     <button class="btn btn-primary" type="submit">Senden</button>
+  </div>
+</form>
+
+{% endblock %}

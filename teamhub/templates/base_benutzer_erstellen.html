@@ -4,11 +4,24 @@
 {% block sectiontitle %}Benutzer erstellen{% endblock %}
 
 {% block content %}
-<form method="post" action="">
-        {% csrf_token %}
-        {{ form.as_table }}
-        <br><br>
-        <button class="btn btn-primary" type="submit">Senden</button>
-</form>   
+
+<form action="" method="post">
+	{% csrf_token %}
+  <p class="text-error">{{ form.non_field_errors|striptags }}</p>
+	<label for="id_username">Benutzername: </label>
+    	<p class="text-error">{{form.username.errors|striptags}}</p>
+      	{{ form.username }}
+
+    <label for="id_email">Email-Adresse:</label>
+   		<p class="text-error">{{form.email.errors|striptags}}</p>
+       	{{ form.email }}
+
+    <label for="id_isStaff">Admin Berechtigungen?:</label>
+   		<p class="text-error">{{form.is_staff.errors|striptags}}</p>
+       	{{ form.is_staff }}
+
+     <br><br>
+     <button class="btn btn-primary" type="submit">Senden</button>
+</form>  
 
 {% endblock %}
