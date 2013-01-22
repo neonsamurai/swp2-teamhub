@@ -1,11 +1,12 @@
 # coding: utf-8
 """
 .. module:: admin
-   :platform: Unix, Windows
-   :synopsis: Customization for admin module. It adds auto population of the ForeignKey field 'ersteller' and 'besitzer' to models Aufgabe and Projekt
 
-.. moduleauthor:: Tim
+:platform: Unix, Windows
 
+:synopsis: Anpassungen für das Admin-Modul. Es fügt automatisches Füllen der Fremdschlüssel 'ersteller' und 'besitzer' zu den Model-Klassen 'Aufgabe' und 'Projekt' hinzu.
+
+.. moduleauthor:: Tim Jagodzinski
 
 """
 
@@ -17,31 +18,20 @@ class AufgabeAdmin(admin.ModelAdmin):
     list_display = ('titel', 'ersteller', 'erstellDatum')
 
     def save_model(self, request, obj, form, change):
-        '''Auto populate ForeignKey field 'ersteller' on save in admin site
+        '''Automatisches Füllen des Fremdschlüssels 'ersteller' beim Speichern in der Adminseite.
 
-        :param request: The request object from which the logged in user is determined.
-        :type request: HttpRequest
-        :param obj: The Aufgabe object to be populated with the ForeignKey of the logged in user.
+        :param obj: Das Aufgabe-Objekt, welches mit dem Fremdschlüssels des angemeldeten Users befüllt werden soll.
         :type obj: Aufgabe
-        :param form: The Django form from which the POST request originates.
-        :type form: Form or ModelForm
-        :param change: ?
-        :type change: ?
+        :param form: Das Django form von dem der POST request ausgeht.
+        :type form: Form oder ModelForm
+
         '''
         obj.ersteller = request.user
         obj.save()
 
     def save_formset(self, request, form, formset, change):
-        '''Saves the formset with the modified Projekt object.
+        '''Speichert das formset mit dem veränderten Aufgabe-Objekt.
 
-        :param request: The request object from which the logged in user is determined.
-        :type request: HttpRequest
-        :param form: The Django form from which the POST request originates.
-        :type form: Form or ModelForm
-        :param formset: The formset to be saved.
-        :type formset: Formset
-        :param change: ?
-        :type change: ?
         '''
         if formset.model == Aufgabe:
             instances = formset.save(commit=False)
@@ -52,48 +42,23 @@ class AufgabeAdmin(admin.ModelAdmin):
             formset.save()
 
 admin.site.register(Aufgabe, AufgabeAdmin)
-'''Saves the formset with the modified Projekt object.
-
-        :param request: The request object from which the logged in user is determined.
-        :type request: HttpRequest
-        :param form: The Django form from which the POST request originates.
-        :type form: Form or ModelForm
-        :param formset: The formset to be saved.
-        :type formset: Formset
-        :param change: ?
-        :type change: ?
-        '''
 
 class ProjektAdmin(admin.ModelAdmin):
     list_display = ('name', 'besitzer')
 
 # Auto populate ForeignKey field besitzer on save in admin site
     def save_model(self, request, obj, form, change):
-        '''Auto populate ForeignKey field 'besitzer' on save in admin site
+        '''Automatisches Füllen des Fremdschlüssels 'besitzer' beim Speichern in der Adminseite.
 
-        :param request: The request object from which the logged in user is determined.
-        :type request: HttpRequest
-        :param obj: The Aufgabe object to be populated with the ForeignKey of the logged in user.
+        :param obj: Das Projekt-Objekt, welches mit dem Fremdschlüssels des angemeldeten Users befüllt werden soll.
         :type obj: Aufgabe
-        :param form: The Django form from which the POST request originates.
-        :type form: Form or ModelForm
-        :param change: ?
-        :type change: ?
         '''
         obj.besitzer = request.user
         obj.save()
 
     def save_formset(self, request, form, formset, change):
-        '''Saves the formset with the modified Projekt object.
+        '''Speichert das formset mit dem veränderten Projekt-Objekt.
 
-        :param request: The request object from which the logged in user is determined.
-        :type request: HttpRequest
-        :param form: The Django form from which the POST request originates.
-        :type form: Form or ModelForm
-        :param formset: The formset to be saved.
-        :type formset: Formset
-        :param change: ?
-        :type change: ?
         '''
         if formset.model == Projekt:
             instances = formset.save(commit=False)

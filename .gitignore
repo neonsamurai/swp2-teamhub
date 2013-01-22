@@ -20,3 +20,6 @@ db/*
 *.pydevproject
 .settings
 *.sublime-*
+
+# Sphinx doc buildfiles
+doc/_build*

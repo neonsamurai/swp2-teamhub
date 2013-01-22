@@ -1,10 +1,12 @@
 # coding: utf-8
 """
 .. module:: views
-:platform: Unix, Windows
-:synopsis: Django views for teamhub package.
 
-.. moduleauthor:: Dennis, Ruslan, Tim, Veronika
+:platform: Unix, Windows
+
+:synopsis: Django views für teamhub Paket.
+
+.. moduleauthor:: Veronika Gross
 
 
 """
@@ -22,20 +24,22 @@ from django.utils import timezone
 
 
 def makeContext(context):
-    '''Adds default keys to the context dictionary. These are used site wide.
+    '''Fügt dem context Dictionary Standardwerte hinzu. Diese werden Seitenweit verwendet.
 
-:param context: The view context dictionary to be appended.
-:type context: Dictionary
-'''
+    :param context: Das Kontext-Dictionary, das standardisiert werden soll.
+
+    :type context: Dictionary
+
+    '''
     context['projektliste'] = Projekt.objects.all().order_by('name')
     context['prioritaet'] = [c.PRIORITAET_HI, c.PRIORITAET_ME, c.PRIORITAET_LO]
-    context['dateNow']=timezone.now()
+    context['dateNow'] = timezone.now()
     return context
 
 
 @login_required
 def dashboard(request):
-    '''The landing page view. It gets all tasks which are assigned to the logged in user.
+    '''Die View der Startseite. Sie sammelt alle Aufgaben, die dem angemeldeten Benutzer zugewiesen sind.
 
 '''
 
@@ -46,6 +50,9 @@ def dashboard(request):
 
 
 def offeneAufgabenAnzeigen(request):
+    '''
+    Diese View sammelt alle Aufgaben, die im Status "offen" stehen.
+'''
 
     meineAufgaben = Aufgabe.objects.filter(status=c.AUFGABE_STATUS_OP).order_by('faelligkeitsDatum')
     context = makeContext({'meineAufgaben': meineAufgaben, 'aktuellerstatus_lang': dict(AUFGABE_STATUS)})
@@ -54,36 +61,31 @@ def offeneAufgabenAnzeigen(request):
 
 
 def vonMirErstellteAufgaben(request):
+    '''
+    Diese View sammelt alle Aufgaben, deren Ersteller der angemeldete Benutzer ist.
+    '''
 
     meineAufgaben = Aufgabe.objects.filter(ersteller=TeamhubUser.objects.get(pk=request.user.pk)).order_by('faelligkeitsDatum')
     context = makeContext({'meineAufgaben': meineAufgaben, 'aktuellerstatus_lang': dict(AUFGABE_STATUS)})
     context['title'] = 'Von mir erstellte Aufgaben'
     return render_to_response('base_aufgabe_liste.html', context, context_instance=RequestContext(request))
 
-def aufgabe(request):
-
-    '''The view creates the input form for creating new tasks.
-
-'''
-
-    return render_to_response('base_aufgabe_erstellen.html', context_instance=RequestContext(request))
-
 
 def logoutUser(request):
-    '''Logs the current user out of the system and redirects to the login screen.
+    '''Meldet den angemeldete Benutzer ab und leitet ihn auf die Loginseite weiter.
 '''
     return logout_then_login(request, '/login/')
 
 
 def aufgabeErstellen(request):
 
-    '''Depending on the request type this view creates a new Aufgabe objects or provides an input form
-to create a new Aufgabe object.
+    '''Abhängig vom übergebenen Requesttyp erstellt diese View entweder ein neues Aufgabenobjekt,
+    oder stellt ein Eingabeformular zum Erstellen eines Aufgabenobjekts bereit.
 '''
 
     from teamhub.forms import aufgabeForm
     from teamhub.decorators import decorateSave
-    template='base_aufgabe_bearbeiten.html'
+    template = 'base_aufgabe_bearbeiten.html'
     if request.method == 'POST':
         form = aufgabeForm(request.POST)
         if form.is_valid():
@@ -102,16 +104,18 @@ to create a new Aufgabe object.
 
 @aufgabeBearbeitenBerechtigung
 def aufgabeBearbeiten(request, aufgabeId):
-    '''Depending on the request type this view changes a Aufgabe object or provides an input form
-to modify data of a Aufgabe object.
+    '''Abhängig vom übergebenen Requesttyp ändert diese View entweder ein Aufgabenobjekt,
+    oder stellt ein Eingabeformular zum Verändern eines Aufgabenobjekts bereit.
 
-:param aufgabeId: The foreign key of the Aufgabe object to be modified.
-:type aufgabeId: int
+
+    :param aufgabeId: Primärschlüssel des Aufgabenobjekts, welches verändert werden soll.
+
+    :type aufgabeId: int
 '''
     from teamhub.forms import aufgabeForm
     from teamhub.decorators import decorateSave
-    
-    template='base_aufgabe_bearbeiten.html'
+
+    template = 'base_aufgabe_bearbeiten.html'
     aufgabe = Aufgabe.objects.get(pk=aufgabeId)
     if request.method == 'POST':
         form = aufgabeForm(request.POST, instance=aufgabe)
@@ -132,8 +136,9 @@ to modify data of a Aufgabe object.
 
     return render_to_response(template, context, context_instance=RequestContext(request))
 
+
 def projektListe(request):
-    '''Gives a list of all projects in the system.
+    '''Erstellt eine Liste aller Projekte in der Datenbank.
 '''
     projektliste = Projekt.objects.all()
     context = {'projektliste': projektliste}
@@ -141,10 +146,11 @@ def projektListe(request):
 
 
 def projektDetail(request, projektId):
-    '''Gives the detail view of a project.
+    '''Erstellt die Detailansicht eines Projekts.
 
-:param projektId: The primary key of the project to be displayed.
-:type projektId: int
+    :param projektId: Der Primärschlüssel des angezeigten Projekts.
+
+    :type projektId: int
 '''
     projekt = Projekt.objects.get(pk=projektId)
     aufgaben = Aufgabe.objects.filter(projekt=projekt).order_by('faelligkeitsDatum')
@@ -154,13 +160,13 @@ def projektDetail(request, projektId):
 
 @teamleiterBerechtigung
 def projektErstellen(request):
-    '''Depending on the request type this view creates a new Projekt object or provides an input form
-to create a new Projekt object.
+    '''Abhängig vom Requesttyp erstellt diese View entweder ein neues Projektobjekt oder stellt ein Formular
+    bereit, mit dem ein neues Projektobjekt erstellt werden kann.
 '''
     from teamhub.forms import projektFormErstellen
     from teamhub.decorators import decorateSave
 
-    template='base_projekt_erstellen.html'
+    template = 'base_projekt_erstellen.html'
     if request.method == 'POST':
         form = projektFormErstellen(request.POST)
         if form.is_valid():
@@ -181,16 +187,18 @@ to create a new Projekt object.
 @teamleiterBerechtigung
 def projektBearbeiten(request, projektId):
 
-    '''Depending on the request type this view changes a Projekt object or provides an input form
-to modify data of a Projekt object.
+    '''Abhängig vom übergebenen Requesttyp ändert diese View entweder ein Projektobjekt,
+    oder stellt ein Eingabeformular zum Verändern eines Projektobjekts bereit.
 
-:param projektId: The primary key of the Projekt object to be modified.
-:type projektId: int
+
+    :param projektId: Primärschlüssel des Projektobjekts, welches verändert werden soll.
+
+    :type projektId: int
 '''
     from teamhub.forms import projektFormBearbeiten
     from teamhub.decorators import decorateSave
 
-    template='base_projekt_bearbeiten.html'
+    template = 'base_projekt_bearbeiten.html'
     projekt = Projekt.objects.get(pk=projektId)
 
     if request.method == 'POST':
@@ -209,28 +217,30 @@ to modify data of a Projekt object.
 
 
 def aufgabeDetails(request, aufgabeId):
-    '''Gives the detail view of a given Aufgabe object.
+    '''Erzeugt die Detailansicht eines Aufgabenobjekts.
 
-:param aufgabeId: The foreign key of the Aufgabe to be displayed.
-:type aufgabeId: int
+    :param aufgabeId: Der Primärschlüssel des angezeigten Aufgabenobjekts.
+
+    :type aufgabeId: int
 '''
     aufgabe = Aufgabe.objects.get(pk=aufgabeId)
-    
+
     context = makeContext({'aufgabe': aufgabe, 'aktuellerstatus_lang': dict(AUFGABE_STATUS), 'benutzer': TeamhubUser.objects.get(pk=request.user.pk)})
     return render_to_response('base_aufgabe.html', context, context_instance=RequestContext(request))
 
 
 @teamleiterBerechtigung
 def benutzerErstellen(request):
-    '''Depending on the request type this view either creates a new user in the system,
-or displays an input form to create a new user.
+    '''Abhängig vom Requesttyp erstellt diese View entweder ein neues Userobjekt oder stellt ein Formular
+    bereit, mit dem ein neues Userobjekt erstellt werden kann.
 
-.. note : Only users with the is_staff flag set to True can create new users.
+    .. note : Nur Benutzer mit dem 'is_staff'-Flag auf 'True' können weitere Benutzerkonten erstellen.
+
 '''
     from teamhub.forms import userForm
     from teamhub.decorators import decorateSave
-    
-    template='base_benutzer_erstellen.html'
+
+    template = 'base_benutzer_erstellen.html'
     if request.method == "POST":
         form = userForm(request.POST)
         if form.is_valid():
@@ -248,13 +258,14 @@ or displays an input form to create a new user.
     context = makeContext({'form': form})
     return render_to_response(template, context, context_instance=RequestContext(request))
 
+
 def userProfilBearbeiten(request):
-    '''Allows a user to modify her profile data.
+    '''Ermöglicht einem Benutzer, seine Benutzerprofildaten zu verändern.
 '''
     from teamhub.forms import profilForm
     from teamhub.decorators import decorateSave
-    
-    template='base_profil.html'
+
+    template = 'base_profil.html'
     user = TeamhubUser.objects.get(pk=request.user.pk)
 
     if request.method == 'POST':
@@ -273,10 +284,13 @@ def userProfilBearbeiten(request):
 
 
 def passwortAendern(request):
+    '''
+    Diese View ermöglicht das Ändern des Passorts
+    '''
     from teamhub.forms import passwortAendernForm
     from teamhub.decorators import decorateSave, passwAendern
-    
-    template='base_passwortAendern.html'
+
+    template = 'base_passwortAendern.html'
 
     if request.method == 'POST':
         form = passwortAendernForm(request.POST)
@@ -293,15 +307,23 @@ def passwortAendern(request):
     context = makeContext({'form': form})
     return render_to_response(template, context, context_instance=RequestContext(request))
 
+
 @teamleiterBerechtigung
 def passwortZuruecksetzen(request):
+    '''
+    Diese View ermöglicht das Zurücksetzen des Passworts eines Benutzers auf das Standardpasswort des Systems.
+
+    .. note : Das Standardpasswort lautet "test". Es sollte vom betroffenden Benutzer möglichst
+    schnell auf ein geeigneteres Passwort geändert werden
+
+    '''
     from teamhub.decorators import decorateSave
     from teamhub.forms import passwortZuruecksetzenForm
 
-    template='base_passwortZuruecksetzen.html'
-    
+    template = 'base_passwortZuruecksetzen.html'
+
     if request.method == 'POST':
-        form=passwortZuruecksetzenForm(request.POST)
+        form = passwortZuruecksetzenForm(request.POST)
         if form.is_valid():
             @decorateSave
             def zuruecksetzen(form, request, template):
@@ -312,13 +334,16 @@ def passwortZuruecksetzen(request):
                 return redirect('/passwzurueck/')
             return zuruecksetzen(form, request, template)
     else:
-        form=passwortZuruecksetzenForm()
-    context = makeContext({'form':form})
+        form = passwortZuruecksetzenForm()
+    context = makeContext({'form': form})
     return render_to_response(template, context, context_instance=RequestContext(request))
 
 
 def aufgabeSuchen(request):
-    '''Implementierung einer einfachen suche. Es wird in Titel und Beschreibung gesucht.'''
+    '''
+    Implementierung einer einfachen Suche. Es wird in Titel und Beschreibung gesucht.
+'''
+
     from django.db.models import Q
 
     if 'search' in request.GET and request.GET['search']:
@@ -335,5 +360,3 @@ def aufgabeSuchen(request):
         anfrage = "Bitte geben Sie ein Suchbegriff ein!!!"
         context = makeContext({"anfrage": anfrage})
     return render_to_response('base_search.html', context, context_instance=RequestContext(request))
-
- 
