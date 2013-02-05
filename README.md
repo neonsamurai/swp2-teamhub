@@ -28,15 +28,15 @@ Das System sollte mehrere Ansichten bieten z.B. Übersicht aller Aufgaben, Über
 # Info, Tutorials usw.
 
 * Git
-** Git Book, ausführliche Doku: http://git-scm.com/book/de
-** Git Tutorial: http://gitimmersion.com/
+  * Git Book, ausführliche Doku: http://git-scm.com/book/de
+  * Git Tutorial: http://gitimmersion.com/
 * Django
-** Django-Projektseite: http://www.djangoproject.com
-** Ausführliche Doku: https://docs.djangoproject.com/en/1.4/
-** Tutorial: https://docs.djangoproject.com/en/1.4/intro/tutorial01/
+  * Django-Projektseite: http://www.djangoproject.com
+  * Ausführliche Doku: https://docs.djangoproject.com/en/1.4/
+  * Tutorial: https://docs.djangoproject.com/en/1.4/intro/tutorial01/
 * Twitter/Bootstrap
-** Github: http://twitter.github.com/bootstrap/
-** Doku: http://twitter.github.com/bootstrap/base-css.html
+  * Github: http://twitter.github.com/bootstrap/
+  * Doku: http://twitter.github.com/bootstrap/base-css.html
 
 # Git Quick-Guide
 
@@ -60,13 +60,16 @@ Das System sollte mehrere Ansichten bieten z.B. Übersicht aller Aufgaben, Über
 
 ## Changes committen
 Die lange Version (Hier kann man erstmal Dateien zum Commit hinzufügen, und die dann commiten. Gut wenn man seine Änderungen auf mehrere Commits aufteilen möchte):
+
 1. $> git add {dateiname}
 2. $> git commit -m "Commit Message"
 
 Die kurze Version (Wenn man alle Änderungen in das Commit einfügen möchte):
+
 1. $> git commit -am "Commit Message"
 
 ## Änderungen zu Github pushen
+
 1. $> git push {BRANCH_NAME}
 
 ## Eine Branch in die eigene Branch "mergen"
